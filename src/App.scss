@@ -1,0 +1,546 @@
+@import "~bootstrap/scss/bootstrap";
+//Variables
+//font colours
+$color-grey-light-1: #f7f7f7;
+$color-grey-light-2: #eee;
+$color-red: rgb(145, 45, 45);
+$color-grey-dark: #777;
+$color-grey-dark-2: #999;
+$color-grey-dark-3: rgb(64, 64, 64);
+$color-green: rgb(79, 164, 224);
+$color-white: #fff;
+$color-black: #000;
+$color-blue: #11263e;
+$color-light-blue-1: #5ca4ec;
+$color-light-blue-3: #167dfb;
+$color-light-blue-2: #1f76cc;
+
+//font sizes
+$default-font-size: 1.6rem;
+
+//dimensions
+$navbar-height: 5rem;
+
+//dimensions-Dashboard
+$categories-sidebar-width: 23rem;
+$category-top-section-height: 7.5rem;
+$board-top-section-height: 14rem;
+
+//mixins
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin x-overflow-handle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@mixin y-overflow-handle {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #e1e1e1;
+        border-radius: 4px;
+    }
+}
+
+@mixin category-item {
+    height: 3.5rem;
+    padding: 0 1rem;
+    border-radius: 4px;
+}
+
+//setup
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    // This defines what 1rem is
+    font-size: 62.5%;
+}
+
+body {
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-size: 1.6rem;
+    line-height: 1.7;
+    color: $color-black;
+    // padding: 3rem;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+a,
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+//Components
+//buttons
+@mixin btn {
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    &:hover {
+        cursor: pointer;
+        background-color: $color-grey-light-1;
+    }
+}
+
+.btn-secondary {
+    @include btn;
+    background-color: $color-white;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: $color-grey-dark-3;
+    padding: 1rem;
+    &:hover {
+        color: $color-grey-dark-3;
+        background-color: $color-grey-light-2;
+    }
+}
+
+.btn-primary {
+    @include btn;
+    background-color: $color-light-blue-3;
+    color: $color-white;
+    padding: 1rem;
+    font-weight: 700;
+    &:hover {
+        background-color: darken($color-light-blue-3, 5%);
+    }
+}
+
+//typography
+.description {
+    font-weight: 300;
+    color: $color-grey-dark;
+}
+
+.heading-secondary {
+    font-weight: 700;
+    font-size: 2rem;
+}
+
+.heading-primary {
+    font-weight: 500;
+    font-size: 3rem;
+}
+
+.font-sm {
+    font-size: 1.5rem;
+}
+
+.form-label {
+    font-size: 1.8rem;
+}
+
+//utils
+.margin-right-sm {
+    margin-right: 1rem;
+}
+
+.margin-top-med {
+    margin-top: 3rem;
+}
+
+.margin-top-sm {
+    margin-top: 1rem;
+}
+
+//animations
+@keyframes moveInLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-10rem);
+    }
+
+    80% {
+        transform: translateX(1rem);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(10rem);
+    }
+
+    80% {
+        transform: translateX(-1rem);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+@keyframes moveInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
+//NavBar
+.navigation {
+    background-color: $color-blue;
+    @include clearfix;
+    height: $navbar-height;
+    padding: 0.4rem;
+    &__name,
+    &__name:hover {
+        text-decoration: none;
+        float: left;
+        font-weight: 700;
+        font-size: 2.5rem;
+        letter-spacing: 1.5px;
+        color: $color-white;
+        padding-left: 2rem;
+    }
+    &__list {
+        float: right;
+        padding-top: 0.5rem;
+    }
+    &__link,
+    &__link:hover {
+        text-decoration: none;
+        color: $color-black;
+        margin-right: 2.5rem;
+        font-size: 2rem;
+        color: $color-grey-light-1;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+//Dashboard Page
+.dashboard {
+    position: absolute;
+    top: $navbar-height;
+    bottom: 0;
+    width: 100%;
+}
+.categories-sidebar {
+    float: left;
+    // background-color: $color-grey-dark;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: $categories-sidebar-width;
+    border-right: 0.5px solid rgba($color-grey-dark-2, 0.4);
+    &__top-section {
+        height: $category-top-section-height;
+    }
+    &__title-container {
+        height: 6.5rem;
+        padding-top: 2.5rem;
+        padding-left: 2rem;
+    }
+    &__divider {
+        margin: 0 1rem 1rem 1rem;
+        border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
+    }
+    &__main-section {
+        padding: 0 1.2rem;
+        height: calc(100% - #{$category-top-section-height});
+        @include y-overflow-handle;
+    }
+    &__category_item {
+        @include category-item;
+        &:hover {
+            background-color: $color-grey-light-1;
+            cursor: pointer;
+        }
+        &--selected {
+            @include category-item;
+            background-color: rgba($color-light-blue-1, 0.2);
+            color: $color-light-blue-2;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    &__category_name {
+        padding-top: 0.3rem;
+        @include x-overflow-handle;
+    }
+}
+
+.board {
+    float: right;
+    // background-color: yellow;
+    position: absolute;
+    top: 0;
+    left: $categories-sidebar-width;
+    bottom: 0;
+    width: calc(100% - #{$categories-sidebar-width});
+    height: 100%;
+    @include y-overflow-handle;
+    &__top-section {
+        padding: 2rem 2.5rem 0;
+        border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
+        height: $board-top-section-height;
+        &--filter {
+            padding: 0 0.5rem;
+        }
+        &--filter-wrapper {
+            text-align: right;
+        }
+        &--header {
+            position: relative;
+            height: 5rem;
+            &-more {
+                float: right;
+                position: absolute;
+                padding: 0.7rem;
+                right: 3rem;
+                top: 0.8rem;
+            }
+            &-title {
+                width: 60%;
+
+                @include x-overflow-handle;
+            }
+        }
+        &--description {
+            width: 60%;
+            height: 2.5rem;
+            @include x-overflow-handle;
+        }
+    }
+
+    &__main-section {
+        padding: 2rem 2.5rem;
+        top: $board-top-section-height;
+        height: calc(100% - #{$board-top-section-height});
+    }
+}
+
+.todo {
+    &__container {
+        width: 100%;
+    }
+    &__item {
+        background-color: $color-grey-light-1;
+        width: 100%;
+        height: 4rem;
+        border-bottom: 0.5px solid $color-grey-light-2;
+        margin-bottom: 2px;
+
+        &:hover span.todo__btn i {
+            visibility: visible; //make icons visible on item hover
+        }
+    }
+    &__side-color {
+        float: left;
+        width: 0.7rem;
+        background-color: $color-light-blue-2;
+        height: 100%;
+    }
+    &__title {
+        float: left;
+        font-size: 1.5rem;
+        padding: 0.7rem;
+        width: 60%;
+        @include x-overflow-handle;
+    }
+    &__complete {
+        &-true {
+            width: 10rem;
+            text-align: center;
+            height: 100%;
+            padding: 0.7rem;
+            background-color: $color-green;
+            font-size: 1.5rem;
+            color: $color-white;
+            margin-top: 0;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        &-false {
+            width: 10rem;
+            text-align: center;
+            height: 100%;
+            padding: 0.5rem;
+            background-color: $color-grey-light-2;
+            font-size: 1.5rem;
+            color: $color-white;
+            margin-top: 0;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    &__btn {
+        margin-top: 0.5rem;
+        &.important-true i {
+            color: $color-red;
+        }
+        &.cart-true i {
+            color: darken($color-grey-dark-2, 50%);
+        }
+        visibility: hidden; // hidden till hover over item
+    }
+    &__others {
+        height: 100%;
+    }
+    &__right {
+        float: right;
+    }
+    &__icon {
+        color: $color-grey-dark-2;
+        font-size: 2rem;
+        margin-right: 1rem;
+        vertical-align: middle;
+        &:hover {
+            cursor: pointer;
+            font-size: 2.2rem;
+        }
+    }
+    &__date {
+        padding: 0.7rem 1rem;
+        border-left: 1px solid $color-white;
+    }
+}
+
+.filter-buttons-wrapper {
+    display: inline-block;
+}
+
+.filter-btn {
+    margin-right: 0.3rem;
+}
+
+//landing
+.landing-jumbotron {
+    background-image: linear-gradient(
+            to right bottom,
+            rgba($color-black, 0.5),
+            rgba($color-black, 0.5)
+        ),
+        url("./images/landing.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    height: 100%;
+    position: relative;
+    &__content {
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        width: 30%;
+    }
+}
+.landing-jumbotron__divider {
+    border-bottom: 1.5px solid $color-white;
+}
+.landing-jumbotron__btn-container {
+    animation-name: moveInBottom;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    backface-visibility: hidden;
+}
+.landing-jumbotron__description {
+    color: $color-white;
+    font-size: 2rem;
+    padding: 3rem 0 8rem 0;
+    animation-name: moveInRight;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    backface-visibility: hidden;
+}
+
+.landing-jumbotron__title {
+    font-size: 6.5rem;
+    color: $color-white;
+    animation-name: moveInLeft;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    backface-visibility: hidden;
+}
+
+//Register or Login Page
+.register {
+    &__dashboard {
+        position: absolute;
+        top: $navbar-height;
+        bottom: 0;
+        width: 100%;
+        background-image: linear-gradient(
+                to right bottom,
+                rgba($color-black, 0.7),
+                rgba($color-black, 0.7)
+            ),
+            url("./images/landing.jpeg");
+    }
+    &__container {
+        background-color: $color-white;
+        width: 60%;
+        margin: 8rem auto 0 auto;
+        padding: 3rem;
+        box-shadow: 0 4px 8px 0 rgba($color-black, 0.2),
+            0 6px 20px 0 rgba($color-black, 0.19);
+        border-radius: 4px;
+    }
+    &__title {
+        margin-bottom: 2rem;
+    }
+}
+
+.form-control {
+    height: 4rem;
+    font-size: 1.5rem;
+}
+
+//alert
+.my-alert {
+    &.danger {
+        position: absolute;
+        z-index: 1;
+        top: $navbar-height;
+        padding: 1rem 2rem;
+        width: 100%;
+        background-color: rgb(197, 62, 62);
+        color: $color-white;
+    }
+    &.success {
+        position: absolute;
+        z-index: 1;
+        top: $navbar-height;
+        padding: 1rem 2rem;
+        width: 100%;
+        background-color: rgb(43, 182, 94);
+        color: $color-white;
+    }
+}
