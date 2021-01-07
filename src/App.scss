@@ -163,6 +163,20 @@ a:hover {
         background-color: darken($color-light-blue-3, 5%);
     }
 }
+
+.add-category-icon {
+    position: absolute;
+    top: 3.5rem;
+    right: 2rem;
+    color: $color-grey-dark-2;
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
+    &:hover {
+        cursor: pointer;
+        color: $color-grey-dark;
+    }
+}
+
 //collaspible menus
 
 .collaspible-menu {
@@ -348,6 +362,7 @@ a:hover {
         height: $category-top-section-height;
     }
     &__title-container {
+        position: relative;
         height: 6.5rem;
         padding-top: 2.5rem;
         padding-left: 2rem;
@@ -377,7 +392,8 @@ a:hover {
         }
     }
     &__category_name {
-        padding-top: 0.3rem;
+        padding-top: 0.5rem;
+        width: 100%;
         @include x-overflow-handle;
     }
 }

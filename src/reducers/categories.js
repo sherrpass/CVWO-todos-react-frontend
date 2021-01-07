@@ -1,6 +1,7 @@
 const defaultState = {
     categories: [],
     loading: true,
+    currCategory: null,
     error: {},
 };
 
@@ -46,6 +47,11 @@ const categoriesReducer = (state = defaultState, { type, payload }) => {
             return {
                 ...state,
                 loading: true,
+            };
+        case "SET_CURR_CATEGORY":
+            return {
+                ...state,
+                currCategory: payload,
             };
         default:
             return state;

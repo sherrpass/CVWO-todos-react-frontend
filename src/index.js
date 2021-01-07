@@ -7,4 +7,4 @@ import Register from "./Register";
 import Login from "./Login";
 import "./App.scss";
 
-ReactDOM.render(<Dashboard />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

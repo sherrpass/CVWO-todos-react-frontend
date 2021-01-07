@@ -1,4 +1,4 @@
-import { DashboardOutlined } from "@material-ui/icons";
+
 import React, { Component } from "react";
 import Modal from "react-modal";
 import CategoryForm from "./CategoryForm";

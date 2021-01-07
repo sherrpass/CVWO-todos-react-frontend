@@ -6,18 +6,20 @@ import setAuthToken from "./utils/setAuthToken";
 import { loadUser } from "./actions/auth";
 import PrivateRoute from "./routing/PrivateRoute";
 
+import Dashboard from "./components/dashboard/Dashboard";
+
 import NotFoundPage from "./components/layout/NotFoundPage";
-import AddTodoPage from "./components/todos/AddTodoPage";
-import EditTodoPage from "./components/todos/EditTodoPage";
-import TodoDashboard from "./components/todos/TodoDashboard";
 import Navbar from "./components/layout/NavBar";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Landing from "./components/layout/Landing";
-import Categories from "./components/categories/Categories";
-import CategoryPage from "./components/categories/CategoryPage";
-import Alert from "./components/layout/Alert";
 
+import Alert from "./components/layout/Alert";
+// import AddTodoPage from "./components/todos/AddTodoPage";
+// import EditTodoPage from "./components/todos/EditTodoPage";
+// import TodoDashboard from "./components/todos/TodoDashboard";
+// import Categories from "./components/categories/Categories";
+// import CategoryPage from "./components/categories/CategoryPage";
 const store = configureStore();
 
 const App = () => {
@@ -37,11 +39,16 @@ const App = () => {
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute
                             exact
-                            path="/dashboard"
-                            component={TodoDashboard}
-                            exact={true}
+                            path="/dashboard/:id"
+                            component={Dashboard}
                         />
                         <PrivateRoute
+                            exact
+                            path="/dashboard"
+                            component={Dashboard}
+                        />
+
+                        {/*<PrivateRoute
                             exact
                             path="/create"
                             component={AddTodoPage}
@@ -60,7 +67,7 @@ const App = () => {
                             exact
                             path="/categories"
                             component={Categories}
-                        />
+                        />*/}
 
                         <Route component={NotFoundPage} />
                     </Switch>

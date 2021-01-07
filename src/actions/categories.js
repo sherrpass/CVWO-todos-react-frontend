@@ -92,3 +92,9 @@ export const deleteCategory = (id) => async (dispatch) => {
         });
     }
 };
+
+//set active Category
+export const setCurrCategory = (id = null) => ({
+    type: "SET_CURR_CATEGORY",
+    payload: id,
+});
