@@ -1,5 +1,8 @@
 @import "~bootstrap/scss/bootstrap";
+@import "react-datepicker/dist/react-datepicker.css";
+
 //Variables
+
 //font colours
 $color-grey-light-1: #f7f7f7;
 $color-grey-light-2: #eee;
@@ -24,8 +27,29 @@ $navbar-height: 5rem;
 //dimensions-Dashboard
 $categories-sidebar-width: 23rem;
 $category-top-section-height: 7.5rem;
-$board-top-section-height: 14rem;
+$board-top-section-height: 14.3rem;
 
+//datepicker
+.react-datepicker {
+    font-size: 1.3rem !important;
+}
+
+.react-datepicker__current-month {
+    font-size: 1.5rem !important;
+}
+
+.react-datepicker__header {
+    padding-top: 6px !important;
+}
+
+.react-datepicker__navigation {
+    top: 13px !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+    margin: 0.5rem !important;
+}
 //mixins
 @mixin clearfix {
     &:after {
@@ -57,6 +81,12 @@ $board-top-section-height: 14rem;
     border-radius: 4px;
 }
 
+@mixin removeDefOutline {
+    &:active,
+    &:focus {
+        outline: none !important;
+    }
+}
 //setup
 *,
 *::after,
@@ -106,12 +136,20 @@ a:hover {
     @include btn;
     background-color: $color-white;
     font-weight: 400;
-    font-size: 1.5rem;
     color: $color-grey-dark-3;
-    padding: 1rem;
+    padding: 0.8rem;
     &:hover {
         color: $color-grey-dark-3;
         background-color: $color-grey-light-2;
+    }
+    &:active,
+    &:focus {
+        outline: none !important;
+        background-color: rgba($color-light-blue-1, 0.2) !important;
+        color: $color-light-blue-2 !important;
+    }
+    &.new-cat-btn {
+        padding: 0.5rem;
     }
 }
 
@@ -119,13 +157,46 @@ a:hover {
     @include btn;
     background-color: $color-light-blue-3;
     color: $color-white;
-    padding: 1rem;
+    padding: 0.8rem;
     font-weight: 700;
     &:hover {
         background-color: darken($color-light-blue-3, 5%);
     }
 }
+//collaspible menus
 
+.collaspible-menu {
+    background-color: $color-white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 4px;
+}
+
+//modals
+.my-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background-color: $color-white;
+    padding: 3rem;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 4px;
+    @include removeDefOutline;
+}
+
+.add-edit-modal {
+    width: 45rem;
+    height: 40rem;
+}
+
+.todo-modal {
+    width: 45rem;
+}
 //typography
 .description {
     font-weight: 300;
@@ -150,9 +221,19 @@ a:hover {
     font-size: 1.8rem;
 }
 
+.form-label-sm {
+    font-size: 1.4rem;
+}
+
 //utils
 .margin-right-sm {
     margin-right: 1rem;
+}
+.margin-right-med {
+    margin-right: 1.5rem;
+}
+.margin-left-sm {
+    margin-right: 0.5rem;
 }
 
 .margin-top-med {
@@ -161,6 +242,13 @@ a:hover {
 
 .margin-top-sm {
     margin-top: 1rem;
+}
+
+.margin-bottom-sm {
+    margin-bottom: 1rem;
+}
+.margin-bottom-med {
+    margin-bottom: 2rem;
 }
 
 //animations
@@ -318,11 +406,14 @@ a:hover {
             position: relative;
             height: 5rem;
             &-more {
+                outline: none;
                 float: right;
                 position: absolute;
                 padding: 0.7rem;
                 right: 3rem;
                 top: 0.8rem;
+                border: none;
+                background-color: $color-white;
             }
             &-title {
                 width: 60%;
@@ -347,6 +438,11 @@ a:hover {
 .todo {
     &__container {
         width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    &__container-title {
+        font-size: 2rem;
+        font-weight: 300;
     }
     &__item {
         background-color: $color-grey-light-1;
@@ -438,6 +534,74 @@ a:hover {
 
 .filter-btn {
     margin-right: 0.3rem;
+}
+
+//menus
+.cat-menu {
+    padding: 0.5rem 0.5rem 0.5rem 1.3rem;
+    position: absolute;
+    top: 1rem;
+    right: 6.8rem;
+    &__btn {
+        display: inline-block;
+    }
+}
+
+.filter-menu {
+    position: absolute;
+    top: 14rem;
+    right: 10.3rem;
+    width: 45rem;
+
+    padding: 1.5rem;
+}
+
+.sort-menu {
+    position: absolute;
+    top: 14rem;
+    right: 3.4rem;
+    width: 15rem;
+    padding: 1.5rem;
+}
+.menu-title {
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    font-weight: 700;
+    text-align: left;
+}
+.menu-row {
+    width: 100%;
+    display: flex;
+}
+.menu-column {
+    flex-grow: 1;
+    margin: 0 0.8rem;
+    &__title {
+        text-align: left;
+        color: $color-grey-dark;
+    }
+    &__item {
+        text-align: left;
+        color: $color-grey-dark;
+        background-color: $color-grey-light-2;
+        border-radius: 3px;
+        width: 100%;
+        padding: 0.4rem 0.8rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+        &.selected {
+            background-color: rgba($color-light-blue-1, 0.15);
+            &:hover {
+                cursor: pointer;
+                background-color: darken(rgba($color-light-blue-1, 0.15), 20%);
+            }
+        }
+        &:hover {
+            cursor: pointer;
+            background-color: darken($color-grey-light-2, 5%);
+        }
+    }
 }
 
 //landing
@@ -543,4 +707,58 @@ a:hover {
         background-color: rgb(43, 182, 94);
         color: $color-white;
     }
+}
+
+//sliders/switches
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #2196f3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }

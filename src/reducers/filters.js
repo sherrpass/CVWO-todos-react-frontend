@@ -1,19 +1,21 @@
 const defaultState = {
-    sortBy: "createdAt", //createdAt, dueBy or name
-    importantOnly: false //whether to only display important only things
-}
+    sortBy: "dueBy", //createdAt, dueBy or name
+    filters: {
+        completion: "all",
+        importance: "all",
+        dueBy: ["overdue", "dueToday", "upcoming", "unscheduled"],
+    },
+};
 
-export default (state = defaultState, action) => {
-    switch(action.type){
-        case("SORT_BY_CREATED_AT"):
-            return {...state, sortBy: "createdAt"}
-        case("SORT_BY_DUE_BY"):
-            return {...state, sortBy: "dueBy"}
-        case("SORT_BY_NAME"):
-            return {...state, sortBy: "name"}
-        case("TOGGLE_IMPORTANT_ONLY"):
-            return {...state, importantOnly: !state.importantOnly}
+const filtersReducer = (state = defaultState, { type, payload }) => {
+    switch (type) {
+        case "SORT_BY":
+            return { ...state, sortBy: payload };
+        case "EDIT_FILTERS":
+            return { ...state, filters: payload };
         default:
             return state;
     }
-}
+};
+
+export default filtersReducer;

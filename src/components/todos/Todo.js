@@ -1,43 +1,65 @@
-import React, {useEffect, useState} from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import moment from "moment";
-import { completeTodo, deleteTodo, toggleImportanceTodo } from "../../actions/todos";
+import {
+    completeTodo,
+    deleteTodo,
+    toggleImportanceTodo,
+} from "../../actions/todos";
 import { Link } from "react-router-dom";
 
-const Todo = ({dispatch, id, title, due_by, created_at, important, completed, date}) => {
-
-    const [importanceLoading,setImportanceLoading] = useState(true);
-    useEffect(()=>{
+const Todo = ({
+    dispatch,
+    id,
+    title,
+    due_by,
+    created_at,
+    important,
+    completed,
+    date,
+}) => {
+    const [importanceLoading, setImportanceLoading] = useState(true);
+    useEffect(() => {
         setImportanceLoading(false);
-    },[important])
-    const onDeleteClick = (e) =>{
+    }, [important]);
+    const onDeleteClick = (e) => {
         dispatch(deleteTodo(id));
         e.target.disabled = true; //to prevent multiple axios requests which would throw an error.
-    }
-    const onCompleteClick = (e) =>{
+    };
+    const onCompleteClick = (e) => {
         dispatch(completeTodo(id));
         e.target.disabled = true; //instantanously
-    }
+    };
     const onImportanceChange = () => {
         setImportanceLoading(true); //to prevent spamming the button, which causes a desync between the store and the backend.
         dispatch(toggleImportanceTodo(id));
-    }
+    };
     return (
         <div>
             <Link to={`/edit/${id}`}>
                 <h3>{title}</h3>
             </Link>
-            {date === "due_by" ? <p>{due_by && moment(due_by).format("MMM D, YYYY")}</p> : <p>{moment(created_at).format("MMM D, YYYY")}</p>}
+            {date === "due_by" ? (
+                due_by !== null ? (
+                    <p>{moment(due_by).format("MMM D, YYYY")}</p>
+                ) : null
+            ) : (
+                <p>{moment(created_at).format("MMM D, YYYY")}</p>
+            )}
             <button onClick={onDeleteClick}>Delete</button>
-            <button disabled={importanceLoading} onClick={onImportanceChange}>{important ? "Important" : "Not Important"}</button>
-            <button disabled={!!completed} onClick={onCompleteClick}>Complete</button>
+            <button disabled={importanceLoading} onClick={onImportanceChange}>
+                {important ? "Important" : "Not Important"}
+            </button>
+            <button disabled={!!completed} onClick={onCompleteClick}>
+                Complete
+            </button>
         </div>
     );
-}
+};
 
 // class Todo extends React.Component {
 //     state={
-        
+
 //     }
 //     onDeleteClick = (e) =>{
 //         this.props.dispatch(deleteTodo(this.props.id));

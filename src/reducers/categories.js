@@ -1,47 +1,55 @@
 const defaultState = {
     categories: [],
     loading: true,
-    error: {}
+    error: {},
 };
-  
-export default (state = defaultState, {type, payload}) =>{
-    switch(type){
-        case("GET_CATEGORIES"):
+
+const categoriesReducer = (state = defaultState, { type, payload }) => {
+    switch (type) {
+        case "GET_CATEGORIES":
             return {
                 ...state,
                 categories: payload,
-                loading: false
+                loading: false,
             };
-        case("ADD_CATEGORY"):
+        case "ADD_CATEGORY":
             return {
                 ...state,
-                categories: [payload, ...state.categories]
+                categories: [payload, ...state.categories],
             };
-        case("EDIT_CATEGORY"):
-            return state.loading ? state : {
-                ...state,
-                categories: state.categories.map((category) => {
-                    // console.log(typeof payload.id);
-                    return category.id === payload.id ? payload.category : category
-                })
-            }
-        case("DELETE_CATEGORY"):
+        case "EDIT_CATEGORY":
+            return state.loading
+                ? state
+                : {
+                      ...state,
+                      categories: state.categories.map((category) => {
+                          // console.log(typeof payload.id);
+                          return category.id === payload.id
+                              ? payload.category
+                              : category;
+                      }),
+                  };
+        case "DELETE_CATEGORY":
             return {
                 ...state,
-                categories: state.categories.filter((category) => category.id !== payload)
+                categories: state.categories.filter(
+                    (category) => category.id !== payload
+                ),
             };
-        case("CATEGORY_ERROR"):
+        case "CATEGORY_ERROR":
             return {
                 ...state,
                 error: payload,
-                loading: false
+                loading: false,
             };
-        case ("LOADING"):
+        case "LOADING":
             return {
                 ...state,
                 loading: true,
             };
         default:
-        return state;
-        }
-}
+            return state;
+    }
+};
+
+export default categoriesReducer;

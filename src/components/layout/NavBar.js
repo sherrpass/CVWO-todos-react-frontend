@@ -9,8 +9,7 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
             <div className="navigation">
                 <nav className="navigation__nav">
                     <NavLink to="/" className="navigation__name">
-                        <i className="fas fa-clipboard"></i>
-                        Todoit
+                        <i className="fas fa-clipboard"></i> Todoit
                     </NavLink>
                     <div className="navigation__list">
                         <NavLink to="/login" className="navigation__link">
@@ -46,8 +45,7 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
                             to="/"
                             className="navigation__link"
                         >
-                            Logout
-                            <i className="fas fa-sign-out-alt"></i>
+                            Logout <i className="fas fa-sign-out-alt"></i>
                         </NavLink>
                     </div>
                 </nav>
