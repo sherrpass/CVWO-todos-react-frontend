@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { getTodos } from "../../actions/todos";
 import { getCategories, setCurrCategory } from "../../actions/categories";
 import CategoriesSidebar from "./CategoriesSidebar";
-// import BoardTopSection from "./BoardTopSection";
+import BoardTopSection from "./BoardTopSection";
 // import BoardMainSection from "./BoardMainSection";
 import Loading from "../layout/Loading";
 
@@ -33,7 +33,9 @@ const Dashboard = ({
         <div className="dashboard">
             <CategoriesSidebar />
 
-            <div className="board"></div>
+            <div className="board">
+                <BoardTopSection />
+            </div>
         </div>
     );
 };

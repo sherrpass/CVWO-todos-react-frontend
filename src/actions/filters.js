@@ -4,7 +4,7 @@ export const sortBy = (sortMethod = "dueBy") => ({
     payload: sortMethod,
 });
 
-export const editFilters = ({ completion, importance, dueBy }) => ({
+export const editFilters = (filters) => ({
     type: "EDIT_FILTERS",
-    payload: { completion, importance, dueBy },
+    payload: filters,
 });

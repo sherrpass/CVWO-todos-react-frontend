@@ -33,7 +33,7 @@ class CategoriesSidebar extends Component {
                         <div className="categories-sidebar__title-container">
                             <div className="heading-secondary">Categories </div>
                             <i
-                                class="fas fa-plus fa-sm add-category-icon"
+                                className="fas fa-plus fa-sm add-category-icon"
                                 onClick={this.openCatModal}
                             ></i>
                         </div>
