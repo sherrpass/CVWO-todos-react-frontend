@@ -1,6 +1,6 @@
 import axios from "axios";
 import setAlert from "./alert";
-
+import { getTodos } from "./todos";
 export const getCategories = () => async (dispatch) => {
     try {
         const response = await axios.get("/api/categories");
@@ -82,6 +82,7 @@ export const deleteCategory = (id) => async (dispatch) => {
         console.log(`deleteCategory`);
         await axios.delete(`/api/categories/${id}`);
         dispatch({ type: "DELETE_CATEGORY", payload: id });
+        dispatch(getTodos()); //to remove this category from all todos
     } catch (error) {
         dispatch({
             type: "CATEGORY_ERROR",

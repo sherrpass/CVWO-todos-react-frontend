@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-
-const CategoryItem = ({ currCategoryId, category }) => {
-    const history = useHistory();
+import { setCurrCategory } from "../../actions/categories";
+const CategoryItem = ({ currCategoryId, category, setCurrCategory }) => {
     return (
         <>
             <div
@@ -12,7 +10,7 @@ const CategoryItem = ({ currCategoryId, category }) => {
                     (currCategoryId === category.id ? "--selected" : "")
                 }
                 onClick={() => {
-                    history.push("/dashboard/" + category.id);
+                    setCurrCategory(category.id);
                 }}
             >
                 <div className="categories-sidebar__category_name">
@@ -25,4 +23,4 @@ const CategoryItem = ({ currCategoryId, category }) => {
 const mapStateToProps = (state) => ({
     currCategoryId: state.category.currCategory,
 });
-export default connect(mapStateToProps)(CategoryItem);
+export default connect(mapStateToProps, { setCurrCategory })(CategoryItem);

@@ -27,11 +27,13 @@ const todosReducer = (state = defaultState, { type, payload }) => {
                 todos: state.todos.filter((todo) => todo.id !== payload),
                 loading: false,
             };
-        case "COMPLETE_TODO":
+        case "TOGGLE_COMPLETE_TODO":
             return {
                 ...state,
                 todos: state.todos.map((todo) =>
-                    todo.id === payload ? { ...todo, completed: true } : todo
+                    todo.id === payload
+                        ? { ...todo, completed: !todo.completed }
+                        : todo
                 ),
                 loading: false,
             };

@@ -135,17 +135,20 @@ export const deleteTodo = (id) => async (dispatch) => {
 };
 
 //complete Todo
-export const completeTodo = (id) => async (dispatch) => {
+export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
     try {
         // console.log(`editTodo`);
         // console.log(formData);
+        const prevCompleted = getState().todo.todos.find(
+            (todo) => todo.id === id
+        ).completed;
         const formData = {
-            completed: true,
+            completed: !prevCompleted,
         };
         await axios.put(`/api/todos/${id}`, formData);
-        dispatch({ type: "COMPLETE_TODO", payload: id });
+        dispatch({ type: "TOGGLE_COMPLETE_TODO", payload: id });
     } catch (error) {
-        console.log("completeTodo error");
+        console.log("togglecompleteTodo error");
         dispatch({
             type: "TODO_ERROR",
             payload: {

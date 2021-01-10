@@ -27,12 +27,12 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
         <>
             <div className="navigation">
                 <nav className="navigation__nav">
-                    <NavLink to="/dashboard" className="navigation__name">
+                    <NavLink to="/" className="navigation__name">
                         <i className="fas fa-clipboard"></i>
                         Todoit
                     </NavLink>
                     <div className="navigation__list">
-                        <NavLink to="/create" className="navigation__link">
+                        <NavLink to="/dashboard" className="navigation__link">
                             Dashboard
                         </NavLink>
                         <NavLink to="/" className="navigation__link">

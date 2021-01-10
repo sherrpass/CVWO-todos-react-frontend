@@ -16,7 +16,7 @@ const categoriesReducer = (state = defaultState, { type, payload }) => {
         case "ADD_CATEGORY":
             return {
                 ...state,
-                categories: [payload, ...state.categories],
+                categories: [...state.categories, payload],
             };
         case "EDIT_CATEGORY":
             return state.loading

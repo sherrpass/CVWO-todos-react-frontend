@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 
-const setAlert = (msg, alertType, time = 5000) => (dispatch) => {
+const setAlert = (msg, alertType, time = 1500) => (dispatch) => {
     const id = v4();
     dispatch({ type: "SET_ALERT", payload: { id, msg, alertType } });
     setTimeout(() => {

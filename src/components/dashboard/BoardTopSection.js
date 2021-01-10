@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { sortBy, editFilters } from "../../actions/filters";
+import {
+    editCategory,
+    deleteCategory,
+    setCurrCategory,
+} from "../../actions/categories";
+import { addTodo } from "../../actions/todos";
+import Modal from "react-modal";
+import { withRouter } from "react-router-dom";
 
 import SortMenu from "./menus/SortMenu";
 import FilterMenu from "./menus/FilterMenu";
+import CategoryForm from "./forms/CategoryForm";
+import TodoForm from "./forms/TodoForm";
 class BoardTopSection extends Component {
     state = {
         menus: {
@@ -13,7 +23,8 @@ class BoardTopSection extends Component {
         },
         modals: {
             showCatModal: false,
-            showDeleteCatModal: false,
+            showDelCatModal: false,
+            showTodoModal: false,
         },
     };
     openCatMenu = () => {
@@ -30,7 +41,9 @@ class BoardTopSection extends Component {
     closeCatMenu = (e) => {
         if (
             !e ||
-            (!this.catMenu.contains(e.target) &&
+            (this.catMenu &&
+                this.catMenuButton &&
+                !this.catMenu.contains(e.target) &&
                 !this.catMenuButton.contains(e.target))
         ) {
             this.setState(
@@ -108,120 +121,241 @@ class BoardTopSection extends Component {
     capitalise = (str) => {
         return str[0].toUpperCase() + str.substring(1);
     };
+
+    closeCatModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { ...prevState.modals, showCatModal: false },
+        }));
+    };
+    openCatModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { ...prevState.modals, showCatModal: true },
+        }));
+    };
+    closeDelCatModal = (func = () => {}) => {
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                modals: { ...prevState.modals, showDelCatModal: false },
+            }),
+            () => func()
+        );
+    };
+    openDelCatModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { ...prevState.modals, showDelCatModal: true },
+        }));
+    };
+    closeTodoModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { ...prevState.modals, showTodoModal: false },
+        }));
+    };
+    openTodoModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { ...prevState.modals, showTodoModal: true },
+        }));
+    };
+    delOnSubmit = () => {
+        this.closeDelCatModal(() => {
+            this.props.setCurrCategory(null);
+            this.props.deleteCategory(this.props.category.id);
+        });
+    };
     render() {
         return (
-            <div className="board__top-section">
-                <div className="board__top-section--header">
-                    <div className="board__top-section--header-title">
-                        <span className="heading-primary">
-                            {this.props.category
-                                ? this.capitalise(this.props.category.name)
-                                : "Everything"}
-                        </span>
-                    </div>
-                    <div>
-                        <button
-                            className="btn-secondary board__top-section--header-more"
-                            onClick={() =>
-                                !this.state.menus.showCatMenu
-                                    ? this.openCatMenu()
-                                    : this.closeCatMenu()
-                            }
-                            ref={(e) => {
-                                this.catMenuButton = e;
-                            }}
-                        >
-                            <i className="fas fa-ellipsis-h fa-lg"></i>
-                        </button>
-                        {this.state.menus.showCatMenu ? (
-                            <div
-                                className="collaspible-menu cat-menu"
-                                ref={(e) => {
-                                    this.catMenu = e;
-                                }}
-                            >
-                                <span
-                                    onClick={this.openCatModal}
-                                    className="catMenu__btn margin-left-sm"
-                                >
-                                    <i className="todo__icon fas fa-pen"></i>
-                                </span>
-                                <span className="catMenu__btn">
-                                    <i className="todo__icon fas fa-trash"></i>
-                                </span>
-                            </div>
-                        ) : null}
-                    </div>
-                </div>
-                <div className="board__top-section--description">
-                    <span className="description">
-                        {this.props.category
-                            ? this.props.category.description
-                                ? this.props.category.description
-                                : "All tasks belonging to " +
-                                  this.capitalise(this.props.category.name)
-                            : "All of your tasks. Let's do this."}
-                    </span>
-                </div>
-                <div className="board__top-section--filter">
-                    <div className="board__top-section--filter-wrapper">
-                        <div className="filter-buttons-wrapper">
-                            <button className="btn-primary margin-right-sm">
-                                + New Item
-                            </button>
-                            <button
-                                className="btn-secondary filter-btn"
-                                onClick={() =>
-                                    !this.state.menus.showFilterMenu
-                                        ? this.openFilterMenu()
-                                        : this.closeFilterMenu()
-                                }
-                                ref={(e) => {
-                                    this.filterMenuButton = e;
-                                }}
-                            >
-                                <i className="fas fa-filter"></i>
-                                <span className="margin-left-sm"> Filter</span>
-                            </button>
-
-                            <button
-                                className="btn-secondary filter-btn"
-                                onClick={() =>
-                                    !this.state.menus.showSortMenu
-                                        ? this.openSortMenu()
-                                        : this.closeSortMenu()
-                                }
-                                ref={(e) => {
-                                    this.sortMenuButton = e;
-                                }}
-                            >
-                                <i className="fas fa-sort"></i>
-                                <span className="margin-left-sm"> Sort</span>
-                            </button>
-                            {this.state.menus.showFilterMenu ? (
-                                <div
-                                    className="collaspible-menu filter-menu"
+            <>
+                <div className="board__top-section">
+                    <div className="board__top-section--header">
+                        <div className="board__top-section--header-title">
+                            <span className="heading-primary">
+                                {this.props.category
+                                    ? this.capitalise(this.props.category.name)
+                                    : "Everything"}
+                            </span>
+                        </div>
+                        <div>
+                            {this.props.category ? (
+                                <button
+                                    className="btn-secondary board__top-section--header-more"
+                                    onClick={() =>
+                                        !this.state.menus.showCatMenu
+                                            ? this.openCatMenu()
+                                            : this.closeCatMenu()
+                                    }
                                     ref={(e) => {
-                                        this.filterMenu = e;
+                                        this.catMenuButton = e;
                                     }}
                                 >
-                                    <FilterMenu />
-                                </div>
+                                    <i className="fas fa-ellipsis-h fa-lg"></i>
+                                </button>
                             ) : null}
-                            {this.state.menus.showSortMenu ? (
+                            {this.state.menus.showCatMenu &&
+                            this.props.category ? (
                                 <div
-                                    className="collaspible-menu sort-menu"
+                                    className="collaspible-menu cat-menu"
                                     ref={(e) => {
-                                        this.sortMenu = e;
+                                        this.catMenu = e;
                                     }}
                                 >
-                                    <SortMenu />
+                                    <span
+                                        onClick={this.openCatModal}
+                                        className="catMenu__btn margin-left-sm"
+                                    >
+                                        {/*HEREEEEEEEEEEEEEEEEEE*/}
+                                        <i className="todo__icon fas fa-pen"></i>
+                                    </span>
+                                    <span
+                                        className="catMenu__btn"
+                                        onClick={this.openDelCatModal}
+                                    >
+                                        <i className="todo__icon fas fa-trash"></i>
+                                    </span>
                                 </div>
                             ) : null}
                         </div>
                     </div>
+                    <div className="board__top-section--description">
+                        <span className="description">
+                            {this.props.category
+                                ? this.props.category.description
+                                    ? this.props.category.description
+                                    : "All tasks belonging to " +
+                                      this.capitalise(this.props.category.name)
+                                : "All of your tasks. Let's do this."}
+                        </span>
+                    </div>
+                    <div className="board__top-section--filter">
+                        <div className="board__top-section--filter-wrapper">
+                            <div className="filter-buttons-wrapper">
+                                <button
+                                    className="btn-primary margin-right-sm"
+                                    onClick={this.openTodoModal}
+                                >
+                                    + New Item
+                                </button>
+                                <button
+                                    className="btn-secondary filter-btn"
+                                    onClick={() =>
+                                        !this.state.menus.showFilterMenu
+                                            ? this.openFilterMenu()
+                                            : this.closeFilterMenu()
+                                    }
+                                    ref={(e) => {
+                                        this.filterMenuButton = e;
+                                    }}
+                                >
+                                    <i className="fas fa-filter"></i>
+                                    <span className="margin-left-sm">
+                                        {" "}
+                                        Filter
+                                    </span>
+                                </button>
+
+                                <button
+                                    className="btn-secondary filter-btn"
+                                    onClick={() =>
+                                        !this.state.menus.showSortMenu
+                                            ? this.openSortMenu()
+                                            : this.closeSortMenu()
+                                    }
+                                    ref={(e) => {
+                                        this.sortMenuButton = e;
+                                    }}
+                                >
+                                    <i className="fas fa-sort"></i>
+                                    <span className="margin-left-sm">
+                                        {" "}
+                                        Sort
+                                    </span>
+                                </button>
+                                {this.state.menus.showFilterMenu ? (
+                                    <div
+                                        className="collaspible-menu filter-menu"
+                                        ref={(e) => {
+                                            this.filterMenu = e;
+                                        }}
+                                    >
+                                        <FilterMenu />
+                                    </div>
+                                ) : null}
+                                {this.state.menus.showSortMenu ? (
+                                    <div
+                                        className="collaspible-menu sort-menu"
+                                        ref={(e) => {
+                                            this.sortMenu = e;
+                                        }}
+                                    >
+                                        <SortMenu />
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <Modal
+                    isOpen={this.state.modals.showCatModal}
+                    className="my-modal add-edit-modal"
+                    onRequestClose={this.closeCatModal}
+                >
+                    <CategoryForm
+                        isEdit={true}
+                        category={this.props.category}
+                        onSubmit={(category) => {
+                            this.closeCatModal();
+                            this.props.editCategory(
+                                this.props.category.id,
+                                category
+                            );
+                        }}
+                    />
+                </Modal>
+                <Modal
+                    isOpen={this.state.modals.showDelCatModal}
+                    className="my-modal del-cat-modal"
+                    onRequestClose={this.closeDelCatModal}
+                    ariaHideApp={false}
+                >
+                    <div className="del-title">
+                        <span className="heading-secondary">
+                            Delete this category
+                        </span>{" "}
+                        <br />
+                        <span className="description">
+                            (But not it's tasks)
+                        </span>
+                    </div>
+                    <div className="del-btn-container">
+                        <div className="del-centre">
+                            <button
+                                onClick={this.delOnSubmit}
+                                className="margin-top-med btn-primary"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </Modal>
+                <Modal
+                    isOpen={this.state.modals.showTodoModal}
+                    className="my-modal todo-modal"
+                    onRequestClose={this.closeTodoModal}
+                    ariaHideApp={false}
+                >
+                    <TodoForm
+                        isEdit={false}
+                        onSubmit={(todo) => {
+                            this.closeTodoModal();
+                            this.props.addTodo(todo);
+                        }}
+                    />
+                </Modal>
+            </>
         );
     }
 }
@@ -234,6 +368,13 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, { sortBy, editFilters })(
-    BoardTopSection
+export default withRouter(
+    connect(mapStateToProps, {
+        sortBy,
+        editFilters,
+        editCategory,
+        deleteCategory,
+        setCurrCategory,
+        addTodo,
+    })(BoardTopSection)
 );

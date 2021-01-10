@@ -1,32 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getTodos } from "../../actions/todos";
-import { getCategories, setCurrCategory } from "../../actions/categories";
+import { getCategories } from "../../actions/categories";
 import CategoriesSidebar from "./CategoriesSidebar";
 import BoardTopSection from "./BoardTopSection";
-// import BoardMainSection from "./BoardMainSection";
+import BoardMainSection from "./BoardMainSection";
 import Loading from "../layout/Loading";
 
-const Dashboard = ({
-    getTodos,
-    getCategories,
-    setCurrCategory,
-    loading,
-    match: {
-        params: { id },
-    },
-}) => {
+const Dashboard = ({ getTodos, getCategories, loading }) => {
     useEffect(() => {
         getTodos();
         getCategories();
     });
-    useEffect(() => {
-        if (id) {
-            setCurrCategory(parseInt(id));
-        } else {
-            setCurrCategory();
-        }
-    }, [id]);
     return loading ? (
         <Loading />
     ) : (
@@ -35,6 +20,7 @@ const Dashboard = ({
 
             <div className="board">
                 <BoardTopSection />
+                <BoardMainSection />
             </div>
         </div>
     );
@@ -46,7 +32,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     getTodos,
     getCategories,
-    setCurrCategory,
 })(Dashboard);
 
 // class Dashboard extends Component {

@@ -209,7 +209,38 @@ a:hover {
 }
 
 .todo-modal {
-    width: 45rem;
+    width: 60%;
+}
+
+.category-option {
+    &:active,
+    &:focus {
+        background-color: $color-white !important;
+    }
+    &.true {
+        background-color: $color-grey-light-2 !important;
+    }
+    &.false {
+        background-color: $color-white !important;
+    }
+}
+
+.del-btn-container {
+    width: 100%;
+    height: 5rem;
+    position: relative;
+}
+.del-centre {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.del-title {
+    text-align: center;
 }
 //typography
 .description {
@@ -229,6 +260,10 @@ a:hover {
 
 .font-sm {
     font-size: 1.5rem;
+}
+
+.padding-sm {
+    padding: 0.3rem !important;
 }
 
 .form-label {
@@ -409,9 +444,9 @@ a:hover {
     height: 100%;
     @include y-overflow-handle;
     &__top-section {
-        padding: 2rem 2.5rem 0;
+        padding: 1rem 0 0.5rem 2.5rem;
         border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
-        height: $board-top-section-height;
+        width: 100%;
         &--filter {
             padding: 0 0.5rem;
         }
@@ -446,11 +481,12 @@ a:hover {
 
     &__main-section {
         padding: 2rem 2.5rem;
-        top: $board-top-section-height;
-        height: calc(100% - #{$board-top-section-height});
     }
 }
 
+[class^="todo"] {
+    font-size: 1.5rem;
+}
 .todo {
     &__container {
         width: 100%;
@@ -483,9 +519,18 @@ a:hover {
         padding: 0.7rem;
         width: 60%;
         @include x-overflow-handle;
+        &:hover {
+            cursor: pointer;
+        }
     }
-    &__complete {
-        &-true {
+
+    &__complete,
+    __complete:active,
+    __complete:focus {
+        border: none !important;
+        outline: none !important;
+
+        &.true {
             width: 10rem;
             text-align: center;
             height: 100%;
@@ -498,7 +543,7 @@ a:hover {
                 cursor: pointer;
             }
         }
-        &-false {
+        &.false {
             width: 10rem;
             text-align: center;
             height: 100%;
@@ -514,10 +559,10 @@ a:hover {
     }
     &__btn {
         margin-top: 0.5rem;
-        &.important-true i {
+        &.important.true i {
             color: $color-red;
         }
-        &.cart-true i {
+        &.cart.true i {
             color: darken($color-grey-dark-2, 50%);
         }
         visibility: hidden; // hidden till hover over item
@@ -539,8 +584,10 @@ a:hover {
         }
     }
     &__date {
+        text-align: center;
         padding: 0.7rem 1rem;
         border-left: 1px solid $color-white;
+        width: 11rem;
     }
 }
 
@@ -777,4 +824,25 @@ input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
+}
+
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    top: 40%;
+    right: 48%;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

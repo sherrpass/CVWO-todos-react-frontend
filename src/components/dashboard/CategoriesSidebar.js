@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import Modal from "react-modal";
 // import CategoryForm from "./CategoryForm";
 import CategoryItem from "./CategoryItem";
-import { withRouter } from "react-router-dom";
-import CategoryForm from "./CategoryForm";
+import CategoryForm from "./forms/CategoryForm";
 import { addCategory } from "../../actions/categories";
+import { setCurrCategory } from "../../actions/categories";
+import categoriesSelector from "../../selectors/categories";
 class CategoriesSidebar extends Component {
     state = {
         showCatModal: false,
@@ -23,6 +24,7 @@ class CategoriesSidebar extends Component {
         }));
     };
     onSubmit = ({ name, description }) => {
+        this.closeCatModal();
         this.props.addCategory({ name, description });
     };
     render() {
@@ -46,7 +48,7 @@ class CategoriesSidebar extends Component {
                                 (this.props.currCategory ? "" : "--selected")
                             }
                             onClick={() => {
-                                this.props.history.push("/dashboard");
+                                this.props.setCurrCategory(null);
                             }}
                         >
                             <div className="categories-sidebar__category_name">
@@ -65,6 +67,7 @@ class CategoriesSidebar extends Component {
                     isOpen={this.state.showCatModal}
                     className="my-modal add-edit-modal"
                     onRequestClose={this.closeCatModal}
+                    ariaHideApp={false}
                 >
                     <CategoryForm isEdit={false} onSubmit={this.onSubmit} />
                 </Modal>
@@ -75,11 +78,11 @@ class CategoriesSidebar extends Component {
 
 function mapStateToProps(state) {
     return {
-        categories: state.category.categories,
+        categories: categoriesSelector(state.category.categories),
         currCategory: state.category.currCategory,
     };
 }
 
-export default withRouter(
-    connect(mapStateToProps, { addCategory })(CategoriesSidebar)
+export default connect(mapStateToProps, { addCategory, setCurrCategory })(
+    CategoriesSidebar
 );

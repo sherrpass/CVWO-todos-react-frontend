@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 
-const CategoryForm = ({ isEdit, category, onSubmit }) => {
+const CategoryForm = ({ isEdit, category, onSubmit, isFromTodo }) => {
     const [name, setName] = useState(category ? category.name : "");
     const [description, setDescription] = useState(
         category ? category.description : ""
     );
+    const [error, setError] = useState(null);
+    const befSubmit = (cat, submitFunc) => {
+        //validate
+        return cat.name
+            ? submitFunc(cat)
+            : setError("Category name is required.");
+    };
     return (
         <>
             <div className="register__title">
@@ -15,21 +22,24 @@ const CategoryForm = ({ isEdit, category, onSubmit }) => {
             <div className="register__form">
                 <form
                     noValidate
-                    onSubmit={() => onSubmit({ name, description })}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        befSubmit({ name, description }, onSubmit);
+                    }}
                 >
                     <div className="mb-3">
                         <label className="form-label">Category name</label>
                         <input
                             placeholder="Enter a category name"
                             value={name}
-                            className={"form-control"}
+                            className={
+                                "form-control" + (error ? " is-invalid" : "")
+                            }
                             onChange={(e) => {
                                 setName(e.target.value);
                             }}
-                            // name="email"
-                            // value={email}
-                            // onChange={onChange}
                         />
+                        <div className="invalid-feedback">{error}</div>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Description</label>
@@ -42,12 +52,24 @@ const CategoryForm = ({ isEdit, category, onSubmit }) => {
                             }}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="margin-top-med btn-primary"
-                    >
-                        {isEdit ? "Confirm Changes" : "Add Category"}
-                    </button>
+                    {isFromTodo ? (
+                        <button
+                            type="button"
+                            className="margin-top-med btn-primary"
+                            onClick={() =>
+                                befSubmit({ name, description }, onSubmit)
+                            }
+                        >
+                            Add Category
+                        </button>
+                    ) : (
+                        <button
+                            type="submit"
+                            className="margin-top-med btn-primary"
+                        >
+                            {isEdit ? "Confirm Changes" : "Add Category"}
+                        </button>
+                    )}
                 </form>
             </div>
         </>
