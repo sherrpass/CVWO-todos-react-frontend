@@ -3,7 +3,9 @@ import setAlert from "./alert";
 import { getTodos } from "./todos";
 export const getCategories = () => async (dispatch) => {
     try {
-        const response = await axios.get("/api/categories");
+        const response = await axios.get(
+            "https://cvwo-todo-rails-backend.herokuapp.com/api/categories"
+        );
         console.log("getCategories");
         console.log(response.data);
         dispatch({ type: "GET_CATEGORIES", payload: response.data });
@@ -28,7 +30,10 @@ export const addCategory = ({ name = "", description = "" } = {}) => async (
         };
         console.log(`addCategory`);
         console.log(formData);
-        const response = await axios.post("/api/categories", formData);
+        const response = await axios.post(
+            "https://cvwo-todo-rails-backend.herokuapp.com/api/categories",
+            formData
+        );
         dispatch({ type: "ADD_CATEGORY", payload: response.data });
     } catch (error) {
         const errorMsg = error.response.data.message;
@@ -56,7 +61,10 @@ export const editCategory = (id, { name, description }) => async (
         };
         console.log(`editCategory`);
         console.log(formData);
-        const response = await axios.put(`/api/categories/${id}`, formData);
+        const response = await axios.put(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/categories/${id}`,
+            formData
+        );
         dispatch({
             type: "EDIT_CATEGORY",
             payload: { id, category: response.data },
@@ -80,7 +88,9 @@ export const editCategory = (id, { name, description }) => async (
 export const deleteCategory = (id) => async (dispatch) => {
     try {
         console.log(`deleteCategory`);
-        await axios.delete(`/api/categories/${id}`);
+        await axios.delete(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/categories/${id}`
+        );
         dispatch({ type: "DELETE_CATEGORY", payload: id });
         dispatch(getTodos()); //to remove this category from all todos
     } catch (error) {

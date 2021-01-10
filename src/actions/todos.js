@@ -4,7 +4,9 @@ import setAlert from "./alert";
 //get Todos
 export const getTodos = () => async (dispatch) => {
     try {
-        const response = await axios.get("/api/todos");
+        const response = await axios.get(
+            "https://cvwo-todo-rails-backend.herokuapp.com/api/todos"
+        );
         // console.log("getTodos");
         // console.log(response.data);
         const tailoredData = response.data.map(({ todo, categories }) => ({
@@ -46,7 +48,10 @@ export const addTodo = ({
             category_ids,
         };
         console.log(formData);
-        const response = await axios.post("/api/todos", formData);
+        const response = await axios.post(
+            "https://cvwo-todo-rails-backend.herokuapp.com/api/todos",
+            formData
+        );
         const tailoredData = {
             ...response.data.todo,
             categories: response.data.categories,
@@ -93,7 +98,10 @@ export const editTodo = (
             category_ids,
         };
         console.log(formData);
-        const response = await axios.put(`/api/todos/${id}`, formData);
+        const response = await axios.put(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            formData
+        );
         const tailoredData = {
             ...response.data.todo,
             categories: response.data.categories,
@@ -120,7 +128,9 @@ export const deleteTodo = (id) => async (dispatch) => {
     try {
         // console.log(`editTodo`);
         // console.log(formData);
-        await axios.delete(`/api/todos/${id}`);
+        await axios.delete(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`
+        );
         dispatch({ type: "DELETE_TODO", payload: id });
     } catch (error) {
         console.log("deleteTodo error");
@@ -145,7 +155,10 @@ export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
         const formData = {
             completed: !prevCompleted,
         };
-        await axios.put(`/api/todos/${id}`, formData);
+        await axios.put(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            formData
+        );
         dispatch({ type: "TOGGLE_COMPLETE_TODO", payload: id });
     } catch (error) {
         console.log("togglecompleteTodo error");
@@ -170,7 +183,10 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
         const formData = {
             important: !prevImportance,
         };
-        await axios.put(`/api/todos/${id}`, formData);
+        await axios.put(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            formData
+        );
         dispatch({ type: "TOGGLE_IMPORTANCE_TODO", payload: id });
     } catch (error) {
         console.log("toggleImportanceTodo error");
@@ -187,7 +203,9 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
 //clear all completed
 export const clearCompletedTodos = () => async (dispatch) => {
     try {
-        await axios.delete(`/api/todos/completed`);
+        await axios.delete(
+            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/completed`
+        );
         dispatch({ type: "CLEAR_ALL_COMPLETED_TODOS" });
     } catch (error) {
         console.log("clearCompletedTodos error");
