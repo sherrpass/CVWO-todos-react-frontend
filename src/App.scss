@@ -444,7 +444,7 @@ a:hover {
     height: 100%;
     @include y-overflow-handle;
     &__top-section {
-        padding: 1rem 0 0.5rem 2.5rem;
+        padding: 1rem 1rem 0.5rem 2.5rem;
         border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
         width: 100%;
         &--filter {
@@ -610,10 +610,48 @@ a:hover {
     }
 }
 
+.search-menu {
+    position: absolute;
+    top: 13.3rem;
+    right: 16.5rem;
+    width: 40rem;
+
+    padding: 1.5rem;
+}
+
+.has-search .form-control {
+    padding-left: 4rem;
+}
+.has-search {
+    padding: 0 0.5rem;
+}
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    line-height: 4rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+    &:hover {
+        cursor: pointer;
+    }
+}
+.btn-search {
+    background-color: rgba($color-light-blue-1, 0.15);
+    width: 5rem;
+    &:hover {
+        cursor: pointer;
+        background-color: darken(rgba($color-light-blue-1, 0.15), 20%);
+    }
+}
+
 .filter-menu {
     position: absolute;
-    top: 14rem;
-    right: 10.3rem;
+    top: 13.3rem;
+    right: 8.3rem;
     width: 45rem;
 
     padding: 1.5rem;
@@ -621,8 +659,8 @@ a:hover {
 
 .sort-menu {
     position: absolute;
-    top: 14rem;
-    right: 3.4rem;
+    top: 13.3rem;
+    right: 1.6rem;
     width: 15rem;
     padding: 1.5rem;
 }

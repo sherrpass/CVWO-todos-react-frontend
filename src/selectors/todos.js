@@ -10,8 +10,18 @@ export const categorySelector = (todos, categoryId = null) => {
                   ) !== -1
           );
 };
-export const filterSelector = (todos, { completion, importance, dueBy }) => {
+export const filterSelector = (
+    todos,
+    { completion, importance, dueBy, search }
+) => {
     return todos
+        .filter((todo) => {
+            //for search filter
+            return (
+                !search ||
+                todo.title.toLowerCase().includes(search.toLowerCase())
+            );
+        })
         .filter((todo) => {
             //for importance filter
             return importance === "all" || todo.important;

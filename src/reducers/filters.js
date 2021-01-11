@@ -1,4 +1,5 @@
 const defaultState = {
+    search: "",
     sortBy: "dueBy", //createdAt, dueBy or name
     filters: {
         completion: "all", //completed, uncompleted or all

@@ -12,14 +12,17 @@ import { withRouter } from "react-router-dom";
 
 import SortMenu from "./menus/SortMenu";
 import FilterMenu from "./menus/FilterMenu";
+import SearchMenu from "./menus/SearchMenu";
 import CategoryForm from "./forms/CategoryForm";
 import TodoForm from "./forms/TodoForm";
+
 class BoardTopSection extends Component {
     state = {
         menus: {
             showCatMenu: false,
             showFilterMenu: false,
             showSortMenu: false,
+            showSearchMenu: false,
         },
         modals: {
             showCatModal: false,
@@ -57,6 +60,34 @@ class BoardTopSection extends Component {
             );
         }
     };
+    openSearchMenu = () => {
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                menus: { ...prevState.menus, showSearchMenu: true },
+            }),
+            () => {
+                document.addEventListener("click", this.closeSearchMenu);
+            }
+        );
+    };
+    closeSearchMenu = (e) => {
+        if (
+            !e ||
+            (!this.searchMenu.contains(e.target) &&
+                !this.searchMenuButton.contains(e.target))
+        ) {
+            this.setState(
+                (prevState) => ({
+                    ...prevState,
+                    menus: { ...prevState.menus, showSearchMenu: false },
+                }),
+                () => {
+                    document.removeEventListener("click", this.closeSearchMenu);
+                }
+            );
+        }
+    };
     openFilterMenu = () => {
         this.setState(
             (prevState) => ({
@@ -64,14 +95,11 @@ class BoardTopSection extends Component {
                 menus: { ...prevState.menus, showFilterMenu: true },
             }),
             () => {
-                console.log(this.state.menus.showFilterMenu);
-                console.log("openFilterMenu");
                 document.addEventListener("click", this.closeFilterMenu);
             }
         );
     };
     closeFilterMenu = (e) => {
-        console.log("closed");
         if (
             !e ||
             (!this.filterMenu.contains(e.target) &&
@@ -83,8 +111,6 @@ class BoardTopSection extends Component {
                     menus: { ...prevState.menus, showFilterMenu: false },
                 }),
                 () => {
-                    console.log(this.state.menus.showFilterMenu);
-                    console.log("closeFilterMenu");
                     document.removeEventListener("click", this.closeFilterMenu);
                 }
             );
@@ -230,6 +256,7 @@ class BoardTopSection extends Component {
                                 : "All of your tasks. Let's do this."}
                         </span>
                     </div>
+                    {/*Filter Buttons*/}
                     <div className="board__top-section--filter">
                         <div className="board__top-section--filter-wrapper">
                             <div className="filter-buttons-wrapper">
@@ -238,6 +265,23 @@ class BoardTopSection extends Component {
                                     onClick={this.openTodoModal}
                                 >
                                     + New Item
+                                </button>
+                                <button
+                                    className="btn-secondary filter-btn"
+                                    onClick={() =>
+                                        !this.state.menus.showSearchMenu
+                                            ? this.openSearchMenu()
+                                            : this.closeSearchMenu()
+                                    }
+                                    ref={(e) => {
+                                        this.searchMenuButton = e;
+                                    }}
+                                >
+                                    <i className="fas fa-search"></i>
+                                    <span className="margin-left-sm">
+                                        {" "}
+                                        Search
+                                    </span>
                                 </button>
                                 <button
                                     className="btn-secondary filter-btn"
@@ -274,6 +318,18 @@ class BoardTopSection extends Component {
                                         Sort
                                     </span>
                                 </button>
+
+                                {/*Menus*/}
+                                {this.state.menus.showSearchMenu ? (
+                                    <div
+                                        className="collaspible-menu search-menu"
+                                        ref={(e) => {
+                                            this.searchMenu = e;
+                                        }}
+                                    >
+                                        <SearchMenu />
+                                    </div>
+                                ) : null}
                                 {this.state.menus.showFilterMenu ? (
                                     <div
                                         className="collaspible-menu filter-menu"
@@ -298,6 +354,8 @@ class BoardTopSection extends Component {
                         </div>
                     </div>
                 </div>
+
+                {/*Modals*/}
                 <Modal
                     isOpen={this.state.modals.showCatModal}
                     className="my-modal add-edit-modal"
