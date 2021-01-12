@@ -6,6 +6,7 @@ import {
     deleteTodo,
     toggleCompleteTodo,
     toggleImportanceTodo,
+    toggleCartTodo,
 } from "../../actions/todos";
 import Modal from "react-modal";
 import TodoForm from "./forms/TodoForm";
@@ -91,7 +92,14 @@ class TodoItem extends Component {
                                     (this.props.todo.cart ? " true" : " false")
                                 }
                             >
-                                <i className="todo__icon fas fa-cart-plus"></i>
+                                <i
+                                    className="todo__icon fas fa-cart-plus"
+                                    onClick={() => {
+                                        this.props.toggleCartTodo(
+                                            this.props.todo.id
+                                        );
+                                    }}
+                                ></i>
                             </span>
                             <span className="todo__right todo__btn delete">
                                 <i
@@ -131,4 +139,5 @@ export default connect(mapStateToProps, {
     deleteTodo,
     toggleCompleteTodo,
     toggleImportanceTodo,
+    toggleCartTodo,
 })(TodoItem);

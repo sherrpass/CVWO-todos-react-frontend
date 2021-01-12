@@ -47,6 +47,14 @@ const todosReducer = (state = defaultState, { type, payload }) => {
                 ),
                 loading: false,
             };
+        case "TOGGLE_CART_TODO":
+            return {
+                ...state,
+                todos: state.todos.map((todo) =>
+                    todo.id === payload ? { ...todo, cart: !todo.cart } : todo
+                ),
+                loading: false,
+            };
         case "CLEAR_ALL_COMPLETED_TODOS":
             return {
                 ...state,

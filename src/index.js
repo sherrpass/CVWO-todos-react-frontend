@@ -4,4 +4,4 @@ import App from "./App";
 import "./App.scss";
 import Pomodoro from "./Pomodoro";
 
-ReactDOM.render(<Pomodoro />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));

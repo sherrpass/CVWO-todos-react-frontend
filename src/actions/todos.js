@@ -34,6 +34,7 @@ export const addTodo = ({
     due_by = null, //in ms from unix epoch, default is null for functionality of airbnb react-dates
     important = false,
     category_ids = "", //expects the category_ids to be a string of category ids the todo belongs to separated by spaces ***
+    cart = false,
 } = {}) => async (dispatch) => {
     try {
         console.log("addTodo category_ids:");
@@ -46,6 +47,7 @@ export const addTodo = ({
             important,
             due_by,
             category_ids,
+            cart,
         };
         console.log(formData);
         const response = await axios.post(
@@ -83,6 +85,7 @@ export const editTodo = (
         created_at,
         important,
         category_ids = "",
+        cart = false,
     }
 ) => async (dispatch) => {
     try {
@@ -96,10 +99,11 @@ export const editTodo = (
             important,
             due_by,
             category_ids,
+            cart,
         };
         console.log(formData);
         const response = await axios.put(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
             formData
         );
         const tailoredData = {
@@ -128,9 +132,7 @@ export const deleteTodo = (id) => async (dispatch) => {
     try {
         // console.log(`editTodo`);
         // console.log(formData);
-        await axios.delete(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`
-        );
+        await axios.delete(process.env.REACT_APP_PROXY + `/api/todos/${id}`);
         dispatch({ type: "DELETE_TODO", payload: id });
     } catch (error) {
         console.log("deleteTodo error");
@@ -156,7 +158,7 @@ export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
             completed: !prevCompleted,
         };
         await axios.put(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
             formData
         );
         dispatch({ type: "TOGGLE_COMPLETE_TODO", payload: id });
@@ -184,7 +186,7 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
             important: !prevImportance,
         };
         await axios.put(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/${id}`,
+            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
             formData
         );
         dispatch({ type: "TOGGLE_IMPORTANCE_TODO", payload: id });
@@ -199,12 +201,37 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
         });
     }
 };
+export const toggleCartTodo = (id) => async (dispatch, getState) => {
+    try {
+        // console.log(`editTodo`);
+        // console.log(formData);
+        const prevCart = getState().todo.todos.find((todo) => todo.id === id)
+            .cart;
+        const formData = {
+            cart: !prevCart,
+        };
+        await axios.put(
+            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
+            formData
+        );
+        dispatch({ type: "TOGGLE_CART_TODO", payload: id });
+    } catch (error) {
+        console.log("toggleCartTodo error");
+        dispatch({
+            type: "TODO_ERROR",
+            payload: {
+                msg: error.response.data.message,
+                status: error.response.status,
+            },
+        });
+    }
+};
 
 //clear all completed
 export const clearCompletedTodos = () => async (dispatch) => {
     try {
         await axios.delete(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/todos/completed`
+            process.env.REACT_APP_PROXY + `/api/todos/completed`
         );
         dispatch({ type: "CLEAR_ALL_COMPLETED_TODOS" });
     } catch (error) {
@@ -218,6 +245,7 @@ export const clearCompletedTodos = () => async (dispatch) => {
         });
     }
 };
+
 // export const clearCompletedTodos = () => ({
 //     type:"CLEAR_ALL_COMPLETED_TODOS"
 // })
