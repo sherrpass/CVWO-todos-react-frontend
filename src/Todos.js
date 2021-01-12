@@ -4,11 +4,9 @@ import {
     categorySelector,
     filterSelector,
     sortSelector,
-    cartSelector,
 } from "../../selectors/todos";
 import TodoItem from "./TodoItem";
 import { Collapse } from "react-collapse";
-
 class Todos extends Component {
     state = {
         showTodo: true,
@@ -58,20 +56,15 @@ class Todos extends Component {
 
 function mapStateToProps(state, props) {
     return {
-        todos: props.isCart
-            ? cartSelector(state.todo.todos)
-            : sortSelector(
-                  filterSelector(
-                      categorySelector(
-                          state.todo.todos,
-                          state.category.currCategory
-                      ),
-                      props.dueBy
-                          ? { ...state.filters.filters, dueBy: [props.dueBy] }
-                          : state.filters.filters
-                  ),
-                  state.filters.sortBy
-              ),
+        todos: sortSelector(
+            filterSelector(
+                categorySelector(state.todo.todos, state.category.currCategory),
+                props.dueBy
+                    ? { ...state.filters.filters, dueBy: [props.dueBy] }
+                    : state.filters.filters
+            ),
+            state.filters.sortBy
+        ),
     };
 }
 

@@ -13,11 +13,12 @@ $color-grey-dark-3: rgb(64, 64, 64);
 $color-green: rgb(79, 164, 224);
 $color-white: #fff;
 $color-black: #000;
-$color-blue: #11263e;
+$color-blue: #193e67;
 $color-light-blue-1: #5ca4ec;
 $color-light-blue-3: #167dfb;
 $color-light-blue-2: #1f76cc;
 $color-light-blue-4: rgb(148, 214, 255);
+$color-dark-red: rgb(126, 18, 18);
 //font sizes
 $default-font-size: 1.6rem;
 
@@ -553,6 +554,9 @@ a:hover {
         width: 0.7rem;
         background-color: $color-light-blue-2;
         height: 100%;
+        &.important {
+            background-color: $color-dark-red;
+        }
     }
     &__title {
         position: absolute;
@@ -595,7 +599,7 @@ a:hover {
     &__btn {
         margin-top: 0.5rem;
         &.important.true i {
-            color: $color-red;
+            color: $color-dark-red;
         }
         &.cart.true i {
             color: darken($color-grey-dark-2, 50%);
@@ -922,4 +926,73 @@ input:checked + .slider:before {
 
 .ReactCollapse--collapse {
     transition: height 500ms;
+}
+
+//pomodoro
+.pomodoro {
+    &__timer-circle {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        stroke: $color-blue;
+        fill: transparent;
+    }
+    &__timer {
+        margin: 0 auto;
+        position: relative;
+    }
+    &__top-section {
+        padding: 1rem 0 0.5rem;
+    }
+    &__timer--time {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        transform: translate(50%, -50%);
+        text-align: center;
+    }
+    &__control-btns {
+        margin: 0 auto;
+        width: 50%;
+        text-align: center;
+    }
+    &__control-btn,
+    &__control-btn:active,
+    &__control-btn:focus {
+        outline: none;
+        border: 1px solid $color-grey-dark;
+        background-color: $color-white;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 50%;
+        color: $color-grey-dark;
+        font-size: 1.5rem;
+        &.primary {
+            font-size: 1.8rem;
+            border: 1px solid $color-blue;
+            width: 4.5rem;
+            height: 4.5rem;
+            color: $color-blue;
+            .fa-play {
+                transform: translate(0.2rem, 0.1rem);
+            }
+        }
+        .fa-forward {
+            transform: translate(0.1rem, 0);
+        }
+        &:not(:last-child) {
+            margin-right: 1rem;
+        }
+    }
+    &__main-section {
+        width: 100%;
+        padding: 2rem 2.5rem;
+    }
+}
+.pomodoro-time {
+    font-size: 5rem;
+    color: $color-grey-dark-3;
+}
+.pomodoro-time-description {
+    font-size: 2rem;
 }

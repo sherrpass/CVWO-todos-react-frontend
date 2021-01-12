@@ -79,6 +79,12 @@ export const sortSelector = (todos, sortBy) => {
     });
 };
 
+export const cartSelector = (todos) => {
+    return todos.filter((todo) => {
+        return todo.isCart;
+    });
+};
+
 // export default (
 //     todos,
 //     { sortBy, importantOnly },

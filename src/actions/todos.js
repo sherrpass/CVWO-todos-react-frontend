@@ -5,7 +5,7 @@ import setAlert from "./alert";
 export const getTodos = () => async (dispatch) => {
     try {
         const response = await axios.get(
-            "https://cvwo-todo-rails-backend.herokuapp.com/api/todos"
+            process.env.REACT_APP_PROXY + "/api/todos"
         );
         // console.log("getTodos");
         // console.log(response.data);
@@ -49,7 +49,7 @@ export const addTodo = ({
         };
         console.log(formData);
         const response = await axios.post(
-            "https://cvwo-todo-rails-backend.herokuapp.com/api/todos",
+            process.env.REACT_APP_PROXY + "/api/todos",
             formData
         );
         const tailoredData = {
