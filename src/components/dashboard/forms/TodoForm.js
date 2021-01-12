@@ -34,6 +34,7 @@ class TodoForm extends Component {
             category_ids: this.props.todo
                 ? this.props.todo.categories.map((category) => category.id)
                 : [], //changes the array of categories objects to an array of categories_id
+            cart: this.props.todo ? this.props.todo.cart : false,
         },
         modalIsOpen: false,
         error: null,
@@ -58,10 +59,10 @@ class TodoForm extends Component {
         }));
     };
 
-    onCompleteChange = () => {
+    onCartChange = () => {
         this.setState((prevState) => ({
             ...prevState,
-            todo: { ...prevState.todo, completed: true },
+            todo: { ...prevState.todo, cart: !prevState.todo.cart },
         }));
     };
     onImportanceChange = () => {
@@ -145,7 +146,9 @@ class TodoForm extends Component {
         return (
             <div>
                 <div className="margin-bottom-sm">
-                    <span className="heading-primary">Edit Todo</span>
+                    <span className="heading-primary">
+                        {this.props.isEdit ? "Edit Todo" : "Add Todo"}
+                    </span>
                 </div>
                 <div className="register__form">
                     <form noValidate onSubmit={this.onSubmit}>
@@ -227,18 +230,6 @@ class TodoForm extends Component {
                             >
                                 {this.props.categories &&
                                     this.props.categories.map((category) => (
-                                        // <button
-                                        //     type="button"
-                                        //     key={category.id}
-                                        //     onClick={this.onOldCategoryClick}
-                                        //     value={category.id}
-                                        // >
-                                        //     {this.state.todo.category_ids.includes(
-                                        //         category.id
-                                        //     )
-                                        //         ? category.name + " (Sel)"
-                                        //         : category.name}
-                                        // </button>
                                         <option
                                             selected={false}
                                             onClick={this.onOldCategoryClick}
@@ -257,8 +248,8 @@ class TodoForm extends Component {
                                     ))}
                             </select>
                         </div>
-                        <div>
-                            <label className=".form-label-sm margin-right-sm ">
+                        <div className="mb-3">
+                            <label className=".form-label-sm margin-right-med">
                                 Important
                             </label>
                             <label
@@ -272,17 +263,22 @@ class TodoForm extends Component {
                                 />
                                 <span className="slider"></span>
                             </label>
-                            {
-                                //     {this.props.isEdit && (
-                                //     <button
-                                //         type="button"
-                                //         disabled={this.state.todo.completed}
-                                //         onClick={this.onCompleteChange}
-                                //     >
-                                //         Complete
-                                //     </button>
-                                // )}
-                            }
+                        </div>
+                        <div>
+                            <label className=".form-label-sm margin-right-sm ">
+                                Add to cart
+                            </label>
+                            <label
+                                className="switch"
+                                onClick={this.onCartChange}
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={this.state.todo.cart}
+                                    onChange={this.onCartChange}
+                                />
+                                <span className="slider"></span>
+                            </label>
                         </div>
 
                         <button

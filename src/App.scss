@@ -29,7 +29,7 @@ $navbar-height: 5rem;
 $categories-sidebar-width: 23rem;
 $category-top-section-height: 7.5rem;
 $board-top-section-height: 14.3rem;
-$categories-sidebar-closed-width: 2rem;
+$categories-sidebar-closed-width: 1.5rem;
 //datepicker
 .react-datepicker {
     font-size: 1.3rem !important;
@@ -281,7 +281,7 @@ a:hover {
     margin-right: 1rem;
 }
 .margin-right-med {
-    margin-right: 1.5rem;
+    margin-right: 1.8rem;
 }
 .margin-left-sm {
     margin-right: 0.5rem;
@@ -446,7 +446,7 @@ a:hover {
         width: 3rem;
         border-radius: 50%;
         left: calc(#{$categories-sidebar-width} - 1.5rem);
-        top: 1rem;
+        bottom: 1rem;
         background-color: $color-white;
         border: 0.5px solid rgba($color-grey-dark-2, 0.4);
         text-align: center;
@@ -995,8 +995,17 @@ input:checked + .slider:before {
         margin: 0 auto;
     }
     &__todos-title {
+        position: relative;
         margin-bottom: 1rem;
         border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
+    }
+    &__add-task-btn {
+        position: absolute;
+        top: -0.4rem;
+        right: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        color: $color-grey-dark;
     }
 }
 .pomodoro-time {

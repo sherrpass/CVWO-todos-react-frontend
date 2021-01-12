@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import Todos from "../dashboard/Todos";
 import Loading from "../layout/Loading";
 import { getTodos } from "../../actions/todos";
-
+import TodoForm from "../dashboard/forms/TodoForm";
+import Modal from "react-modal";
 class Pomodoro extends Component {
     componentDidMount() {
         this.props.getTodos();
@@ -13,8 +14,22 @@ class Pomodoro extends Component {
         timeLeft: 1500, //in seconds
         isBreak: false,
         currTask: null,
+        modals: {
+            showTodoModal: false,
+        },
     };
-
+    closeTodoModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { showTodoModal: false },
+        }));
+    };
+    openTodoModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { showTodoModal: true },
+        }));
+    };
     clockRuns = () => {
         setTimeout(() => {
             if (this.state.isRunning) {
@@ -107,7 +122,6 @@ class Pomodoro extends Component {
         ) : (
             <>
                 <div className="dashboard">
-                    <button onClick={this.playOn}>play</button>
                     <div className="pomodoro__top-section">
                         <div
                             className="pomodoro__timer"
@@ -182,11 +196,33 @@ class Pomodoro extends Component {
                         <div className="pomodoro__todos-container">
                             <div className="pomodoro__todos-title">
                                 <span className="heading-secondary">Tasks</span>
+                                <button
+                                    className="btn-secondary pomodoro__add-task-btn"
+                                    onClick={this.openTodoModal}
+                                >
+                                    <span className="description">
+                                        + New Task
+                                    </span>
+                                </button>
                             </div>
                             <Todos isCart={true} />
                         </div>
                     </div>
                 </div>
+                <Modal
+                    isOpen={this.state.modals.showTodoModal}
+                    className="my-modal todo-modal"
+                    onRequestClose={this.closeTodoModal}
+                    ariaHideApp={false}
+                >
+                    <TodoForm
+                        isEdit={false}
+                        onSubmit={(todo) => {
+                            this.closeTodoModal();
+                            this.props.addTodo(todo);
+                        }}
+                    />
+                </Modal>
             </>
         );
     }
