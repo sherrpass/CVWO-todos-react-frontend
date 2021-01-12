@@ -1,12 +1,20 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import Todos from "../dashboard/Todos";
+import Loading from "../layout/Loading";
+import { getTodos } from "../../actions/todos";
 
 class Pomodoro extends Component {
+    componentDidMount() {
+        this.props.getTodos();
+    }
     state = {
         isRunning: false,
         timeLeft: 1500, //in seconds
         isBreak: false,
+        currTask: null,
     };
+
     clockRuns = () => {
         setTimeout(() => {
             if (this.state.isRunning) {
@@ -83,6 +91,9 @@ class Pomodoro extends Component {
             timeLeft: prevState.isBreak ? 300 : 1500,
         }));
     };
+    onCurrTaskClick = (e) => {
+        this.setState(() => ({ currTask: e.target.id }));
+    };
     radius = 15;
     stroke = 2;
     progressFrac = this.state.timeLeft / (this.state.isBreak ? 300 : 1500);
@@ -91,9 +102,12 @@ class Pomodoro extends Component {
     strokeDashoffset =
         this.circumference - this.progressFrac * this.circumference;
     render() {
-        return (
+        return this.props.loading ? (
+            <Loading />
+        ) : (
             <>
                 <div className="dashboard">
+                    <button onClick={this.playOn}>play</button>
                     <div className="pomodoro__top-section">
                         <div
                             className="pomodoro__timer"
@@ -165,7 +179,12 @@ class Pomodoro extends Component {
                         </div>
                     </div>
                     <div className="pomodoro__main-section">
-                        <Todos isCart={true} />
+                        <div className="pomodoro__todos-container">
+                            <div className="pomodoro__todos-title">
+                                <span className="heading-secondary">Tasks</span>
+                            </div>
+                            <Todos isCart={true} />
+                        </div>
                     </div>
                 </div>
             </>
@@ -173,4 +192,7 @@ class Pomodoro extends Component {
     }
 }
 
-export default Pomodoro;
+const mapStateToProps = (state) => ({
+    loading: state.todo.loading,
+});
+export default connect(mapStateToProps, { getTodos })(Pomodoro);

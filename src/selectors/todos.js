@@ -81,7 +81,7 @@ export const sortSelector = (todos, sortBy) => {
 
 export const cartSelector = (todos) => {
     return todos.filter((todo) => {
-        return todo.isCart;
+        return todo.cart;
     });
 };
 

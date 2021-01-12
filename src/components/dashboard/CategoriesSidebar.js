@@ -31,7 +31,10 @@ class CategoriesSidebar extends Component {
     render() {
         return (
             <>
-                <div className="categories-sidebar__btn">
+                <div
+                    className="categories-sidebar__btn"
+                    onClick={this.props.onClickCollaspe}
+                >
                     <i
                         class={
                             "fas fa-chevron-" +

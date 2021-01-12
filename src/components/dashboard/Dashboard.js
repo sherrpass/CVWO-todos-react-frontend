@@ -24,9 +24,11 @@ const Dashboard = ({ getTodos, getCategories, loading }) => {
                 className={
                     "categories-sidebar" + (showSideBar ? "" : " closed")
                 }
-                onClick={toggleSideBar}
             >
-                <CategoriesSidebar showSideBar={showSideBar} />
+                <CategoriesSidebar
+                    onClickCollaspe={toggleSideBar}
+                    showSideBar={showSideBar}
+                />
             </div>
             <div className={"board" + (showSideBar ? "" : " closed")}>
                 <BoardTopSection />

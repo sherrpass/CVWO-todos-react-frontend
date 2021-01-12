@@ -35,7 +35,7 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
                         <NavLink to="/dashboard" className="navigation__link">
                             Dashboard
                         </NavLink>
-                        <NavLink to="/" className="navigation__link">
+                        <NavLink to="/pomodoro" className="navigation__link">
                             {" "}
                             {/*to be added*/}
                             Pomodoro

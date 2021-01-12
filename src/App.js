@@ -7,6 +7,7 @@ import { loadUser } from "./actions/auth";
 import PrivateRoute from "./routing/PrivateRoute";
 
 import Dashboard from "./components/dashboard/Dashboard";
+import Pomodoro from "./components/pomodoro/Pomodoro";
 
 import NotFoundPage from "./components/layout/NotFoundPage";
 import Navbar from "./components/layout/NavBar";
@@ -41,6 +42,11 @@ const App = () => {
                             exact
                             path="/dashboard"
                             component={Dashboard}
+                        />
+                        <PrivateRoute
+                            exact
+                            path="/pomodoro"
+                            component={Pomodoro}
                         />
 
                         {/*<PrivateRoute
