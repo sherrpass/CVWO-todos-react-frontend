@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { getTodos } from "../../actions/todos";
 import { getCategories } from "../../actions/categories";
@@ -8,17 +8,27 @@ import BoardMainSection from "./BoardMainSection";
 import Loading from "../layout/Loading";
 
 const Dashboard = ({ getTodos, getCategories, loading }) => {
+    const [showSideBar, setShowSideBar] = useState(true);
     useEffect(() => {
         getTodos();
         getCategories();
     });
+    const toggleSideBar = () => {
+        setShowSideBar(!showSideBar);
+    };
     return loading ? (
         <Loading />
     ) : (
         <div className="dashboard">
-            <CategoriesSidebar />
-
-            <div className="board">
+            <div
+                className={
+                    "categories-sidebar" + (showSideBar ? "" : " closed")
+                }
+                onClick={toggleSideBar}
+            >
+                <CategoriesSidebar showSideBar={showSideBar} />
+            </div>
+            <div className={"board" + (showSideBar ? "" : " closed")}>
                 <BoardTopSection />
                 <BoardMainSection />
             </div>

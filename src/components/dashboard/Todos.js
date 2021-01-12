@@ -6,7 +6,7 @@ import {
     sortSelector,
 } from "../../selectors/todos";
 import TodoItem from "./TodoItem";
-
+import { Collapse } from "react-collapse";
 class Todos extends Component {
     state = {
         showTodo: true,
@@ -34,21 +34,13 @@ class Todos extends Component {
                         {this.dueByTitleConversion(this.props.dueBy)}
                     </div>
                 ) : null}
-                <div
-                    className={
-                        "todo__collaspsible" +
-                        (this.props.dueBy
-                            ? this.state.showTodo
-                                ? " collapse show"
-                                : " collapse"
-                            : "")
-                    }
-                    id={this.props.dueBy}
-                >
-                    {this.props.todos.map((todo) => {
-                        return <TodoItem key={todo.id} todo={todo} />;
-                    })}
-                </div>
+                <Collapse isOpened={this.state.showTodo}>
+                    <div className="todo__collaspsible" id={this.props.dueBy}>
+                        {this.props.todos.map((todo) => {
+                            return <TodoItem key={todo.id} todo={todo} />;
+                        })}
+                    </div>
+                </Collapse>
             </div>
         );
         // return (

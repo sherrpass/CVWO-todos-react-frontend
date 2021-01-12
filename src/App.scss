@@ -17,7 +17,7 @@ $color-blue: #11263e;
 $color-light-blue-1: #5ca4ec;
 $color-light-blue-3: #167dfb;
 $color-light-blue-2: #1f76cc;
-
+$color-light-blue-4: rgb(148, 214, 255);
 //font sizes
 $default-font-size: 1.6rem;
 
@@ -28,7 +28,7 @@ $navbar-height: 5rem;
 $categories-sidebar-width: 23rem;
 $category-top-section-height: 7.5rem;
 $board-top-section-height: 14.3rem;
-
+$categories-sidebar-closed-width: 2rem;
 //datepicker
 .react-datepicker {
     font-size: 1.3rem !important;
@@ -390,9 +390,16 @@ a:hover {
     // background-color: $color-grey-dark;
     position: absolute;
     top: 0;
+    left: 0;
     bottom: 0;
     width: $categories-sidebar-width;
     border-right: 0.5px solid rgba($color-grey-dark-2, 0.4);
+    transition: all 0.2s ease-out;
+    &.closed {
+        left: calc(
+            -1 * #{$categories-sidebar-width} + #{$categories-sidebar-closed-width}
+        );
+    }
     &__top-section {
         height: $category-top-section-height;
     }
@@ -431,6 +438,31 @@ a:hover {
         width: 100%;
         @include x-overflow-handle;
     }
+    &__btn {
+        position: absolute;
+        height: 3rem;
+        width: 3rem;
+        border-radius: 50%;
+        left: calc(#{$categories-sidebar-width} - 1.5rem);
+        top: 1rem;
+        background-color: $color-white;
+        border: 0.5px solid rgba($color-grey-dark-2, 0.4);
+        text-align: center;
+        font-weight: 300;
+        font-size: 1.3rem;
+        color: #777;
+        z-index: 1;
+        &:hover {
+            background-color: $color-grey-light-2;
+            cursor: pointer;
+        }
+        .fa-chevron-left {
+            transform: translate(-0.1rem, 0.35rem);
+        }
+        .fa-chevron-right {
+            transform: translate(0.1rem, 0.35rem);
+        }
+    }
 }
 
 .board {
@@ -443,6 +475,11 @@ a:hover {
     width: calc(100% - #{$categories-sidebar-width});
     height: 100%;
     @include y-overflow-handle;
+    transition: all 0.2s ease-out;
+    &.closed {
+        left: #{$categories-sidebar-closed-width};
+        width: calc(100% - #{$categories-sidebar-closed-width});
+    }
     &__top-section {
         padding: 1rem 1rem 0.5rem 2.5rem;
         border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
@@ -487,6 +524,7 @@ a:hover {
 [class^="todo"] {
     font-size: 1.5rem;
 }
+
 .todo {
     &__container {
         width: 100%;
@@ -495,6 +533,9 @@ a:hover {
     &__container-title {
         font-size: 2rem;
         font-weight: 300;
+        &:hover {
+            cursor: pointer;
+        }
     }
     &__item {
         background-color: $color-grey-light-1;
@@ -502,7 +543,7 @@ a:hover {
         height: 4rem;
         border-bottom: 0.5px solid $color-grey-light-2;
         margin-bottom: 2px;
-
+        position: relative;
         &:hover span.todo__btn i {
             visibility: visible; //make icons visible on item hover
         }
@@ -514,7 +555,8 @@ a:hover {
         height: 100%;
     }
     &__title {
-        float: left;
+        position: absolute;
+        left: 1rem;
         font-size: 1.5rem;
         padding: 0.7rem;
         width: 60%;
@@ -525,33 +567,26 @@ a:hover {
     }
 
     &__complete,
-    __complete:active,
-    __complete:focus {
+    &__complete:active,
+    &__complete:focus {
         border: none !important;
         outline: none !important;
-
+        width: 10rem;
+        text-align: center;
+        height: 100%;
+        padding: 0.7rem;
+        color: $color-white;
+        margin-top: 0;
         &.true {
-            width: 10rem;
-            text-align: center;
-            height: 100%;
-            padding: 0.7rem;
             background-color: $color-green;
-            font-size: 1.5rem;
-            color: $color-white;
-            margin-top: 0;
+
             &:hover {
                 cursor: pointer;
             }
         }
         &.false {
-            width: 10rem;
-            text-align: center;
-            height: 100%;
-            padding: 0.5rem;
             background-color: $color-grey-light-2;
-            font-size: 1.5rem;
-            color: $color-white;
-            margin-top: 0;
+
             &:hover {
                 cursor: pointer;
             }
@@ -792,7 +827,7 @@ a:hover {
 .my-alert {
     &.danger {
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         top: $navbar-height;
         padding: 1rem 2rem;
         width: 100%;
@@ -801,7 +836,7 @@ a:hover {
     }
     &.success {
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         top: $navbar-height;
         padding: 1rem 2rem;
         width: 100%;
@@ -883,4 +918,8 @@ input:checked + .slider:before {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.ReactCollapse--collapse {
+    transition: height 500ms;
 }

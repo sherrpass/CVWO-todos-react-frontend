@@ -23,6 +23,7 @@ class CategoriesSidebar extends Component {
             showCatModal: true,
         }));
     };
+
     onSubmit = ({ name, description }) => {
         this.closeCatModal();
         this.props.addCategory({ name, description });
@@ -30,38 +31,41 @@ class CategoriesSidebar extends Component {
     render() {
         return (
             <>
-                <div className="categories-sidebar">
-                    <div className="categories-sidebar__top-section">
-                        <div className="categories-sidebar__title-container">
-                            <div className="heading-secondary">Categories </div>
-                            <i
-                                className="fas fa-plus fa-sm add-category-icon"
-                                onClick={this.openCatModal}
-                            ></i>
-                        </div>
-                        <div className="categories-sidebar__divider"></div>
+                <div className="categories-sidebar__btn">
+                    <i
+                        class={
+                            "fas fa-chevron-" +
+                            (this.props.showSideBar ? "left" : "right")
+                        }
+                    ></i>
+                </div>
+                <div className="categories-sidebar__top-section">
+                    <div className="categories-sidebar__title-container">
+                        <div className="heading-secondary">Categories </div>
+                        <i
+                            className="fas fa-plus fa-sm add-category-icon"
+                            onClick={this.openCatModal}
+                        ></i>
                     </div>
-                    <div className="categories-sidebar__main-section">
-                        <div
-                            className={
-                                "categories-sidebar__category_item" +
-                                (this.props.currCategory ? "" : "--selected")
-                            }
-                            onClick={() => {
-                                this.props.setCurrCategory(null);
-                            }}
-                        >
-                            <div className="categories-sidebar__category_name">
-                                Everything
-                            </div>
+                    <div className="categories-sidebar__divider"></div>
+                </div>
+                <div className="categories-sidebar__main-section">
+                    <div
+                        className={
+                            "categories-sidebar__category_item" +
+                            (this.props.currCategory ? "" : "--selected")
+                        }
+                        onClick={() => {
+                            this.props.setCurrCategory(null);
+                        }}
+                    >
+                        <div className="categories-sidebar__category_name">
+                            Everything
                         </div>
-                        {this.props.categories.map((category) => (
-                            <CategoryItem
-                                key={category.id}
-                                category={category}
-                            />
-                        ))}
                     </div>
+                    {this.props.categories.map((category) => (
+                        <CategoryItem key={category.id} category={category} />
+                    ))}
                 </div>
                 <Modal
                     isOpen={this.state.showCatModal}
