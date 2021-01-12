@@ -4,7 +4,7 @@ import { getTodos } from "./todos";
 export const getCategories = () => async (dispatch) => {
     try {
         const response = await axios.get(
-            "https://cvwo-todo-rails-backend.herokuapp.com/api/categories"
+            process.env.REACT_APP_PROXY + "/api/categories"
         );
         console.log("getCategories");
         console.log(response.data);
@@ -31,7 +31,7 @@ export const addCategory = ({ name = "", description = "" } = {}) => async (
         console.log(`addCategory`);
         console.log(formData);
         const response = await axios.post(
-            "https://cvwo-todo-rails-backend.herokuapp.com/api/categories",
+            process.env.REACT_APP_PROXY + "/api/categories",
             formData
         );
         dispatch({ type: "ADD_CATEGORY", payload: response.data });
