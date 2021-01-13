@@ -75,7 +75,6 @@ $categories-sidebar-closed-width: 1.5rem;
         border-radius: 4px;
     }
 }
-
 @mixin category-item {
     height: 3.5rem;
     padding: 0 1rem;
@@ -214,6 +213,11 @@ a:hover {
     width: 60%;
 }
 
+.todo-modal {
+    width: 50%;
+    min-width: 30rem;
+}
+
 .category-option {
     &:active,
     &:focus {
@@ -270,12 +274,30 @@ a:hover {
 
 .form-label {
     font-size: 1.8rem;
+    &.primary {
+        font-size: 2rem;
+    }
+
+    &.secondary {
+        font-size: 1.4rem;
+        color: $color-grey-dark;
+        font-weight: 500;
+    }
 }
 
 .form-label-sm {
     font-size: 1.4rem;
 }
-
+.form-range {
+    width: 100%;
+}
+.vol {
+    text-align: center;
+}
+.pomodoro-settings-error {
+    font-size: 1.4rem;
+    color: $color-dark-red;
+}
 //utils
 .margin-right-sm {
     margin-right: 1rem;
@@ -631,6 +653,27 @@ a:hover {
     }
 }
 
+.form__title {
+    position: relative;
+}
+.close-modal {
+    color: rgba($color-grey-dark-2, 0.7);
+    font-size: 3rem;
+    &:hover {
+        cursor: pointer;
+    }
+    &.todo {
+        position: absolute;
+        top: -1.5rem;
+        right: 0.5rem;
+    }
+    &.category {
+        position: absolute;
+        top: -0.5rem;
+        right: 1rem;
+    }
+}
+
 .filter-buttons-wrapper {
     display: inline-block;
 }
@@ -654,6 +697,15 @@ a:hover {
     position: absolute;
     top: 13.3rem;
     right: 16.5rem;
+    width: 40rem;
+
+    padding: 1.5rem;
+}
+
+.pomo-menu {
+    position: absolute;
+    top: 4rem;
+    right: 3rem;
     width: 40rem;
 
     padding: 1.5rem;
@@ -943,6 +995,7 @@ input:checked + .slider:before {
         position: relative;
     }
     &__top-section {
+        position: relative;
         padding: 1rem 0 0.5rem;
     }
     &__timer--time {
@@ -1006,6 +1059,19 @@ input:checked + .slider:before {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         color: $color-grey-dark;
+    }
+    &__settings {
+        position: absolute;
+        top: 2rem;
+        right: 3rem;
+        .fas {
+            font-size: 2.5rem;
+            color: $color-grey-dark;
+            &:hover {
+                cursor: pointer;
+                color: darken($color-grey-dark, 10%);
+            }
+        }
     }
 }
 .pomodoro-time {

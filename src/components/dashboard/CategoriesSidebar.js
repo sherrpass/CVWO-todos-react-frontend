@@ -76,7 +76,11 @@ class CategoriesSidebar extends Component {
                     onRequestClose={this.closeCatModal}
                     ariaHideApp={false}
                 >
-                    <CategoryForm isEdit={false} onSubmit={this.onSubmit} />
+                    <CategoryForm
+                        isEdit={false}
+                        onSubmit={this.onSubmit}
+                        closeModal={this.closeCatModal}
+                    />
                 </Modal>
             </>
         );

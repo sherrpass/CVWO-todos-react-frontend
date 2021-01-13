@@ -2,22 +2,71 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Todos from "../dashboard/Todos";
 import Loading from "../layout/Loading";
-import { getTodos } from "../../actions/todos";
+import { getTodos, addTodo } from "../../actions/todos";
 import TodoForm from "../dashboard/forms/TodoForm";
 import Modal from "react-modal";
+import dingMP3 from "../../sounds/pomodoro_finished.mp3";
+import clickMP3 from "../../sounds/pomodoro_click.mp3";
+import PomoSettings from "./PomoSettings";
 class Pomodoro extends Component {
-    componentDidMount() {
-        this.props.getTodos();
-    }
+    Ding = new Audio(dingMP3);
+    Click = new Audio(clickMP3);
+    radius = 15;
+    stroke = 2;
+    normalizedRadius = this.radius - this.stroke * 2;
+    circumference = this.normalizedRadius * 2 * Math.PI;
     state = {
         isRunning: false,
         timeLeft: 1500, //in seconds
         isBreak: false,
         currTask: null,
+        settings: {
+            pomodoroTime: 1500,
+            breakTime: 300,
+            volume: 50,
+        },
         modals: {
             showTodoModal: false,
+            showPomoModal: false,
         },
     };
+    componentDidMount() {
+        this.props.getTodos();
+        let settings = localStorage.getItem("pomoSettings");
+        if (settings) {
+            let parsedSettings = JSON.parse(settings);
+            const { pomodoroTime, breakTime, volume } = parsedSettings;
+            this.setState(
+                (prevState) => ({
+                    ...prevState,
+                    settings: { pomodoroTime, breakTime, volume },
+                }),
+                () => {
+                    //update timeLeft
+                    this.onRedoClick();
+                }
+            );
+        }
+    }
+    onSettingsChange = ({ pomodoroTime, breakTime, volume }) => {
+        //update state
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                settings: { pomodoroTime, breakTime, volume },
+            }),
+            () => {
+                this.onRedoClick();
+                this.closePomoModal();
+            }
+        );
+        //update localstorage
+        localStorage.setItem(
+            "pomoSettings",
+            JSON.stringify({ pomodoroTime, breakTime, volume })
+        );
+    };
+
     closeTodoModal = () => {
         this.setState((prevState) => ({
             ...prevState,
@@ -30,12 +79,35 @@ class Pomodoro extends Component {
             modals: { showTodoModal: true },
         }));
     };
+    closePomoModal = () => {
+        this.setState((prevState) => ({
+            ...prevState,
+            modals: { showPomoModal: false },
+        }));
+    };
+    openPomoModal = () => {
+        this.setState(
+            (prevState) => ({
+                ...prevState,
+                modals: { showPomoModal: true },
+            }),
+            () => {
+                this.onRedoClick();
+            }
+        );
+    };
+
     clockRuns = () => {
         setTimeout(() => {
             if (this.state.isRunning) {
                 if (this.state.timeLeft === 0) {
+                    this.Ding.volume = this.state.settings.volume / 100;
+                    this.Ding.play();
+                    //finished
                     this.setState((prevState) => ({
-                        timeLeft: prevState.isBreak ? 1500 : 300,
+                        timeLeft: prevState.isBreak
+                            ? prevState.settings.pomodoroTime
+                            : prevState.settings.breakTime,
                         isRunning: false,
                         isBreak: !prevState.isBreak,
                     }));
@@ -54,8 +126,13 @@ class Pomodoro extends Component {
         }, 1000);
     };
     timeConverter = (timeInSec) => {
-        let min = Math.floor(timeInSec / 60);
+        let hour = 0;
+        if (timeInSec >= 3600) {
+            hour = Math.floor(timeInSec / 3600);
+        }
+        let min = Math.floor((timeInSec - hour * 3600) / 60);
         let sec = timeInSec % 60;
+        let hourStr = hour.toString();
         let minStr = min.toString();
         let secStr = sec.toString();
         if (min < 10) {
@@ -64,24 +141,26 @@ class Pomodoro extends Component {
         if (sec < 10) {
             secStr = "0" + secStr;
         }
-        return minStr + ":" + secStr;
+        return (hour !== 0 ? hourStr + ":" : "") + minStr + ":" + secStr;
     };
     onForwardClick = () => {
         if (this.state.isBreak) {
-            this.setState(() => ({
+            this.setState((prevState) => ({
                 isBreak: false,
-                timeLeft: 1500,
+                timeLeft: prevState.settings.pomodoroTime,
                 isRunning: false,
             }));
         } else {
-            this.setState(() => ({
+            this.setState((prevState) => ({
                 isBreak: true,
-                timeLeft: 300,
+                timeLeft: prevState.settings.breakTime,
                 isRunning: false,
             }));
         }
     };
     onPlayClick = () => {
+        this.Click.volume = this.state.settings.volume / 100;
+        this.Click.play();
         if (this.state.isRunning) {
             this.setState((prevState) => ({
                 ...prevState,
@@ -103,19 +182,15 @@ class Pomodoro extends Component {
         this.setState((prevState) => ({
             ...prevState,
             isRunning: false,
-            timeLeft: prevState.isBreak ? 300 : 1500,
+            timeLeft: prevState.isBreak
+                ? prevState.settings.breakTime
+                : prevState.settings.pomodoroTime,
         }));
     };
     onCurrTaskClick = (e) => {
         this.setState(() => ({ currTask: e.target.id }));
     };
-    radius = 15;
-    stroke = 2;
-    progressFrac = this.state.timeLeft / (this.state.isBreak ? 300 : 1500);
-    normalizedRadius = this.radius - this.stroke * 2;
-    circumference = this.normalizedRadius * 2 * Math.PI;
-    strokeDashoffset =
-        this.circumference - this.progressFrac * this.circumference;
+
     render() {
         return this.props.loading ? (
             <Loading />
@@ -123,6 +198,13 @@ class Pomodoro extends Component {
             <>
                 <div className="dashboard">
                     <div className="pomodoro__top-section">
+                        <div className="pomodoro__settings">
+                            <i
+                                class="fas fa-cog fa-lg"
+                                onClick={this.openPomoModal}
+                            ></i>
+                        </div>
+
                         <div
                             className="pomodoro__timer"
                             style={{
@@ -143,8 +225,10 @@ class Pomodoro extends Component {
                                             .circumference -
                                             (this.state.timeLeft /
                                                 (this.state.isBreak
-                                                    ? 300
-                                                    : 1500)) *
+                                                    ? this.state.settings
+                                                          .breakTime
+                                                    : this.state.settings
+                                                          .pomodoroTime)) *
                                                 this.circumference}rem`,
                                         r: `${this.normalizedRadius}rem`,
                                         cx: `${this.radius}rem`,
@@ -180,7 +264,7 @@ class Pomodoro extends Component {
                                 {this.state.isRunning ? (
                                     <i className="fas fa-pause"></i>
                                 ) : (
-                                    <i class="fas fa-play"></i>
+                                    <i className="fas fa-play"></i>
                                 )}
                             </button>
                             <button
@@ -209,6 +293,7 @@ class Pomodoro extends Component {
                         </div>
                     </div>
                 </div>
+
                 <Modal
                     isOpen={this.state.modals.showTodoModal}
                     className="my-modal todo-modal"
@@ -223,6 +308,24 @@ class Pomodoro extends Component {
                         }}
                     />
                 </Modal>
+                <Modal
+                    isOpen={this.state.modals.showPomoModal}
+                    className="my-modal pomo-modal"
+                    onRequestClose={this.closePomoModal}
+                    ariaHideApp={false}
+                >
+                    <PomoSettings
+                        onSubmit={(settings) => {
+                            this.onSettingsChange(settings);
+                        }}
+                        settings={{
+                            pomodoroTime: this.state.settings.pomodoroTime / 60,
+                            breakTime: this.state.settings.breakTime / 60,
+                            volume: this.state.settings.volume,
+                        }}
+                        closeModal={this.closePomoModal}
+                    />
+                </Modal>
             </>
         );
     }
@@ -231,4 +334,4 @@ class Pomodoro extends Component {
 const mapStateToProps = (state) => ({
     loading: state.todo.loading,
 });
-export default connect(mapStateToProps, { getTodos })(Pomodoro);
+export default connect(mapStateToProps, { getTodos, addTodo })(Pomodoro);

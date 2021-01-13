@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const CategoryForm = ({ isEdit, category, onSubmit, isFromTodo }) => {
+const CategoryForm = ({
+    isEdit,
+    category,
+    onSubmit,
+    isFromTodo,
+    closeModal,
+}) => {
     const [name, setName] = useState(category ? category.name : "");
     const [description, setDescription] = useState(
         category ? category.description : ""
@@ -14,10 +20,13 @@ const CategoryForm = ({ isEdit, category, onSubmit, isFromTodo }) => {
     };
     return (
         <>
-            <div className="register__title">
+            <div className="register__title form__title">
                 <span className="heading-primary">
                     {isEdit ? "Edit Category" : "New Category"}
                 </span>
+                <div className="close-modal category">
+                    <i class="fas fa-times" onClick={closeModal}></i>
+                </div>
             </div>
             <div className="register__form">
                 <form

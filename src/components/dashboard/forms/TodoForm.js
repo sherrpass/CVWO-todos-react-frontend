@@ -145,10 +145,16 @@ class TodoForm extends Component {
         // ) :
         return (
             <div>
-                <div className="margin-bottom-sm">
+                <div className="form__title margin-bottom-sm">
                     <span className="heading-primary">
                         {this.props.isEdit ? "Edit Todo" : "Add Todo"}
                     </span>
+                    <div className="close-modal todo">
+                        <i
+                            class="fas fa-times"
+                            onClick={this.props.closeModal}
+                        ></i>
+                    </div>
                 </div>
                 <div className="register__form">
                     <form noValidate onSubmit={this.onSubmit}>

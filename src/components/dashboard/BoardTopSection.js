@@ -411,6 +411,7 @@ class BoardTopSection extends Component {
                             this.closeTodoModal();
                             this.props.addTodo(todo);
                         }}
+                        closeModal={this.closeTodoModal}
                     />
                 </Modal>
             </>
