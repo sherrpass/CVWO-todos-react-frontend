@@ -122,6 +122,7 @@ class TodoItem extends Component {
                 >
                     <TodoForm
                         isEdit={true}
+                        closeModal={this.closeTodoModal}
                         todo={this.props.todo}
                         onSubmit={(todo) => {
                             this.closeTodoModal();

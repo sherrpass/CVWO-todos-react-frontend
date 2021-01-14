@@ -364,6 +364,7 @@ class BoardTopSection extends Component {
                     <CategoryForm
                         isEdit={true}
                         category={this.props.category}
+                        closeModal={this.closeCatModal}
                         onSubmit={(category) => {
                             this.closeCatModal();
                             this.props.editCategory(
