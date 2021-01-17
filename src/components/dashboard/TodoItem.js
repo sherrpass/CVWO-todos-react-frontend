@@ -17,9 +17,30 @@ function mapStateToProps(state) {
 class TodoItem extends Component {
     state = {
         showTodoModal: false,
+        largeWidth: window.matchMedia("(min-width: 1060px)").matches,
     };
+    mm = window.matchMedia("(min-width: 1060px)");
+    handler = (e) => this.setState(() => ({ largeWidth: e.matches }));
+    componentDidMount() {
+        this.mm.addListener(this.handler);
+    }
+    componentWillUnmount() {
+        this.mm.removeListener(this.handler);
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (
+            prevProps.todo.completed !== this.props.todo.completed &&
+            this.props.todo.completed &&
+            this.completedDiv
+        ) {
+            this.completedDiv.classList.add("animate");
+            setTimeout(() => {
+                this.completedDiv.classList.remove("animate");
+            }, 2500);
+        }
+    }
     closeTodoModal = () => {
-        this.setState((prevState) => ({
+        this.setState(() => ({
             showTodoModal: false,
         }));
     };
@@ -46,15 +67,25 @@ class TodoItem extends Component {
                         <button
                             className={
                                 "todo__right todo__complete" +
-                                (this.props.todo.completed ? " true" : " false")
+                                (this.props.todo.completed
+                                    ? " true"
+                                    : " false") +
+                                (this.state.largeWidth ? " large" : " small")
                             }
+                            ref={(e) => {
+                                this.completedDiv = e;
+                            }}
                             onClick={() => {
                                 this.props.toggleCompleteTodo(
                                     this.props.todo.id
                                 );
                             }}
                         >
-                            <span>Done</span>
+                            {this.state.largeWidth ? (
+                                <span>Done</span>
+                            ) : (
+                                <i class="fas fa-check"></i>
+                            )}
                         </button>
                         <div className="todo__right todo__date">
                             {this.props.todo.due_by ? (
@@ -67,7 +98,12 @@ class TodoItem extends Component {
                                 <span className="description">-</span>
                             )}
                         </div>
-                        <div className="appear-on-hover">
+                        <div
+                            className={
+                                "appear-on-hover" +
+                                (this.state.largeWidth ? " large" : " small")
+                            }
+                        >
                             <span
                                 className={
                                     "todo__right todo__btn important" +
@@ -127,6 +163,10 @@ class TodoItem extends Component {
                         onSubmit={(todo) => {
                             this.closeTodoModal();
                             this.props.editTodo(this.props.todo.id, todo);
+                        }}
+                        onDelete={() => {
+                            this.closeTodoModal();
+                            this.props.deleteTodo(this.props.todo.id);
                         }}
                     />
                 </Modal>

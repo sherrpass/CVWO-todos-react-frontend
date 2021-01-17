@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
 
 const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
+    const [largeWidth, setLargeWidth] = useState(
+        window.matchMedia("(min-width: 768px)").matches
+    );
+    useEffect(() => {
+        const handler = (e) => {
+            setLargeWidth(e.matches);
+        };
+        window.matchMedia("(min-width: 768px)").addListener(handler);
+    }, []);
     const guestNavBar = (
         <>
             <div className="navigation">
@@ -12,10 +21,22 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
                         <i className="fas fa-clipboard"></i> Todoit
                     </NavLink>
                     <div className="navigation__list">
-                        <NavLink to="/login" className="navigation__link">
+                        <NavLink
+                            to="/login"
+                            className={
+                                "navigation__link" +
+                                (largeWidth ? " large" : " small")
+                            }
+                        >
                             Login
                         </NavLink>
-                        <NavLink to="/register" className="navigation__link">
+                        <NavLink
+                            to="/register"
+                            className={
+                                "navigation__link" +
+                                (largeWidth ? " large" : " small")
+                            }
+                        >
                             Sign Up
                         </NavLink>
                     </div>
@@ -31,10 +52,22 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
                         <i className="fas fa-clipboard"></i> Todoit
                     </NavLink>
                     <div className="navigation__list">
-                        <NavLink to="/dashboard" className="navigation__link">
+                        <NavLink
+                            to="/dashboard"
+                            className={
+                                "navigation__link" +
+                                (largeWidth ? " large" : " small")
+                            }
+                        >
                             Dashboard
                         </NavLink>
-                        <NavLink to="/pomodoro" className="navigation__link">
+                        <NavLink
+                            to="/pomodoro"
+                            className={
+                                "navigation__link" +
+                                (largeWidth ? " large" : " small")
+                            }
+                        >
                             {" "}
                             {/*to be added*/}
                             Pomodoro
@@ -42,9 +75,13 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
                         <NavLink
                             onClick={logout}
                             to="/"
-                            className="navigation__link"
+                            className={
+                                "navigation__link" +
+                                (largeWidth ? " large" : " small")
+                            }
                         >
-                            Logout <i className="fas fa-sign-out-alt"></i>
+                            {largeWidth && <span>Logout</span>}{" "}
+                            <i className="fas fa-sign-out-alt"></i>
                         </NavLink>
                     </div>
                 </nav>

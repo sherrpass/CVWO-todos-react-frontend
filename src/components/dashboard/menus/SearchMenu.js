@@ -18,7 +18,7 @@ const SearchMenu = ({ editFilters, search }) => {
                     type="text"
                     class="form-control"
                     placeholder="Title"
-                    value={search}
+                    value={search || ""}
                     onChange={(e) => {
                         editFilters({
                             search: e.target.value,

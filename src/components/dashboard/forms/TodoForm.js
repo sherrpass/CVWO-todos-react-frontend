@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { getCategories, addCategory } from "../../../actions/categories";
 import ReactModal from "react-modal";
 import CategoryForm from "./CategoryForm";
-
 class TodoForm extends Component {
     state = {
         // todo: {
@@ -33,6 +32,8 @@ class TodoForm extends Component {
             important: this.props.todo ? this.props.todo.important : false,
             category_ids: this.props.todo
                 ? this.props.todo.categories.map((category) => category.id)
+                : this.props.currCategory
+                ? [this.props.currCategory]
                 : [], //changes the array of categories objects to an array of categories_id
             cart: this.props.todo ? this.props.todo.cart : false,
         },
@@ -237,7 +238,7 @@ class TodoForm extends Component {
                                 {this.props.categories &&
                                     this.props.categories.map((category) => (
                                         <option
-                                            selected={false}
+                                            value={false}
                                             onClick={this.onOldCategoryClick}
                                             key={category.id}
                                             value={category.id}
@@ -249,7 +250,12 @@ class TodoForm extends Component {
                                                     : "padding-sm category-option false"
                                             }
                                         >
-                                            {category.name}
+                                            {category.name +
+                                                (this.state.todo.category_ids.includes(
+                                                    category.id
+                                                )
+                                                    ? " <"
+                                                    : "")}
                                         </option>
                                     ))}
                             </select>
@@ -291,8 +297,17 @@ class TodoForm extends Component {
                             className="margin-top-med btn-primary"
                             type="submit"
                         >
-                            {this.props.isEdit ? "Confirm changes" : "Add Todo"}
+                            {this.props.isEdit ? "Confirm" : "Add Todo"}
                         </button>
+                        {this.props.isEdit && (
+                            <button
+                                className="margin-top-med margin-left-sm btn-danger"
+                                type="button"
+                                onClick={this.props.onDelete}
+                            >
+                                Delete
+                            </button>
+                        )}
                     </form>
                 </div>
             </div>
@@ -302,6 +317,7 @@ class TodoForm extends Component {
 
 const mapStateToProps = (state) => ({
     categories: state.category.categories,
+    currCategory: state.category.currCategory,
 });
 
 export default connect(mapStateToProps, { getCategories, addCategory })(

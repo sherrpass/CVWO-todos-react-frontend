@@ -10,7 +10,7 @@ $color-red: rgb(145, 45, 45);
 $color-grey-dark: #777;
 $color-grey-dark-2: #999;
 $color-grey-dark-3: rgb(64, 64, 64);
-$color-green: rgb(79, 164, 224);
+$color-blue-completed: rgb(79, 164, 224);
 $color-white: #fff;
 $color-black: #000;
 $color-blue: #193e67;
@@ -134,6 +134,7 @@ a:hover {
 
 .btn-secondary {
     @include btn;
+    font-size: 1.6rem;
     background-color: $color-white;
     font-weight: 400;
     color: $color-grey-dark-3;
@@ -155,12 +156,23 @@ a:hover {
 
 .btn-primary {
     @include btn;
+    font-size: 1.6rem;
     background-color: $color-light-blue-3;
     color: $color-white;
     padding: 0.8rem;
     font-weight: 700;
     &:hover {
         background-color: darken($color-light-blue-3, 5%);
+    }
+}
+
+.btn-danger {
+    @include btn;
+    background-color: $color-red;
+    padding: 0.8rem;
+    font-weight: 700;
+    &:hover {
+        background-color: darken($color-red, 5%);
     }
 }
 
@@ -198,7 +210,7 @@ a:hover {
     transform: translate(-50%, -50%);
     z-index: 2;
     background-color: $color-white;
-    padding: 3rem;
+    padding: 4rem;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 4px;
     @include removeDefOutline;
@@ -215,7 +227,7 @@ a:hover {
 
 .todo-modal {
     width: 50%;
-    min-width: 30rem;
+    min-width: 360px;
 }
 
 .category-option {
@@ -224,7 +236,7 @@ a:hover {
         background-color: $color-white !important;
     }
     &.true {
-        background-color: $color-grey-light-2 !important;
+        font-weight: 700;
     }
     &.false {
         background-color: $color-white !important;
@@ -306,7 +318,11 @@ a:hover {
     margin-right: 1.8rem;
 }
 .margin-left-sm {
-    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.margin-left-med {
+    margin-left: 2rem;
 }
 
 .margin-top-med {
@@ -393,11 +409,14 @@ a:hover {
     &__link:hover {
         text-decoration: none;
         color: $color-black;
-        margin-right: 2.5rem;
+        margin-right: 2rem;
         font-size: 2rem;
         color: $color-grey-light-1;
         &:hover {
             text-decoration: none;
+        }
+        &.small {
+            margin-right: 1.5rem;
         }
     }
 }
@@ -411,7 +430,8 @@ a:hover {
 }
 .categories-sidebar {
     float: left;
-    // background-color: $color-grey-dark;
+    background-color: $color-white;
+    z-index: 2;
     position: absolute;
     top: 0;
     left: 0;
@@ -475,7 +495,6 @@ a:hover {
         font-weight: 300;
         font-size: 1.3rem;
         color: #777;
-        z-index: 1;
         &:hover {
             background-color: $color-grey-light-2;
             cursor: pointer;
@@ -500,7 +519,8 @@ a:hover {
     height: 100%;
     @include y-overflow-handle;
     transition: all 0.2s ease-out;
-    &.closed {
+    &.closed,
+    &.small {
         left: #{$categories-sidebar-closed-width};
         width: calc(100% - #{$categories-sidebar-closed-width});
     }
@@ -508,11 +528,11 @@ a:hover {
         padding: 1rem 1rem 0.5rem 2.5rem;
         border-bottom: 0.5px solid rgba($color-grey-dark-2, 0.4);
         width: 100%;
-        &--filter {
-            padding: 0 0.5rem;
-        }
         &--filter-wrapper {
             text-align: right;
+            &.small {
+                text-align: left;
+            }
         }
         &--header {
             position: relative;
@@ -532,11 +552,17 @@ a:hover {
 
                 @include x-overflow-handle;
             }
+            &.small {
+                height: 6rem;
+            }
         }
         &--description {
             width: 60%;
             height: 2.5rem;
             @include x-overflow-handle;
+            &.small {
+                display: none;
+            }
         }
     }
 
@@ -568,7 +594,7 @@ a:hover {
         border-bottom: 0.5px solid $color-grey-light-2;
         margin-bottom: 2px;
         position: relative;
-        &:hover span.todo__btn i {
+        &:hover .appear-on-hover.large i {
             visibility: visible; //make icons visible on item hover
         }
     }
@@ -605,10 +631,13 @@ a:hover {
         color: $color-white;
         margin-top: 0;
         &.true {
-            background-color: $color-green;
-
+            background-color: $color-blue-completed;
             &:hover {
                 cursor: pointer;
+            }
+            &.animate {
+                background-image: url("./images/completed.gif");
+                background-size: contain;
             }
         }
         &.false {
@@ -616,6 +645,13 @@ a:hover {
 
             &:hover {
                 cursor: pointer;
+            }
+        }
+        &.small {
+            width: 5rem;
+            &.animate {
+                background-image: url("./images/completed.gif");
+                background-size: cover;
             }
         }
     }
@@ -693,24 +729,6 @@ a:hover {
     }
 }
 
-.search-menu {
-    position: absolute;
-    top: 13.3rem;
-    right: 16.5rem;
-    width: 40rem;
-
-    padding: 1.5rem;
-}
-
-.pomo-menu {
-    position: absolute;
-    top: 4rem;
-    right: 3rem;
-    width: 40rem;
-
-    padding: 1.5rem;
-}
-
 .has-search .form-control {
     padding-left: 4rem;
 }
@@ -740,13 +758,30 @@ a:hover {
     }
 }
 
+.search-menu {
+    position: absolute;
+    top: 13.3rem;
+    right: 16.5rem;
+    width: 40rem;
+
+    padding: 1.5rem;
+    &.small {
+        top: 12rem;
+        left: 13.3rem;
+    }
+}
+
 .filter-menu {
     position: absolute;
     top: 13.3rem;
     right: 8.3rem;
     width: 45rem;
-
+    font-size: 1.6rem;
     padding: 1.5rem;
+    &.small {
+        top: 12rem;
+        left: 22.3rem;
+    }
 }
 
 .sort-menu {
@@ -755,8 +790,22 @@ a:hover {
     right: 1.6rem;
     width: 15rem;
     padding: 1.5rem;
+    &.small {
+        top: 12rem;
+        left: 30.5rem;
+    }
+}
+
+.pomo-menu {
+    position: absolute;
+    top: 4rem;
+    right: 3rem;
+    width: 40rem;
+
+    padding: 1.5rem;
 }
 .menu-title {
+    font-size: 1.6rem;
     padding-bottom: 1rem;
     padding-left: 1rem;
     font-weight: 700;
@@ -770,6 +819,7 @@ a:hover {
     flex-grow: 1;
     margin: 0 0.8rem;
     &__title {
+        font-size: 1.6rem;
         text-align: left;
         color: $color-grey-dark;
     }
@@ -884,7 +934,7 @@ a:hover {
 .my-alert {
     &.danger {
         position: absolute;
-        z-index: 2;
+        z-index: 5;
         top: $navbar-height;
         padding: 1rem 2rem;
         width: 100%;
@@ -893,7 +943,7 @@ a:hover {
     }
     &.success {
         position: absolute;
-        z-index: 2;
+        z-index: 5;
         top: $navbar-height;
         padding: 1rem 2rem;
         width: 100%;

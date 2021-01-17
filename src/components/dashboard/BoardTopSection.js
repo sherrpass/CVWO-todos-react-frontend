@@ -17,6 +17,13 @@ import CategoryForm from "./forms/CategoryForm";
 import TodoForm from "./forms/TodoForm";
 
 class BoardTopSection extends Component {
+    componentDidMount() {
+        this.mm.addListener(this.handler);
+    }
+    componentWillUnmount() {
+        this.mm.removeListener(this.handler);
+    }
+
     state = {
         menus: {
             showCatMenu: false,
@@ -29,7 +36,10 @@ class BoardTopSection extends Component {
             showDelCatModal: false,
             showTodoModal: false,
         },
+        largeWidth: window.matchMedia("(min-width: 1060px)").matches,
     };
+    mm = window.matchMedia("(min-width: 1060px)");
+    handler = (e) => this.setState(() => ({ largeWidth: e.matches }));
     openCatMenu = () => {
         this.setState(
             (prevState) => ({
@@ -197,7 +207,12 @@ class BoardTopSection extends Component {
         return (
             <>
                 <div className="board__top-section">
-                    <div className="board__top-section--header">
+                    <div
+                        className={
+                            "board__top-section--header" +
+                            (this.state.largeWidth ? " large" : " small")
+                        }
+                    >
                         <div className="board__top-section--header-title">
                             <span className="heading-primary">
                                 {this.props.category
@@ -246,7 +261,12 @@ class BoardTopSection extends Component {
                             ) : null}
                         </div>
                     </div>
-                    <div className="board__top-section--description">
+                    <div
+                        className={
+                            "board__top-section--description" +
+                            (this.state.largeWidth ? " large" : " small")
+                        }
+                    >
                         <span className="description">
                             {this.props.category
                                 ? this.props.category.description
@@ -256,9 +276,15 @@ class BoardTopSection extends Component {
                                 : "All of your tasks. Let's do this."}
                         </span>
                     </div>
+
                     {/*Filter Buttons*/}
                     <div className="board__top-section--filter">
-                        <div className="board__top-section--filter-wrapper">
+                        <div
+                            className={
+                                "board__top-section--filter-wrapper" +
+                                (this.state.largeWidth ? " large" : " small")
+                            }
+                        >
                             <div className="filter-buttons-wrapper">
                                 <button
                                     className="btn-primary margin-right-sm"
@@ -322,7 +348,12 @@ class BoardTopSection extends Component {
                                 {/*Menus*/}
                                 {this.state.menus.showSearchMenu ? (
                                     <div
-                                        className="collaspible-menu search-menu"
+                                        className={
+                                            "collaspible-menu search-menu" +
+                                            (this.state.largeWidth
+                                                ? " large"
+                                                : " small")
+                                        }
                                         ref={(e) => {
                                             this.searchMenu = e;
                                         }}
@@ -332,7 +363,12 @@ class BoardTopSection extends Component {
                                 ) : null}
                                 {this.state.menus.showFilterMenu ? (
                                     <div
-                                        className="collaspible-menu filter-menu"
+                                        className={
+                                            "collaspible-menu filter-menu" +
+                                            (this.state.largeWidth
+                                                ? " large"
+                                                : " small")
+                                        }
                                         ref={(e) => {
                                             this.filterMenu = e;
                                         }}
@@ -342,7 +378,12 @@ class BoardTopSection extends Component {
                                 ) : null}
                                 {this.state.menus.showSortMenu ? (
                                     <div
-                                        className="collaspible-menu sort-menu"
+                                        className={
+                                            "collaspible-menu sort-menu" +
+                                            (this.state.largeWidth
+                                                ? " large"
+                                                : " small")
+                                        }
                                         ref={(e) => {
                                             this.sortMenu = e;
                                         }}
