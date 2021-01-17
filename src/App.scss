@@ -86,6 +86,15 @@ $categories-sidebar-closed-width: 1.5rem;
         outline: none !important;
     }
 }
+@mixin btn {
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    &:hover {
+        cursor: pointer;
+        background-color: $color-grey-light-1;
+    }
+}
 //setup
 *,
 *::after,
@@ -121,15 +130,6 @@ a:hover {
 
 //Components
 //buttons
-@mixin btn {
-    border: none;
-    outline: none;
-    border-radius: 4px;
-    &:hover {
-        cursor: pointer;
-        background-color: $color-grey-light-1;
-    }
-}
 
 .btn-secondary {
     @include btn;
@@ -145,6 +145,7 @@ a:hover {
     &:active,
     &:focus {
         outline: none !important;
+        border: none !important;
         background-color: rgba($color-light-blue-1, 0.2) !important;
         color: $color-light-blue-2 !important;
     }

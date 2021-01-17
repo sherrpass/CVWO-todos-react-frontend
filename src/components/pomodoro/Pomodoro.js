@@ -302,10 +302,16 @@ class Pomodoro extends Component {
                 >
                     <TodoForm
                         isEdit={false}
+                        closeModal={this.closeTodoModal}
                         onSubmit={(todo) => {
                             this.closeTodoModal();
                             this.props.addTodo(todo);
                         }}
+                        onDelete={() => {
+                            this.closeTodoModal();
+                            this.props.deleteTodo(this.props.todo.id);
+                        }}
+                        isPomo={true}
                     />
                 </Modal>
                 <Modal

@@ -34,7 +34,11 @@ class TodoForm extends Component {
                 : this.props.currCategory
                 ? [this.props.currCategory]
                 : [], //changes the array of categories objects to an array of categories_id
-            cart: this.props.todo ? this.props.todo.cart : false,
+            cart: this.props.todo
+                ? this.props.todo.cart
+                : this.props.isPomo
+                ? true
+                : false,
         },
         modalIsOpen: false,
         error: null,
