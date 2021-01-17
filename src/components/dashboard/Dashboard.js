@@ -45,11 +45,7 @@ class Dashboard extends React.Component {
                 >
                     <CategoriesSidebar
                         onClickCollaspe={this.toggleSideBar}
-                        showSideBar={() =>
-                            this.setState(() => ({
-                                showSideBar: true,
-                            }))
-                        }
+                        showSideBar={this.state.showSideBar}
                     />
                 </div>
                 <div
