@@ -767,6 +767,7 @@ a:hover {
     &.small {
         top: 12rem;
         left: 1rem;
+        width: 36.5rem;
     }
 }
 
@@ -780,7 +781,7 @@ a:hover {
     &.small {
         top: 12rem;
         left: 1rem;
-        width: 40rem;
+        width: 36.5rem;
     }
 }
 
@@ -792,7 +793,7 @@ a:hover {
     padding: 1.5rem;
     &.small {
         top: 12rem;
-        left: 26rem;
+        left: 22.5rem;
     }
 }
 
@@ -1007,17 +1008,16 @@ input:checked + .slider:before {
 }
 
 .loader {
-    border: 16px solid #f3f3f3; /* Light grey */
-    border-top: 16px solid #3498db; /* Blue */
+    border: 10px solid #f3f3f3; /* Light grey */
+    border-top: 10px solid #3498db; /* Blue */
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 60px;
+    height: 60px;
     animation: spin 2s linear infinite;
     position: absolute;
     top: 40%;
-    right: 48%;
+    right: 45%;
 }
-
 @keyframes spin {
     0% {
         transform: rotate(0deg);
