@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import moment from "moment";
-import DatePicker from "react-datepicker";
 import { connect } from "react-redux";
 import { getCategories, addCategory } from "../../../actions/categories";
 import ReactModal from "react-modal";
@@ -27,7 +26,7 @@ class TodoForm extends Component {
             due_by: this.props.todo
                 ? this.props.todo.due_by === null
                     ? null
-                    : moment(this.props.todo.due_by).toDate()
+                    : moment(this.props.todo.due_by)
                 : null, //i want the default to be no due date
             important: this.props.todo ? this.props.todo.important : false,
             category_ids: this.props.todo
@@ -72,10 +71,10 @@ class TodoForm extends Component {
             todo: { ...prevState.todo, important: !prevState.todo.important },
         }));
     };
-    onDateChange = (date) => {
+    onDateChange = (e) => {
         this.setState((prevState) => ({
             ...prevState,
-            todo: { ...prevState.todo, due_by: date },
+            todo: { ...prevState.todo, due_by: moment(e.target.valueAsNumber) },
         }));
     };
 
@@ -126,7 +125,7 @@ class TodoForm extends Component {
         return {
             ...todo,
             category_ids: todo.category_ids.join(" "),
-            due_by: todo.due_by === null ? null : moment(todo.due_by).valueOf(),
+            due_by: todo.due_by === null ? null : todo.due_by.valueOf(),
         };
     };
 
@@ -152,7 +151,7 @@ class TodoForm extends Component {
                     </span>
                     <div className="close-modal todo">
                         <i
-                            class="fas fa-times"
+                            className="fas fa-times"
                             onClick={this.props.closeModal}
                         ></i>
                     </div>
@@ -195,12 +194,28 @@ class TodoForm extends Component {
                                 <span className="description">(Optional)</span>
                             </label>
                             <br />
-                            <DatePicker
+                            {this.state.todo.due_by ? (
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    value={this.state.todo.due_by.format(
+                                        "YYYY-MM-DD"
+                                    )}
+                                    onChange={(e) => this.onDateChange(e)}
+                                />
+                            ) : (
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    onChange={(e) => this.onDateChange(e)}
+                                />
+                            )}
+                            {/*<DatePicker
                                 selected={this.state.todo.due_by}
                                 className={"form-control"}
                                 isClearable
                                 onChange={(date) => this.onDateChange(date)}
-                            />
+                            />*/}
                         </div>
                         <div className="margin-bottom-med">
                             {/* for adding categories*/}

@@ -12,11 +12,12 @@ const SearchMenu = ({ editFilters, search }) => {
     return (
         <>
             <div className="menu-title">Search</div>
-            <div class="form-group has-search">
-                <span class="fa fa-search form-control-feedback"></span>
+            <div className="form-group has-search">
+                <span className="fa fa-search form-control-feedback"></span>
                 <input
                     type="text"
-                    class="form-control"
+                    autoFocus
+                    className="form-control"
                     placeholder="Title"
                     value={search || ""}
                     onChange={(e) => {

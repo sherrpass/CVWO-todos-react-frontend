@@ -200,7 +200,7 @@ class Pomodoro extends Component {
                     <div className="pomodoro__top-section">
                         <div className="pomodoro__settings">
                             <i
-                                class="fas fa-cog fa-lg"
+                                className="fas fa-cog fa-lg"
                                 onClick={this.openPomoModal}
                             ></i>
                         </div>

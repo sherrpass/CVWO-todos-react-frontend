@@ -36,7 +36,7 @@ class CategoriesSidebar extends Component {
                     onClick={this.props.onClickCollaspe}
                 >
                     <i
-                        class={
+                        className={
                             "fas fa-chevron-" +
                             (this.props.showSideBar ? "left" : "right")
                         }

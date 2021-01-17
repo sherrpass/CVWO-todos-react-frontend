@@ -69,6 +69,7 @@ const PomoSettings = ({ closeModal, onSubmit, settings }) => {
                             </label>
                             <input
                                 className="form-control"
+                                autoFocus
                                 value={isNaN(pomodoroTime) ? "" : pomodoroTime}
                                 onChange={(e) => {
                                     var reg = new RegExp("^[0-9]+$");

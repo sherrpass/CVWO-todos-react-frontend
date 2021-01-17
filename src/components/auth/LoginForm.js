@@ -48,7 +48,7 @@ const LoginForm = ({ login }) => {
                         value={email}
                         onChange={onChange}
                     />
-                    <div class="invalid-feedback">{errors.email}</div>
+                    <div className="invalid-feedback">{errors.email}</div>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Password</label>
@@ -63,7 +63,7 @@ const LoginForm = ({ login }) => {
                         value={password}
                         onChange={onChange}
                     />
-                    <div class="invalid-feedback">{errors.password}</div>
+                    <div className="invalid-feedback">{errors.password}</div>
                 </div>
                 <button type="submit" className="margin-top-med btn-primary">
                     Login

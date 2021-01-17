@@ -84,7 +84,7 @@ class TodoItem extends Component {
                             {this.state.largeWidth ? (
                                 <span>Done</span>
                             ) : (
-                                <i class="fas fa-check"></i>
+                                <i className="fas fa-check"></i>
                             )}
                         </button>
                         <div className="todo__right todo__date">

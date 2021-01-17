@@ -25,7 +25,7 @@ const CategoryForm = ({
                     {isEdit ? "Edit Category" : "New Category"}
                 </span>
                 <div className="close-modal category">
-                    <i class="fas fa-times" onClick={closeModal}></i>
+                    <i className="fas fa-times" onClick={closeModal}></i>
                 </div>
             </div>
             <div className="register__form">
@@ -41,6 +41,7 @@ const CategoryForm = ({
                         <input
                             placeholder="Enter a category name"
                             value={name}
+                            autoFocus
                             className={
                                 "form-control" + (error ? " is-invalid" : "")
                             }
