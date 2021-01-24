@@ -297,7 +297,7 @@ class TodoForm extends Component {
                         </div>
                         <div>
                             <label className=".form-label-sm margin-right-sm ">
-                                Add to cart
+                                Pomodoro
                             </label>
                             <label
                                 className="switch"

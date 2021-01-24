@@ -312,7 +312,7 @@ a:hover {
 }
 //utils
 .margin-right-sm {
-    margin-right: 1rem;
+    margin-right: 1.3rem;
 }
 .margin-right-med {
     margin-right: 1.8rem;
@@ -1131,4 +1131,10 @@ input:checked + .slider:before {
 }
 .pomodoro-time-description {
     font-size: 2rem;
+}
+
+.web-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    margin-bottom: 0.5rem;
 }

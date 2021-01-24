@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
+import webIcon from "../../images/webIcon.png";
 
 const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
     const [largeWidth, setLargeWidth] = useState(
@@ -18,7 +19,8 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
             <div className="navigation">
                 <nav className="navigation__nav">
                     <NavLink to="/" className="navigation__name">
-                        <i className="fas fa-clipboard"></i> Todoit
+                        <img src={webIcon} alt="Icon" className="web-icon" />{" "}
+                        Todoit
                     </NavLink>
                     <div className="navigation__list">
                         <NavLink
