@@ -51,7 +51,8 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
             <div className="navigation">
                 <nav className="navigation__nav">
                     <NavLink to="/" className="navigation__name">
-                        <i className="fas fa-clipboard"></i> Todoit
+                        <img src={webIcon} alt="Icon" className="web-icon" />{" "}
+                        Todoit
                     </NavLink>
                     <div className="navigation__list">
                         <NavLink
