@@ -7,8 +7,6 @@ export const getTodos = () => async (dispatch) => {
         const response = await axios.get(
             process.env.REACT_APP_PROXY + "/api/todos"
         );
-        // console.log("getTodos");
-        // console.log(response.data);
         const tailoredData = response.data.map(({ todo, categories }) => ({
             ...todo,
             categories,
@@ -49,7 +47,6 @@ export const addTodo = ({
             category_ids,
             cart,
         };
-        console.log(formData);
         const response = await axios.post(
             process.env.REACT_APP_PROXY + "/api/todos",
             formData
@@ -101,7 +98,6 @@ export const editTodo = (
             category_ids,
             cart,
         };
-        console.log(formData);
         const response = await axios.put(
             process.env.REACT_APP_PROXY + `/api/todos/${id}`,
             formData
@@ -130,8 +126,6 @@ export const editTodo = (
 //delete Todo
 export const deleteTodo = (id) => async (dispatch) => {
     try {
-        // console.log(`editTodo`);
-        // console.log(formData);
         await axios.delete(process.env.REACT_APP_PROXY + `/api/todos/${id}`);
         dispatch({ type: "DELETE_TODO", payload: id });
     } catch (error) {
@@ -149,8 +143,6 @@ export const deleteTodo = (id) => async (dispatch) => {
 //complete Todo
 export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
     try {
-        // console.log(`editTodo`);
-        // console.log(formData);
         const prevCompleted = getState().todo.todos.find(
             (todo) => todo.id === id
         ).completed;
@@ -177,8 +169,6 @@ export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
 //change importance
 export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
     try {
-        // console.log(`editTodo`);
-        // console.log(formData);
         const prevImportance = getState().todo.todos.find(
             (todo) => todo.id === id
         ).important;
@@ -203,8 +193,6 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
 };
 export const toggleCartTodo = (id) => async (dispatch, getState) => {
     try {
-        // console.log(`editTodo`);
-        // console.log(formData);
         const prevCart = getState().todo.todos.find((todo) => todo.id === id)
             .cart;
         const formData = {
@@ -245,7 +233,3 @@ export const clearCompletedTodos = () => async (dispatch) => {
         });
     }
 };
-
-// export const clearCompletedTodos = () => ({
-//     type:"CLEAR_ALL_COMPLETED_TODOS"
-// })

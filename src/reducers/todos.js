@@ -78,16 +78,3 @@ const todosReducer = (state = defaultState, { type, payload }) => {
 };
 
 export default todosReducer;
-// case("ADD_TODO"):
-//   return {
-//     ...state,
-//     todos:[payload, ...state.todos],
-//     loading: false
-//   };
-// case("EDIT_TODO"):
-//   return {
-//     ...state,
-//     todos: state.todos.map((todo) =>
-//     (todo.id === payload.id ? {...todo, ...payload.update} : todo)),
-//     loading: false
-//   };

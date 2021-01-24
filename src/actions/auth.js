@@ -12,7 +12,6 @@ export const register = ({ email, password }) => async (dispatch) => {
         );
         console.log(response.data);
         dispatch({ type: "REGISTER_SUCCESS", payload: response.data });
-        // dispatch(loadUser());
         dispatch(setAlert("Registered Successfully!", "success"));
     } catch (error) {
         const errorMsg = error.response.data.message;
@@ -34,7 +33,6 @@ export const login = ({ email, password }) => async (dispatch) => {
         );
         console.log(response);
         dispatch({ type: "LOGIN_SUCCESS", payload: response.data });
-        // dispatch(loadUser());
         dispatch(
             setAlert("Logged in as " + response.data.user.email, "success")
         );

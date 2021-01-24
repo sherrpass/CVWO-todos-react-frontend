@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Modal from "react-modal";
-// import CategoryForm from "./CategoryForm";
 import CategoryItem from "./CategoryItem";
 import CategoryForm from "./forms/CategoryForm";
 import { addCategory } from "../../actions/categories";

@@ -13,7 +13,6 @@ const LoginForm = ({ login }) => {
     const { email, password, errors } = formData;
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        console.log(formData);
     };
     const onSubmit = (e) => {
         e.preventDefault();

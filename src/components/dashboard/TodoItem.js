@@ -123,7 +123,6 @@ class TodoItem extends Component {
                             </span>
                             <span
                                 className={
-                                    //to add the action here!!!
                                     "todo__right todo__btn cart" +
                                     (this.props.todo.cart ? " true" : " false")
                                 }

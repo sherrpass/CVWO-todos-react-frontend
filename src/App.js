@@ -9,18 +9,12 @@ import PrivateRoute from "./routing/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import Pomodoro from "./components/pomodoro/Pomodoro";
 
-import NotFoundPage from "./components/layout/NotFoundPage";
 import Navbar from "./components/layout/NavBar";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Landing from "./components/layout/Landing";
 
 import Alert from "./components/layout/Alert";
-// import AddTodoPage from "./components/todos/AddTodoPage";
-// import EditTodoPage from "./components/todos/EditTodoPage";
-// import TodoDashboard from "./components/todos/TodoDashboard";
-// import Categories from "./components/categories/Categories";
-// import CategoryPage from "./components/categories/CategoryPage";
 const store = configureStore();
 
 const App = () => {
@@ -48,29 +42,7 @@ const App = () => {
                             path="/pomodoro"
                             component={Pomodoro}
                         />
-
-                        {/*<PrivateRoute
-                            exact
-                            path="/create"
-                            component={AddTodoPage}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/edit/:id"
-                            component={EditTodoPage}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/categories/:id"
-                            component={CategoryPage}
-                        />
-                        <PrivateRoute
-                            exact
-                            path="/categories"
-                            component={Categories}
-                        />*/}
-
-                        <Route component={NotFoundPage} />
+                        <Route component={Landing} />
                     </Switch>
                 </>
             </Router>

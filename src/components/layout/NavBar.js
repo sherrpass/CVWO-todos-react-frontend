@@ -98,21 +98,3 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
 });
 export default connect(mapStateToProps, { logout })(NavBar);
-
-// <header>
-//     <h1>TODO App</h1>
-//     <NavLink to="/login">Login</NavLink>
-//     <NavLink to="/register">Register</NavLink>
-// </header>;
-// <header>
-//             <h1>TODO App</h1>
-
-//             <NavLink to="/dashboard" exact={true}>
-//                 Dashboard
-//             </NavLink>
-//             <NavLink to="/create">Create</NavLink>
-//             <NavLink to="/categories">Categories</NavLink>
-//             <NavLink onClick={logout} to="/">
-//                 Logout
-//             </NavLink>
-//         </header>

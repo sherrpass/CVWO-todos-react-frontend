@@ -3,12 +3,6 @@ import { connect } from "react-redux";
 import { editFilters } from "../../../actions/filters";
 
 const SearchMenu = ({ editFilters, search }) => {
-    // const [searchValue, setSearchValue] = useState("");
-    // const onSearchSubmit = () => {
-    //     editFilters({
-    //         search: searchValue,
-    //     });
-    // };
     return (
         <>
             <div className="menu-title">Search</div>

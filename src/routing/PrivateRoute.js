@@ -11,9 +11,7 @@ const PrivateRoute = ({
     return (
         <Route
             {...rest}
-            render={(
-                props //need to implement Spinner loading component to be rendered as loadUser is being executed. (isAuthenticated=false, loading=true and their is a token)
-            ) => {
+            render={(props) => {
                 if (loading) {
                     return <Loading />;
                 } else {

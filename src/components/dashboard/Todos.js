@@ -45,14 +45,6 @@ class Todos extends Component {
                 </Collapse>
             </div>
         );
-        // return (
-        //     <div className="todo__container">
-        //         {this.props.dueBy ? <div>{this.props.dueBy}</div> : null}
-        //         {this.props.todos.map((todo) => {
-        //             return <div>{todo.title}</div>;
-        //         })}
-        //     </div>
-        // );
     }
 }
 

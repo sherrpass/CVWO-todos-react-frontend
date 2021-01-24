@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { getTodos } from "../../actions/todos";
 import { getCategories } from "../../actions/categories";
@@ -68,57 +68,6 @@ class Dashboard extends React.Component {
     }
 }
 
-// const Dashboard = ({ getTodos, getCategories, loading }) => {
-//     const [showSideBar, setShowSideBar] = useState(
-//         window.matchMedia("(min-width: 768px)").matches
-//     );
-//     const [largeWidth, setLargeWidth] = useState(
-//         window.matchMedia("(min-width: 768px)").matches
-//     );
-//     const mm = useRef(window.matchMedia("(min-width: 768px)"));
-//     const handler = useRef((e) => {
-//         setShowSideBar(e.matches);
-//         setLargeWidth(e.matches);
-//     });
-//     useEffect(() => {
-//         getTodos();
-//         getCategories();
-//         mm.addListener(handler);
-//     }, []);
-//     const toggleSideBar = () => {
-//         setShowSideBar(!showSideBar);
-//     };
-//     return loading ? (
-//         <Loading />
-//     ) : (
-//         <div className="dashboard">
-//             <div
-//                 className={
-//                     "categories-sidebar" + (showSideBar ? "" : " closed")
-//                 }
-//             >
-//                 <CategoriesSidebar
-//                     onClickCollaspe={toggleSideBar}
-//                     showSideBar={showSideBar}
-//                 />
-//             </div>
-//             <div
-//                 className={
-//                     "board" +
-//                     (showSideBar ? "" : " closed") +
-//                     (largeWidth ? " large" : " small")
-//                 }
-//                 onClick={() => {
-//                     showSideBar && !largeWidth && toggleSideBar();
-//                 }}
-//             >
-//                 <BoardTopSection />
-//                 <BoardMainSection />
-//             </div>
-//         </div>
-//     );
-// };
-
 const mapStateToProps = (state) => ({
     loading: state.category.loading || state.todo.loading,
 });
@@ -126,27 +75,3 @@ export default connect(mapStateToProps, {
     getTodos,
     getCategories,
 })(Dashboard);
-
-// class Dashboard extends Component {
-//     componentDidMount() {
-//         this.props.getTodos();
-//         this.props.getCategories();
-//     }
-//     render() {
-//         return this.props.loading ? (
-//             <Loading />
-//         ) : (
-//             <div className="dashboard">
-//                 <CategoriesSidebar />
-
-//                 <div className="board"></div>
-//             </div>
-//         );
-//     }
-// }
-
-// function mapStateToProps(state) {
-//     return { loading: state.category.loading || state.todo.loading };
-// }
-
-// export default connect(mapStateToProps, { getTodos, getCategories })(Dashboard);
