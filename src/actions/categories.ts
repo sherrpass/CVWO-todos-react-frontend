@@ -1,7 +1,19 @@
 import axios from "axios";
 import setAlert from "./alert";
 import { getTodos } from "./todos";
-export const getCategories = () => async (dispatch) => {
+import { Action } from "redux";
+import { RootState } from "../store/index.js";
+import { ThunkAction } from "redux-thunk";
+type Category = {
+    name: string;
+    description: string | null;
+};
+export const getCategories = (): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         const response = await axios.get(
             process.env.REACT_APP_PROXY + "/api/categories"
@@ -20,7 +32,10 @@ export const getCategories = () => async (dispatch) => {
     }
 };
 
-export const addCategory = ({ name = "", description = "" } = {}) => async (
+export const addCategory = ({
+    name = "",
+    description = "",
+}: Category): ThunkAction<void, RootState, unknown, Action<string>> => async (
     dispatch
 ) => {
     try {
@@ -50,7 +65,10 @@ export const addCategory = ({ name = "", description = "" } = {}) => async (
     }
 };
 
-export const editCategory = (id, { name, description }) => async (
+export const editCategory = (
+    id: number,
+    { name, description }: Category
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
     dispatch,
     getState
 ) => {
@@ -85,7 +103,11 @@ export const editCategory = (id, { name, description }) => async (
 };
 
 //delete Category
-export const deleteCategory = (id) => async (dispatch) => {
+export const deleteCategory = (
+    id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch
+) => {
     try {
         console.log(`deleteCategory`);
         await axios.delete(

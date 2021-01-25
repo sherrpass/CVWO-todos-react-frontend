@@ -20,6 +20,7 @@ const store = configureStore();
 const App = () => {
     useEffect(() => {
         setAuthToken(localStorage.getItem("token"));
+        // @ts-ignore
         store.dispatch(loadUser());
     }, []);
     return (

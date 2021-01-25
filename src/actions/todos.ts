@@ -1,16 +1,49 @@
 import axios from "axios";
 import setAlert from "./alert";
-
+import { Action } from "redux";
+import { RootState } from "../store/index.js";
+import { ThunkAction } from "redux-thunk";
+type TodoRequest = {
+    title: string;
+    description: string;
+    completed: boolean;
+    created_at: number;
+    important: boolean;
+    due_by: number | null;
+    category_ids: string;
+    cart: boolean;
+};
+type Response = {
+    todo: {
+        title: string;
+        description: string | null;
+        completed: boolean;
+        created_at: number;
+        important: boolean;
+        due_by: number | null;
+        cart: boolean;
+        user_id: number;
+        id: number;
+    };
+    categories: number[];
+};
 //get Todos
-export const getTodos = () => async (dispatch) => {
+export const getTodos = (): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         const response = await axios.get(
             process.env.REACT_APP_PROXY + "/api/todos"
         );
-        const tailoredData = response.data.map(({ todo, categories }) => ({
-            ...todo,
-            categories,
-        }));
+        const tailoredData = response.data.map(
+            ({ todo, categories }: Response) => ({
+                ...todo,
+                categories,
+            })
+        );
         dispatch({ type: "GET_TODOS", payload: tailoredData });
     } catch (error) {
         console.log("getTodos error");
@@ -33,7 +66,12 @@ export const addTodo = ({
     important = false,
     category_ids = "", //expects the category_ids to be a string of category ids the todo belongs to separated by spaces ***
     cart = false,
-} = {}) => async (dispatch) => {
+}: TodoRequest): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         console.log("addTodo category_ids:");
         console.log(category_ids);
@@ -73,7 +111,7 @@ export const addTodo = ({
 
 //edit Todo
 export const editTodo = (
-    id,
+    id: number,
     {
         title,
         description,
@@ -83,8 +121,10 @@ export const editTodo = (
         important,
         category_ids = "",
         cart = false,
-    }
-) => async (dispatch) => {
+    }: TodoRequest
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch
+) => {
     try {
         console.log("editTodo action category_ids:");
         console.log(category_ids);
@@ -124,7 +164,11 @@ export const editTodo = (
 };
 
 //delete Todo
-export const deleteTodo = (id) => async (dispatch) => {
+export const deleteTodo = (
+    id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch
+) => {
     try {
         await axios.delete(process.env.REACT_APP_PROXY + `/api/todos/${id}`);
         dispatch({ type: "DELETE_TODO", payload: id });
@@ -141,19 +185,27 @@ export const deleteTodo = (id) => async (dispatch) => {
 };
 
 //complete Todo
-export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
+export const toggleCompleteTodo = (
+    id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch,
+    getState
+) => {
     try {
-        const prevCompleted = getState().todo.todos.find(
-            (todo) => todo.id === id
-        ).completed;
-        const formData = {
-            completed: !prevCompleted,
-        };
-        await axios.put(
-            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
-            formData
-        );
-        dispatch({ type: "TOGGLE_COMPLETE_TODO", payload: id });
+        const prevTodo = getState().todo.todos.find((todo) => todo.id === id);
+        if (prevTodo) {
+            const prevCompleted = prevTodo.completed;
+            const formData = {
+                completed: !prevCompleted,
+            };
+            await axios.put(
+                process.env.REACT_APP_PROXY + `/api/todos/${id}`,
+                formData
+            );
+            dispatch({ type: "TOGGLE_COMPLETE_TODO", payload: id });
+        } else {
+            console.log("toggleCompleteTodo error");
+        }
     } catch (error) {
         console.log("togglecompleteTodo error");
         dispatch({
@@ -167,19 +219,27 @@ export const toggleCompleteTodo = (id) => async (dispatch, getState) => {
 };
 
 //change importance
-export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
+export const toggleImportanceTodo = (
+    id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch,
+    getState
+) => {
     try {
-        const prevImportance = getState().todo.todos.find(
-            (todo) => todo.id === id
-        ).important;
-        const formData = {
-            important: !prevImportance,
-        };
-        await axios.put(
-            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
-            formData
-        );
-        dispatch({ type: "TOGGLE_IMPORTANCE_TODO", payload: id });
+        const prevTodo = getState().todo.todos.find((todo) => todo.id === id);
+        if (prevTodo) {
+            const prevImportance = prevTodo.important;
+            const formData = {
+                important: !prevImportance,
+            };
+            await axios.put(
+                process.env.REACT_APP_PROXY + `/api/todos/${id}`,
+                formData
+            );
+            dispatch({ type: "TOGGLE_IMPORTANCE_TODO", payload: id });
+        } else {
+            console.log("toggleImportanceTodo error");
+        }
     } catch (error) {
         console.log("toggleImportanceTodo error");
         dispatch({
@@ -191,18 +251,27 @@ export const toggleImportanceTodo = (id) => async (dispatch, getState) => {
         });
     }
 };
-export const toggleCartTodo = (id) => async (dispatch, getState) => {
+export const toggleCartTodo = (
+    id: number
+): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch,
+    getState
+) => {
     try {
-        const prevCart = getState().todo.todos.find((todo) => todo.id === id)
-            .cart;
-        const formData = {
-            cart: !prevCart,
-        };
-        await axios.put(
-            process.env.REACT_APP_PROXY + `/api/todos/${id}`,
-            formData
-        );
-        dispatch({ type: "TOGGLE_CART_TODO", payload: id });
+        const prevTodo = getState().todo.todos.find((todo) => todo.id === id);
+        if (prevTodo) {
+            const prevCart = prevTodo.cart;
+            const formData = {
+                cart: !prevCart,
+            };
+            await axios.put(
+                process.env.REACT_APP_PROXY + `/api/todos/${id}`,
+                formData
+            );
+            dispatch({ type: "TOGGLE_CART_TODO", payload: id });
+        } else {
+            console.log("toggleCartTodo error");
+        }
     } catch (error) {
         console.log("toggleCartTodo error");
         dispatch({
@@ -216,7 +285,12 @@ export const toggleCartTodo = (id) => async (dispatch, getState) => {
 };
 
 //clear all completed
-export const clearCompletedTodos = () => async (dispatch) => {
+export const clearCompletedTodos = (): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         await axios.delete(
             process.env.REACT_APP_PROXY + `/api/todos/completed`

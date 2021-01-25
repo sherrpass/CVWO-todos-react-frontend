@@ -1,25 +1,48 @@
-const defaultState = {
+const defaultState: State = {
     token: localStorage.getItem("token"),
     isAuthenticated: null,
     loading: true,
     user: null,
 };
-
-export default (state = defaultState, { type, payload }) => {
-    switch (type) {
+type User = {
+    id: number;
+    email: string;
+    password_digest: string;
+    created_at: string;
+    updated_at?: string;
+};
+type State = {
+    token: string | null;
+    isAuthenticated: boolean | null;
+    loading: boolean;
+    user: User | null;
+};
+type Actions =
+    | {
+          type: "USER_LOADED" | "REGISTER_SUCCESS" | "LOGIN_SUCCESS";
+          payload: {
+              user: User;
+              token: string;
+          };
+      }
+    | {
+          type: "REGISTER_FAIL" | "LOGIN_FAIL" | "AUTH_ERROR" | "LOGOUT";
+      };
+export default (state: State = defaultState, action: Actions) => {
+    switch (action.type) {
         case "USER_LOADED":
             return {
                 ...state,
                 isAuthenticated: true,
                 loading: false,
-                user: payload,
+                user: action.payload,
             };
         case "REGISTER_SUCCESS":
         case "LOGIN_SUCCESS":
             console.log("reached reducer");
             return {
                 ...state,
-                ...payload,
+                ...action.payload,
                 isAuthenticated: true,
                 loading: false,
             };
@@ -27,7 +50,6 @@ export default (state = defaultState, { type, payload }) => {
         case "AUTH_ERROR":
         case "LOGIN_FAIL":
         case "LOGOUT":
-        case "DELETE_ACCOUNT":
             return {
                 ...state,
                 isAuthenticated: false,

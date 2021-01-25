@@ -7,16 +7,17 @@ import authReducer from "../reducers/auth";
 import categoriesReducer from "../reducers/categories";
 import alertReducer from "../reducers/alert";
 import setAuthToken from "../utils/setAuthToken";
-
+const rootReducer = combineReducers({
+    alerts: alertReducer,
+    todo: todosReducer,
+    filters: filtersReducer,
+    auth: authReducer,
+    category: categoriesReducer,
+});
+export type RootState = ReturnType<typeof rootReducer>;
 export default () => {
     const store = createStore(
-        combineReducers({
-            alerts: alertReducer,
-            todo: todosReducer,
-            filters: filtersReducer,
-            auth: authReducer,
-            category: categoriesReducer,
-        }),
+        rootReducer,
         composeWithDevTools(applyMiddleware(thunk))
     );
     let currentValue = {

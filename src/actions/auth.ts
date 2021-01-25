@@ -1,8 +1,19 @@
 import axios from "axios";
 import setAlert from "./alert";
-
+import { Action } from "redux";
+import { RootState } from "../store/index.js";
+import { ThunkAction } from "redux-thunk";
 //register user
-export const register = ({ email, password }) => async (dispatch) => {
+type User = {
+    email: string;
+    password: string;
+};
+export const register = ({
+    email,
+    password,
+}: User): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch
+) => {
     const formData = { email, password };
     try {
         console.log("hi");
@@ -23,7 +34,12 @@ export const register = ({ email, password }) => async (dispatch) => {
 };
 
 //login user
-export const login = ({ email, password }) => async (dispatch) => {
+export const login = ({
+    email,
+    password,
+}: User): ThunkAction<void, RootState, unknown, Action<string>> => async (
+    dispatch
+) => {
     const formData = { email, password };
     try {
         console.log("reached login action generator");
@@ -45,7 +61,12 @@ export const login = ({ email, password }) => async (dispatch) => {
     }
 };
 
-export const loadUser = () => async (dispatch) => {
+export const loadUser = (): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         const response = await axios.get(
             process.env.REACT_APP_PROXY + "/api/auto_login"
@@ -57,7 +78,12 @@ export const loadUser = () => async (dispatch) => {
     }
 };
 
-export const logout = () => (dispatch) => {
+export const logout = (): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => (dispatch) => {
     dispatch({ type: "LOGOUT" });
     dispatch(setAlert("Logged out", "success"));
 };
