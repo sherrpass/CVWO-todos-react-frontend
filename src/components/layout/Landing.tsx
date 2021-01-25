@@ -1,7 +1,14 @@
 import React from "react";
+//@ts-ignore
 import { Redirect, Link } from "react-router-dom";
+//@ts-ignore
 import { connect } from "react-redux";
-const Landing = ({ isAuthenticated }) => {
+import { RootState } from "../../store/index";
+
+type Props = {
+    isAuthenticated: boolean | null;
+};
+const Landing = ({ isAuthenticated }: Props) => {
     if (isAuthenticated) {
         return <Redirect to="/dashboard" />;
     }
@@ -33,7 +40,7 @@ const Landing = ({ isAuthenticated }) => {
         </>
     );
 };
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return { isAuthenticated: state.auth.isAuthenticated };
 };
 export default connect(mapStateToProps)(Landing);

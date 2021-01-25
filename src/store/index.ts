@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
 export type RootState = ReturnType<typeof rootReducer>;
 const configureStore = () => {
     const store = createStore(
-        rootReducer,
+        rootReducer, //check if any reducers are typed never, this implies that the return value of the reducer may not match the type defined for the state.
         composeWithDevTools(applyMiddleware(thunk))
     );
     let currentValue = {
@@ -31,6 +31,7 @@ const configureStore = () => {
 
     store.subscribe(() => {
         let previousValue = currentValue;
+        //@ts-ignore
         currentValue = store.getState();
         if (currentValue.auth.token !== previousValue.auth.token) {
             setAuthToken(currentValue.auth.token);

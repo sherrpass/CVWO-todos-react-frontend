@@ -34,7 +34,10 @@ const filtersReducer = (state: State = defaultState, action: Actions) => {
     const { type, payload } = action;
     switch (type) {
         case "SORT_BY":
-            return { ...state, sortBy: payload };
+            return {
+                ...state,
+                sortBy: payload as "dueBy" | "createdAt" | "name",
+            };
         case "EDIT_FILTERS":
             return {
                 ...state,

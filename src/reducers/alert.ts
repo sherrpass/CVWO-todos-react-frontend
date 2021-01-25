@@ -1,8 +1,8 @@
-interface Alert {
+type Alert = {
     id: number;
     msg: string;
     alertType: string;
-}
+};
 type State = Alert[];
 type Actions =
     | {
@@ -18,7 +18,7 @@ const alertReducer = (state: State = [], action: Actions) => {
     const { payload, type } = action;
     switch (type) {
         case "SET_ALERT":
-            return [...state, payload];
+            return [...state, payload] as Alert[];
         case "REMOVE_ALERT":
             return state.filter((alert) => alert.id !== payload);
         default:

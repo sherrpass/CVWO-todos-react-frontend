@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
+//@ts-ignore
 import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
 import { logout } from "../../actions/auth";
 import webIcon from "../../images/webIcon.png";
+import { RootState } from "../../store/index";
+type Props = PropsFromRedux;
 
-const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
+const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
     const [largeWidth, setLargeWidth] = useState(
         window.matchMedia("(min-width: 768px)").matches
     );
     useEffect(() => {
-        const handler = (e) => {
+        const handler = (e: MediaQueryListEvent) => {
             setLargeWidth(e.matches);
         };
         window.matchMedia("(min-width: 768px)").addListener(handler);
@@ -94,7 +98,9 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }) => {
     return <>{!loading && (isAuthenticated ? authNavBar : guestNavBar)}</>;
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     auth: state.auth,
 });
-export default connect(mapStateToProps, { logout })(NavBar);
+const connector = connect(mapStateToProps, { logout });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(NavBar);

@@ -35,11 +35,10 @@ const authReducer = (state: State = defaultState, action: Actions) => {
                 ...state,
                 isAuthenticated: true,
                 loading: false,
-                user: action.payload,
+                user: action.payload.user,
             };
         case "REGISTER_SUCCESS":
         case "LOGIN_SUCCESS":
-            console.log("reached reducer");
             return {
                 ...state,
                 ...action.payload,
