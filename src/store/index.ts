@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
     category: categoriesReducer,
 });
 export type RootState = ReturnType<typeof rootReducer>;
-export default () => {
+const configureStore = () => {
     const store = createStore(
         rootReducer,
         composeWithDevTools(applyMiddleware(thunk))
@@ -38,3 +38,4 @@ export default () => {
     });
     return store;
 };
+export default configureStore;

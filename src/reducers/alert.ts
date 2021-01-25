@@ -14,7 +14,7 @@ type Actions =
           payload: number;
       };
 
-export default (state: State = [], action: Actions) => {
+const alertReducer = (state: State = [], action: Actions) => {
     const { payload, type } = action;
     switch (type) {
         case "SET_ALERT":
@@ -25,3 +25,5 @@ export default (state: State = [], action: Actions) => {
             return state;
     }
 };
+
+export default alertReducer;

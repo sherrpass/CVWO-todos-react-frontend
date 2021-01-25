@@ -128,7 +128,7 @@ class TodoItem extends Component {
                                 }
                             >
                                 <i
-                                    class="todo__icon fas fa-stopwatch"
+                                    className="todo__icon fas fa-stopwatch"
                                     onClick={() => {
                                         this.props.toggleCartTodo(
                                             this.props.todo.id

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { connect } from "react-redux";
 import { setCurrCategory } from "../../actions/categories";
 const CategoryItem = ({ currCategoryId, category, setCurrCategory }) => {

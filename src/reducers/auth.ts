@@ -28,7 +28,7 @@ type Actions =
     | {
           type: "REGISTER_FAIL" | "LOGIN_FAIL" | "AUTH_ERROR" | "LOGOUT";
       };
-export default (state: State = defaultState, action: Actions) => {
+const authReducer = (state: State = defaultState, action: Actions) => {
     switch (action.type) {
         case "USER_LOADED":
             return {
@@ -61,3 +61,5 @@ export default (state: State = defaultState, action: Actions) => {
             return state;
     }
 };
+
+export default authReducer;

@@ -18,8 +18,6 @@ export const getCategories = (): ThunkAction<
         const response = await axios.get(
             process.env.REACT_APP_PROXY + "/api/categories"
         );
-        console.log("getCategories");
-        console.log(response.data);
         dispatch({ type: "GET_CATEGORIES", payload: response.data });
     } catch (error) {
         dispatch({

@@ -84,10 +84,8 @@ class TodoForm extends Component {
     };
 
     onOldCategoryClick = (e) => {
-        console.log("clicked");
         if (this.state.todo.category_ids.includes(parseInt(e.target.value))) {
             //if the category chosen was already in the categories, remove it
-            console.log("removing...");
             this.setState((prevState) => ({
                 ...prevState,
                 todo: {
@@ -242,7 +240,6 @@ class TodoForm extends Component {
                                 {this.props.categories &&
                                     this.props.categories.map((category) => (
                                         <option
-                                            value={false}
                                             onClick={this.onOldCategoryClick}
                                             key={category.id}
                                             value={category.id}
