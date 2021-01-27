@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import moment from "moment";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
-//@ts-ignore
 import DatePicker from "react-datepicker";
 import { getCategories, addCategory } from "../../../actions/categories";
-//@ts-ignore
 import ReactModal from "react-modal";
 import CategoryForm from "./CategoryForm";
 import { RootState } from "../../../store/index";
@@ -18,7 +15,12 @@ import {
 } from "../../../allTypes";
 
 type Props = PropsFromRedux & {
-    todo: Todo;
+    todo?: Todo;
+    isPomo?: boolean;
+    onSubmit: (todo: TodoRequest) => void;
+    isEdit?: boolean;
+    closeModal: () => void;
+    onDelete?: () => void;
 };
 type FormTodo = Override<
     TodoRequest,

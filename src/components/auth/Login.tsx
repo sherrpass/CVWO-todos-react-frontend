@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import LoginForm from "./LoginForm";
 import { RootState } from "../../store/index";
 
-const Login = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const Login = ({ isAuthenticated }: { isAuthenticated: boolean | null }) => {
     if (isAuthenticated) {
         return <Redirect to="/" />;
     }

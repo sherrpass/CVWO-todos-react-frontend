@@ -1,4 +1,3 @@
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
 import { setCurrCategory } from "../../actions/categories";
@@ -7,10 +6,10 @@ import { Category } from "../../allTypes";
 type Props = PropsFromRedux & {
     category: Category;
     setCurrCategory: (
-        id: null | number
+        id?: number | null
     ) => {
         type: string;
-        payload: null;
+        payload: number | null;
     };
 };
 const CategoryItem = ({ currCategoryId, category, setCurrCategory }: Props) => {

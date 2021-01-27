@@ -2,7 +2,7 @@ export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
 
 export type Todo = {
     title: string;
-    description: string | null;
+    description: string;
     completed: boolean;
     created_at: number;
     important: boolean;
@@ -26,7 +26,7 @@ export type Filters = {
     completion?: "completed" | "uncompleted" | "all";
     importance?: "important" | "all";
     dueBy?: Array<"overdue" | "dueToday" | "upcoming" | "unscheduled">;
-    search: string;
+    search?: string;
 };
 export type Category = {
     id: number;

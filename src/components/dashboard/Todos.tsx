@@ -11,7 +11,7 @@ import {
 import TodoItem from "./TodoItem";
 //@ts-ignore
 import { Collapse } from "react-collapse";
-import { Filters, Todo } from "../../allTypes";
+import { Todo } from "../../allTypes";
 
 type DueBy = "overdue" | "dueToday" | "upcoming" | "unscheduled";
 type Props = PropsFromRedux & {
@@ -61,7 +61,10 @@ class Todos extends Component<Props, State> {
     }
 }
 
-function mapStateToProps(state: RootState, props: Props) {
+function mapStateToProps(
+    state: RootState,
+    props: { isCart?: boolean; dueBy?: DueBy }
+) {
     return {
         todos: props.isCart
             ? cartSelector(state.todo.todos)

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
 import Todos from "../dashboard/Todos";
 import Loading from "../layout/Loading";
 import { getTodos, addTodo } from "../../actions/todos";
 import TodoForm from "../dashboard/forms/TodoForm";
-//@ts-ignore
 import Modal from "react-modal";
 //@ts-ignore
 import dingMP3 from "../../sounds/pomodoro_finished.mp3";
@@ -14,8 +12,13 @@ import dingMP3 from "../../sounds/pomodoro_finished.mp3";
 import clickMP3 from "../../sounds/pomodoro_click.mp3";
 import PomoSettings from "./PomoSettings";
 import { Todo, TodoRequest, PomoSetting } from "../../allTypes";
+import { Action } from "redux";
+import { ThunkAction } from "redux-thunk";
 type Props = PropsFromRedux & {
     todo: Todo;
+    deleteTodo: (
+        id: number
+    ) => ThunkAction<void, RootState, unknown, Action<string>>;
 };
 type State = {
     isRunning: boolean;

@@ -1,21 +1,15 @@
 import React from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
-import { Alert as AlertType } from "../../allTypes";
 
 type Props = PropsFromRedux;
 
 const Alert = ({ alerts }: Props) => {
-    return (
-        alerts !== null &&
-        alerts.length > 0 &&
-        alerts.map((alert: AlertType) => (
-            <div key={alert.id} className={`my-alert ${alert.alertType}`}>
-                {alert.msg}
-            </div>
-        ))
-    );
+    return alerts !== null && alerts.length > 0 ? (
+        <div key={alerts[0].id} className={`my-alert ${alerts[0].alertType}`}>
+            {alerts[0].msg}
+        </div>
+    ) : null;
 };
 
 const mapStateToProps = (state: RootState) => ({

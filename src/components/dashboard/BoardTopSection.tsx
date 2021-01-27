@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { sortBy, editFilters } from "../../actions/filters";
 import {
@@ -8,11 +7,7 @@ import {
     setCurrCategory,
 } from "../../actions/categories";
 import { addTodo } from "../../actions/todos";
-//@ts-ignore
 import Modal from "react-modal";
-//@ts-ignore
-import { withRouter } from "react-router-dom";
-
 import SortMenu from "./menus/SortMenu";
 import FilterMenu from "./menus/FilterMenu";
 import SearchMenu from "./menus/SearchMenu";
@@ -20,6 +15,7 @@ import CategoryForm from "./forms/CategoryForm";
 import TodoForm from "./forms/TodoForm";
 import { RootState } from "../../store";
 import { Category, TodoRequest } from "../../allTypes";
+
 type Props = PropsFromRedux;
 type State = {
     menus: {
@@ -451,6 +447,7 @@ class BoardTopSection extends Component<Props, State> {
                 <Modal
                     isOpen={this.state.modals.showDelCatModal}
                     className="my-modal del-cat-modal"
+                    //@ts-ignore
                     onRequestClose={this.closeDelCatModal}
                     ariaHideApp={false}
                 >
@@ -497,8 +494,8 @@ class BoardTopSection extends Component<Props, State> {
 function mapStateToProps(state: RootState) {
     return {
         category: state.category.categories.find(
-            (category) => category.id === state.category.currCategory
-        ),
+            (category: Category) => category.id === state.category.currCategory
+        ) as Category,
     };
 }
 const connector = connect(mapStateToProps, {
@@ -510,4 +507,4 @@ const connector = connect(mapStateToProps, {
     addTodo,
 });
 type PropsFromRedux = ConnectedProps<typeof connector>;
-export default withRouter(connector(BoardTopSection));
+export default connector(BoardTopSection);

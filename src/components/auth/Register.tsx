@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import RegisterForm from "./RegisterForm";
 import { RootState } from "../../store/index";
 
-const Register = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const Register = ({ isAuthenticated }: { isAuthenticated: boolean | null }) => {
     if (isAuthenticated) {
         return <Redirect to="/" />;
     }

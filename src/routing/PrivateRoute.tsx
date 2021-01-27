@@ -1,13 +1,13 @@
-//@ts-ignore
 import { Route, Redirect } from "react-router-dom";
 import React from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../store/index";
 import Loading from "../components/layout/Loading";
 
 type Props = PropsFromRedux & {
-    component: React.ComponentType;
+    component: React.ReactNode;
+    exact: boolean;
+    path: string;
 };
 const PrivateRoute = ({
     component: Component,
@@ -22,6 +22,7 @@ const PrivateRoute = ({
                     return <Loading />;
                 } else {
                     if (isAuthenticated) {
+                        //@ts-ignore
                         return <Component {...props} />;
                     } else {
                         return <Redirect to="/login" />;

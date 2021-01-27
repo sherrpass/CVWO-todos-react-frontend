@@ -1,23 +1,22 @@
 import React, { Component } from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import Todos from "./Todos";
 import { RootState } from "../../store/index";
+type DueBy = "overdue" | "dueToday" | "upcoming" | "unscheduled";
 type Props = PropsFromRedux;
 class BoardMainSection extends Component<Props> {
+    dueByCats: DueBy[] = ["overdue", "dueToday", "upcoming", "unscheduled"];
     render() {
         return (
             <div className="board__main-section">
                 {this.props.filters.sortBy === "dueBy" ? (
-                    ["overdue", "dueToday", "upcoming", "unscheduled"].map(
-                        (dueByItem) => {
-                            return this.props.filters.filters.dueBy.includes(
-                                dueByItem
-                            ) ? (
-                                <Todos dueBy={dueByItem} key={dueByItem} />
-                            ) : null;
-                        }
-                    )
+                    this.dueByCats.map((dueByItem: DueBy) => {
+                        return this.props.filters.filters.dueBy.includes(
+                            dueByItem
+                        ) ? (
+                            <Todos dueBy={dueByItem} key={dueByItem} />
+                        ) : null;
+                    })
                 ) : (
                     <Todos />
                 )}
