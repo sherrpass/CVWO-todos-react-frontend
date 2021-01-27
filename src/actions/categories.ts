@@ -79,7 +79,7 @@ export const editCategory = (
         console.log(`editCategory`);
         console.log(formData);
         const response = await axios.put(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/categories/${id}`,
+            process.env.REACT_APP_PROXY + "/api/categories",
             formData
         );
         dispatch({
@@ -110,7 +110,7 @@ export const deleteCategory = (
     try {
         console.log(`deleteCategory`);
         await axios.delete(
-            `https://cvwo-todo-rails-backend.herokuapp.com/api/categories/${id}`
+            process.env.REACT_APP_PROXY + `/api/categories/${id}`
         );
         dispatch({ type: "DELETE_CATEGORY", payload: id });
         dispatch(getTodos()); //to remove this category from all todos

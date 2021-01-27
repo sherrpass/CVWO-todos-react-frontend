@@ -201,6 +201,9 @@ a:hover {
 }
 
 //modals
+.ReactModal__Overlay {
+    z-index: 3;
+}
 .my-modal {
     position: absolute;
     top: 50%;
@@ -209,7 +212,7 @@ a:hover {
     bottom: auto;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    z-index: 2;
+    z-index: 3;
     background-color: $color-white;
     padding: 4rem;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
