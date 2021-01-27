@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
 import moment from "moment";
 import {
     editTodo,
@@ -8,26 +10,35 @@ import {
     toggleImportanceTodo,
     toggleCartTodo,
 } from "../../actions/todos";
+//@ts-ignore
 import Modal from "react-modal";
 import TodoForm from "./forms/TodoForm";
-function mapStateToProps(state) {
-    return {};
-}
+import { Todo, TodoRequest } from "../../allTypes";
 
-class TodoItem extends Component {
+type Props = PropsFromRedux & {
+    todo: Todo;
+};
+
+type State = {
+    showTodoModal: boolean;
+    largeWidth: boolean;
+};
+class TodoItem extends Component<Props, State> {
     state = {
         showTodoModal: false,
         largeWidth: window.matchMedia("(min-width: 1060px)").matches,
     };
+    completedDiv: null | HTMLButtonElement = null;
     mm = window.matchMedia("(min-width: 1060px)");
-    handler = (e) => this.setState(() => ({ largeWidth: e.matches }));
+    handler = (e: MediaQueryListEvent) =>
+        this.setState(() => ({ largeWidth: e.matches }));
     componentDidMount() {
         this.mm.addListener(this.handler);
     }
     componentWillUnmount() {
         this.mm.removeListener(this.handler);
     }
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps: Props) {
         if (
             prevProps.todo.completed !== this.props.todo.completed &&
             this.props.todo.completed &&
@@ -35,7 +46,8 @@ class TodoItem extends Component {
         ) {
             this.completedDiv.classList.add("animate");
             setTimeout(() => {
-                this.completedDiv.classList.remove("animate");
+                this.completedDiv &&
+                    this.completedDiv.classList.remove("animate");
             }, 2500);
         }
     }
@@ -49,7 +61,7 @@ class TodoItem extends Component {
             showTodoModal: true,
         }));
     };
-    capitalise = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    capitalise = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
     render() {
         return (
             <>
@@ -159,7 +171,7 @@ class TodoItem extends Component {
                         isEdit={true}
                         closeModal={this.closeTodoModal}
                         todo={this.props.todo}
-                        onSubmit={(todo) => {
+                        onSubmit={(todo: TodoRequest) => {
                             this.closeTodoModal();
                             this.props.editTodo(this.props.todo.id, todo);
                         }}
@@ -173,11 +185,15 @@ class TodoItem extends Component {
         );
     }
 }
-
-export default connect(mapStateToProps, {
+function mapStateToProps(state: RootState) {
+    return {};
+}
+const connector = connect(mapStateToProps, {
     editTodo,
     deleteTodo,
     toggleCompleteTodo,
     toggleImportanceTodo,
     toggleCartTodo,
-})(TodoItem);
+});
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(TodoItem);

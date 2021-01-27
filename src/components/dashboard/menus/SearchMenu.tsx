@@ -1,7 +1,10 @@
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../../store/index";
 import { editFilters } from "../../../actions/filters";
 
-const SearchMenu = ({ editFilters, search }) => {
+type Props = PropsFromRedux;
+const SearchMenu = ({ editFilters, search }: Props) => {
     return (
         <>
             <div className="menu-title">Search</div>
@@ -23,7 +26,9 @@ const SearchMenu = ({ editFilters, search }) => {
         </>
     );
 };
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     search: state.filters.filters.search,
 });
-export default connect(mapStateToProps, { editFilters })(SearchMenu);
+const connector = connect(mapStateToProps, { editFilters });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(SearchMenu);

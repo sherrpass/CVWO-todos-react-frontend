@@ -1,20 +1,10 @@
+import { Todo } from "../allTypes";
 const defaultState: State = {
     todos: [],
     loading: true,
     error: {},
 };
-type Todo = {
-    title: string;
-    description: string | null;
-    completed: boolean;
-    created_at: number;
-    important: boolean;
-    due_by: number | null;
-    categories: number[];
-    cart: boolean;
-    user_id: number;
-    id: number;
-};
+
 type State = {
     todos: Todo[];
     loading: boolean;

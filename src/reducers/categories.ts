@@ -1,14 +1,10 @@
+import { Category } from "../allTypes";
+
 const defaultState: State = {
     categories: [],
     loading: true,
     currCategory: null,
     error: {},
-};
-type Category = {
-    id: number;
-    name: string;
-    user_id: number;
-    description: string | null;
 };
 type State = {
     categories: Category[];

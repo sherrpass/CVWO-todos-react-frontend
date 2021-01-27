@@ -1,15 +1,10 @@
+import { User } from "../allTypes";
+
 const defaultState: State = {
     token: localStorage.getItem("token"),
     isAuthenticated: null,
     loading: true,
     user: null,
-};
-type User = {
-    id: number;
-    email: string;
-    password_digest: string;
-    created_at: string;
-    updated_at?: string;
 };
 type State = {
     token: string | null;

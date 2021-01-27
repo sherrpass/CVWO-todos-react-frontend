@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
 import { sortBy, editFilters } from "../../actions/filters";
 import {
     editCategory,
@@ -7,7 +8,9 @@ import {
     setCurrCategory,
 } from "../../actions/categories";
 import { addTodo } from "../../actions/todos";
+//@ts-ignore
 import Modal from "react-modal";
+//@ts-ignore
 import { withRouter } from "react-router-dom";
 
 import SortMenu from "./menus/SortMenu";
@@ -15,16 +18,39 @@ import FilterMenu from "./menus/FilterMenu";
 import SearchMenu from "./menus/SearchMenu";
 import CategoryForm from "./forms/CategoryForm";
 import TodoForm from "./forms/TodoForm";
-
-class BoardTopSection extends Component {
+import { RootState } from "../../store";
+import { Category, TodoRequest } from "../../allTypes";
+type Props = PropsFromRedux;
+type State = {
+    menus: {
+        showCatMenu: boolean;
+        showFilterMenu: boolean;
+        showSortMenu: boolean;
+        showSearchMenu: boolean;
+    };
+    modals: {
+        showCatModal: boolean;
+        showDelCatModal: boolean;
+        showTodoModal: boolean;
+    };
+    largeWidth: boolean;
+};
+class BoardTopSection extends Component<Props, State> {
     componentDidMount() {
         this.mm.addListener(this.handler);
     }
     componentWillUnmount() {
         this.mm.removeListener(this.handler);
     }
-
-    state = {
+    catMenuButton: HTMLButtonElement | null = null;
+    catMenu: HTMLDivElement | null = null;
+    searchMenuButton: HTMLButtonElement | null = null;
+    searchMenu: HTMLDivElement | null = null;
+    filterMenuButton: HTMLButtonElement | null = null;
+    filterMenu: HTMLDivElement | null = null;
+    sortMenuButton: HTMLButtonElement | null = null;
+    sortMenu: HTMLDivElement | null = null;
+    state: State = {
         menus: {
             showCatMenu: false,
             showFilterMenu: false,
@@ -39,7 +65,8 @@ class BoardTopSection extends Component {
         largeWidth: window.matchMedia("(min-width: 1060px)").matches,
     };
     mm = window.matchMedia("(min-width: 1060px)");
-    handler = (e) => this.setState(() => ({ largeWidth: e.matches }));
+    handler = (e: MediaQueryListEvent) =>
+        this.setState(() => ({ largeWidth: e.matches }));
     openCatMenu = () => {
         this.setState(
             (prevState) => ({
@@ -51,13 +78,13 @@ class BoardTopSection extends Component {
             }
         );
     };
-    closeCatMenu = (e) => {
+    closeCatMenu = (e?: MouseEvent) => {
         if (
             !e ||
             (this.catMenu &&
                 this.catMenuButton &&
-                !this.catMenu.contains(e.target) &&
-                !this.catMenuButton.contains(e.target))
+                !this.catMenu.contains(e.target as Node) &&
+                !this.catMenuButton.contains(e.target as Node))
         ) {
             this.setState(
                 (prevState) => ({
@@ -81,11 +108,13 @@ class BoardTopSection extends Component {
             }
         );
     };
-    closeSearchMenu = (e) => {
+    closeSearchMenu = (e?: MouseEvent) => {
         if (
             !e ||
-            (!this.searchMenu.contains(e.target) &&
-                !this.searchMenuButton.contains(e.target))
+            (this.searchMenu &&
+                this.searchMenuButton &&
+                !this.searchMenu.contains(e.target as Node) &&
+                !this.searchMenuButton.contains(e.target as Node))
         ) {
             this.setState(
                 (prevState) => ({
@@ -109,11 +138,13 @@ class BoardTopSection extends Component {
             }
         );
     };
-    closeFilterMenu = (e) => {
+    closeFilterMenu = (e?: MouseEvent) => {
         if (
             !e ||
-            (!this.filterMenu.contains(e.target) &&
-                !this.filterMenuButton.contains(e.target))
+            (this.filterMenu &&
+                this.filterMenuButton &&
+                !this.filterMenu.contains(e.target as Node) &&
+                !this.filterMenuButton.contains(e.target as Node))
         ) {
             this.setState(
                 (prevState) => ({
@@ -137,11 +168,13 @@ class BoardTopSection extends Component {
             }
         );
     };
-    closeSortMenu = (e) => {
+    closeSortMenu = (e?: MouseEvent) => {
         if (
             !e ||
-            (!this.sortMenu.contains(e.target) &&
-                !this.sortMenuButton.contains(e.target))
+            (this.sortMenu &&
+                this.sortMenuButton &&
+                !this.sortMenu.contains(e.target as Node) &&
+                !this.sortMenuButton.contains(e.target as Node))
         ) {
             this.setState(
                 (prevState) => ({
@@ -154,7 +187,7 @@ class BoardTopSection extends Component {
             );
         }
     };
-    capitalise = (str) => {
+    capitalise = (str: string) => {
         return str[0].toUpperCase() + str.substring(1);
     };
 
@@ -449,7 +482,7 @@ class BoardTopSection extends Component {
                 >
                     <TodoForm
                         isEdit={false}
-                        onSubmit={(todo) => {
+                        onSubmit={(todo: TodoRequest) => {
                             this.closeTodoModal();
                             this.props.addTodo(todo);
                         }}
@@ -461,21 +494,20 @@ class BoardTopSection extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     return {
         category: state.category.categories.find(
             (category) => category.id === state.category.currCategory
         ),
     };
 }
-
-export default withRouter(
-    connect(mapStateToProps, {
-        sortBy,
-        editFilters,
-        editCategory,
-        deleteCategory,
-        setCurrCategory,
-        addTodo,
-    })(BoardTopSection)
-);
+const connector = connect(mapStateToProps, {
+    sortBy,
+    editFilters,
+    editCategory,
+    deleteCategory,
+    setCurrCategory,
+    addTodo,
+});
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default withRouter(connector(BoardTopSection));

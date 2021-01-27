@@ -1,22 +1,39 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+//@ts-ignore
 import DatePicker from "react-datepicker";
 import { getCategories, addCategory } from "../../../actions/categories";
+//@ts-ignore
 import ReactModal from "react-modal";
 import CategoryForm from "./CategoryForm";
-class TodoForm extends Component {
-    state = {
-        // todo: {
-        //     title: "",
-        //     description: "",
-        //     completed: false,
-        //     created_at: moment().valueOf(),
-        //     due_by: null, //i want the default to be no due date
-        //     important: false,
-        //     category_ids: [], //changes the array of categories objects to an array of categories_id
-        // },
-        // modalIsOpen: false,
+import { RootState } from "../../../store/index";
+import {
+    Todo,
+    TodoRequest,
+    Override,
+    Category,
+    CategoryRequest,
+} from "../../../allTypes";
+
+type Props = PropsFromRedux & {
+    todo: Todo;
+};
+type FormTodo = Override<
+    TodoRequest,
+    {
+        due_by: Date | null;
+        category_ids: number[];
+    }
+>;
+type State = {
+    todo: FormTodo;
+    modalIsOpen: boolean;
+    error: string | null;
+};
+class TodoForm extends Component<Props, State> {
+    state: State = {
         todo: {
             title: this.props.todo ? this.props.todo.title : "",
             description: this.props.todo ? this.props.todo.description : "",
@@ -31,7 +48,9 @@ class TodoForm extends Component {
                 : null, //i want the default to be no due date
             important: this.props.todo ? this.props.todo.important : false,
             category_ids: this.props.todo
-                ? this.props.todo.categories.map((category) => category.id)
+                ? this.props.todo.categories.map(
+                      (category: Category) => category.id
+                  )
                 : this.props.currCategory
                 ? [this.props.currCategory]
                 : [], //changes the array of categories objects to an array of categories_id
@@ -49,14 +68,14 @@ class TodoForm extends Component {
     //     this.props.getCategories();
     // };
 
-    onTitleChange = (e) => {
+    onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const title = e.target.value;
         this.setState((prevState) => ({
             ...prevState,
             todo: { ...prevState.todo, title },
         }));
     };
-    onDescriptionChange = (e) => {
+    onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const description = e.target.value;
         this.setState((prevState) => ({
             ...prevState,
@@ -76,23 +95,25 @@ class TodoForm extends Component {
             todo: { ...prevState.todo, important: !prevState.todo.important },
         }));
     };
-    onDateChange = (date) => {
+    onDateChange = (date: Date | null) => {
         this.setState((prevState) => ({
             ...prevState,
             todo: { ...prevState.todo, due_by: date },
         }));
     };
 
-    onOldCategoryClick = (e) => {
-        if (this.state.todo.category_ids.includes(parseInt(e.target.value))) {
+    onOldCategoryClick = (
+        e: React.MouseEvent<HTMLOptionElement, MouseEvent>
+    ) => {
+        const target = e.target as HTMLOptionElement;
+        if (this.state.todo.category_ids.includes(parseInt(target.value))) {
             //if the category chosen was already in the categories, remove it
             this.setState((prevState) => ({
                 ...prevState,
                 todo: {
                     ...prevState.todo,
                     category_ids: prevState.todo.category_ids.filter(
-                        (category_id) =>
-                            category_id !== parseInt(e.target.value)
+                        (category_id) => category_id !== parseInt(target.value)
                     ),
                 },
             }));
@@ -105,7 +126,7 @@ class TodoForm extends Component {
                     ...prevState.todo,
                     category_ids: [
                         ...prevState.todo.category_ids,
-                        parseInt(e.target.value),
+                        parseInt(target.value),
                     ],
                 },
             }));
@@ -119,11 +140,11 @@ class TodoForm extends Component {
     onModalReqClose = () => {
         this.setState((prevState) => ({ ...prevState, modalIsOpen: false }));
     };
-    onAddFormCategorySubmit = (cat) => {
+    onAddFormCategorySubmit = (cat: CategoryRequest) => {
         this.props.addCategory(cat);
         this.onModalReqClose();
     };
-    tidyUpStateForSubmit = (todo) => {
+    tidyUpStateForSubmit = (todo: FormTodo) => {
         //corrects the due_by and category_ids values for add/editTodo action generator
         return {
             ...todo,
@@ -132,7 +153,7 @@ class TodoForm extends Component {
         };
     };
 
-    onSubmit = (e) => {
+    onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // console.log(moment(this.state.todo.due_by).valueOf());
         if (!this.state.todo.title) {
@@ -184,7 +205,6 @@ class TodoForm extends Component {
                                 <span className="description">(Optional)</span>
                             </label>
                             <textarea
-                                type="text"
                                 placeholder="Description"
                                 className={"form-control"}
                                 value={this.state.todo.description}
@@ -201,7 +221,9 @@ class TodoForm extends Component {
                                 selected={this.state.todo.due_by}
                                 className={"form-control"}
                                 isClearable
-                                onChange={(date) => this.onDateChange(date)}
+                                onChange={(date: Date | null) =>
+                                    this.onDateChange(date)
+                                }
                             />
                         </div>
                         <div className="margin-bottom-med">
@@ -227,6 +249,7 @@ class TodoForm extends Component {
                                     onSubmit={(cat) => {
                                         this.onAddFormCategorySubmit(cat);
                                     }}
+                                    closeModal={this.onModalReqClose}
                                     isEdit={false}
                                     isFromTodo={true}
                                 />
@@ -238,27 +261,31 @@ class TodoForm extends Component {
                                 aria-label="multiple select example"
                             >
                                 {this.props.categories &&
-                                    this.props.categories.map((category) => (
-                                        <option
-                                            onClick={this.onOldCategoryClick}
-                                            key={category.id}
-                                            value={category.id}
-                                            className={
-                                                this.state.todo.category_ids.includes(
-                                                    category.id
-                                                )
-                                                    ? "padding-sm category-option true"
-                                                    : "padding-sm category-option false"
-                                            }
-                                        >
-                                            {category.name +
-                                                (this.state.todo.category_ids.includes(
-                                                    category.id
-                                                )
-                                                    ? " <"
-                                                    : "")}
-                                        </option>
-                                    ))}
+                                    this.props.categories.map(
+                                        (category: Category) => (
+                                            <option
+                                                onClick={
+                                                    this.onOldCategoryClick
+                                                }
+                                                key={category.id}
+                                                value={category.id}
+                                                className={
+                                                    this.state.todo.category_ids.includes(
+                                                        category.id
+                                                    )
+                                                        ? "padding-sm category-option true"
+                                                        : "padding-sm category-option false"
+                                                }
+                                            >
+                                                {category.name +
+                                                    (this.state.todo.category_ids.includes(
+                                                        category.id
+                                                    )
+                                                        ? " <"
+                                                        : "")}
+                                            </option>
+                                        )
+                                    )}
                             </select>
                         </div>
                         <div className="mb-3">
@@ -316,11 +343,10 @@ class TodoForm extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     categories: state.category.categories,
     currCategory: state.category.currCategory,
 });
-
-export default connect(mapStateToProps, { getCategories, addCategory })(
-    TodoForm
-);
+const connector = connect(mapStateToProps, { getCategories, addCategory });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(TodoForm);

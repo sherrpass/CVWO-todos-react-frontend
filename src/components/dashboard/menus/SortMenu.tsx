@@ -1,8 +1,11 @@
-import React from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../../store/index";
 import { sortBy } from "../../../actions/filters";
-const SortMenu = ({ sortBy, sortMethod }) => {
-    const includeMixin = (bool) => {
+
+type Props = PropsFromRedux;
+const SortMenu = ({ sortBy, sortMethod }: Props) => {
+    const includeMixin = (bool: boolean) => {
         return bool ? "menu-column__item selected" : "menu-column__item";
     };
     return (
@@ -41,7 +44,9 @@ const SortMenu = ({ sortBy, sortMethod }) => {
         </>
     );
 };
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     sortMethod: state.filters.sortBy,
 });
-export default connect(mapStateToProps, { sortBy })(SortMenu);
+const connector = connect(mapStateToProps, { sortBy });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(SortMenu);

@@ -1,18 +1,32 @@
 import React, { useState } from "react";
-
+import { Category, CategoryRequest } from "../../../allTypes";
+type Props = {
+    isEdit?: boolean;
+    category?: Category;
+    onSubmit: (category: CategoryRequest) => void;
+    isFromTodo?: boolean;
+    closeModal: () => void;
+};
 const CategoryForm = ({
     isEdit,
     category,
     onSubmit,
     isFromTodo,
     closeModal,
-}) => {
+}: Props) => {
     const [name, setName] = useState(category ? category.name : "");
     const [description, setDescription] = useState(
-        category ? category.description : ""
+        category
+            ? category.description === null
+                ? ""
+                : category.description
+            : ""
     );
-    const [error, setError] = useState(null);
-    const befSubmit = (cat, submitFunc) => {
+    const [error, setError] = useState<string | null>(null);
+    const befSubmit = (
+        cat: CategoryRequest,
+        submitFunc: (category: CategoryRequest) => void
+    ) => {
         //validate
         return cat.name
             ? submitFunc(cat)

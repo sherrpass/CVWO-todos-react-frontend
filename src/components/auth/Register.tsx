@@ -1,9 +1,12 @@
 import React from "react";
+//@ts-ignore
 import { Redirect } from "react-router-dom";
+//@ts-ignore
 import { connect } from "react-redux";
 import RegisterForm from "./RegisterForm";
+import { RootState } from "../../store/index";
 
-const Register = ({ isAuthenticated }) => {
+const Register = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     if (isAuthenticated) {
         return <Redirect to="/" />;
     }
@@ -23,7 +26,7 @@ const Register = ({ isAuthenticated }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     //toredirect logged in users to the dashboard
     isAuthenticated: state.auth.isAuthenticated,
 });

@@ -1,8 +1,5 @@
-type Alert = {
-    id: number;
-    msg: string;
-    alertType: string;
-};
+import { Alert } from "../allTypes";
+
 type State = Alert[];
 type Actions =
     | {

@@ -1,21 +1,25 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../../store/index";
 import { editFilters } from "../../../actions/filters";
 
-class FilterMenu extends Component {
-    dueByIncludes = (str) => {
+type DueBy = "overdue" | "dueToday" | "upcoming" | "unscheduled";
+type Props = PropsFromRedux;
+class FilterMenu extends Component<Props> {
+    dueByIncludes = (str: DueBy) => {
         return this.props.filters.dueBy.includes(str)
             ? "menu-column__item selected"
             : "menu-column__item";
     };
-    includeMixin = (bool) => {
+    includeMixin = (bool: boolean) => {
         return bool ? "menu-column__item selected" : "menu-column__item";
     };
-    onDueByClick = (dueCat) => {
+    onDueByClick = (dueCat: DueBy) => {
         if (this.props.filters.dueBy.includes(dueCat)) {
             this.props.editFilters({
                 dueBy: this.props.filters.dueBy.filter(
-                    (dueBy) => dueBy !== dueCat
+                    (dueBy: DueBy) => dueBy !== dueCat
                 ),
             });
         } else {
@@ -24,12 +28,12 @@ class FilterMenu extends Component {
             });
         }
     };
-    onImportanceClick = (impt) => {
+    onImportanceClick = (impt: "important" | "all") => {
         this.props.editFilters({
             importance: impt,
         });
     };
-    onCompletionClick = (status) => {
+    onCompletionClick = (status: "completed" | "uncompleted" | "all") => {
         this.props.editFilters({
             completion: status,
         });
@@ -145,10 +149,11 @@ class FilterMenu extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     return {
         filters: state.filters.filters,
     };
 }
-
-export default connect(mapStateToProps, { editFilters })(FilterMenu);
+const connector = connect(mapStateToProps, { editFilters });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(FilterMenu);

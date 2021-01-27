@@ -3,17 +3,19 @@ import setAlert from "./alert";
 import { Action } from "redux";
 import { RootState } from "../store/index.js";
 import { ThunkAction } from "redux-thunk";
+import { UserRequest } from "../allTypes";
+import { setCurrCategory } from "./categories";
+
 //register user
-type User = {
-    email: string;
-    password: string;
-};
 export const register = ({
     email,
     password,
-}: User): ThunkAction<void, RootState, unknown, Action<string>> => async (
-    dispatch
-) => {
+}: UserRequest): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     const formData = { email, password };
     try {
         console.log("hi");
@@ -37,9 +39,12 @@ export const register = ({
 export const login = ({
     email,
     password,
-}: User): ThunkAction<void, RootState, unknown, Action<string>> => async (
-    dispatch
-) => {
+}: UserRequest): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     const formData = { email, password };
     try {
         console.log("reached login action generator");
@@ -84,6 +89,7 @@ export const logout = (): ThunkAction<
     unknown,
     Action<string>
 > => (dispatch) => {
+    dispatch(setCurrCategory());
     dispatch({ type: "LOGOUT" });
     dispatch(setAlert("Logged out", "success"));
 };

@@ -2,13 +2,10 @@ import React from "react";
 //@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
+import { Alert as AlertType } from "../../allTypes";
 
 type Props = PropsFromRedux;
-type AlertType = {
-    id: number;
-    msg: string;
-    alertType: string;
-};
+
 const Alert = ({ alerts }: Props) => {
     return (
         alerts !== null &&

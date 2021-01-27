@@ -1,18 +1,33 @@
 import moment from "moment";
-
-export const categorySelector = (todos, categoryId = null) => {
+import { Todo, Filters, Category, Override } from "../allTypes";
+type dueBy = "overdue" | "dueToday" | "upcoming" | "unscheduled";
+export const categorySelector = (
+    todos: Todo[],
+    categoryId: number | null = null
+) => {
     return categoryId === null
         ? todos
         : todos.filter(
-              (todo) =>
+              (todo: Todo) =>
                   todo.categories.findIndex(
-                      (categoryItem) => categoryItem.id === categoryId
+                      (categoryItem: Category) => categoryItem.id === categoryId
                   ) !== -1
           );
 };
 export const filterSelector = (
-    todos,
-    { completion, importance, dueBy, search }
+    todos: Todo[],
+    {
+        completion,
+        importance,
+        dueBy,
+        search,
+    }: Override<
+        Filters,
+        {
+            search: string;
+            dueBy: Array<dueBy>;
+        }
+    >
 ) => {
     return todos
         .filter((todo) => {
@@ -37,7 +52,7 @@ export const filterSelector = (
         .filter((todo) => {
             // for dueBy filter
             const now = moment();
-            let category;
+            let category: dueBy;
             if (todo.due_by == null) {
                 category = "unscheduled";
             } else {
@@ -54,7 +69,10 @@ export const filterSelector = (
         });
 };
 
-export const sortSelector = (todos, sortBy) => {
+export const sortSelector = (
+    todos: Todo[],
+    sortBy: "dueBy" | "createdAt" | "name"
+) => {
     return todos.sort((a, b) => {
         //sort based on sortBy type
         if (sortBy === "createdAt") {
@@ -74,7 +92,7 @@ export const sortSelector = (todos, sortBy) => {
     });
 };
 
-export const cartSelector = (todos) => {
+export const cartSelector = (todos: Todo[]) => {
     return todos.filter((todo) => {
         return todo.cart;
     });

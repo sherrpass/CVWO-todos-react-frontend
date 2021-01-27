@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
 import {
     categorySelector,
     filterSelector,
@@ -7,16 +9,27 @@ import {
     cartSelector,
 } from "../../selectors/todos";
 import TodoItem from "./TodoItem";
+//@ts-ignore
 import { Collapse } from "react-collapse";
+import { Filters, Todo } from "../../allTypes";
 
-class Todos extends Component {
+type DueBy = "overdue" | "dueToday" | "upcoming" | "unscheduled";
+type Props = PropsFromRedux & {
+    dueBy?: DueBy;
+    isCart?: boolean;
+};
+
+type State = {
+    showTodo: boolean;
+};
+class Todos extends Component<Props, State> {
     state = {
         showTodo: true,
     };
-    dueByTitleConversion = (dueBy) => {
+    dueByTitleConversion = (dueBy: DueBy) => {
         return dueBy === "dueToday" ? "Today" : this.capitalise(dueBy);
     };
-    capitalise = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+    capitalise = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
     toggleShowTodos = () => {
         this.setState((prevState) => ({ showTodo: !prevState.showTodo }));
     };
@@ -38,7 +51,7 @@ class Todos extends Component {
                 ) : null}
                 <Collapse isOpened={this.state.showTodo}>
                     <div className="todo__collaspsible" id={this.props.dueBy}>
-                        {this.props.todos.map((todo) => {
+                        {this.props.todos.map((todo: Todo) => {
                             return <TodoItem key={todo.id} todo={todo} />;
                         })}
                     </div>
@@ -48,7 +61,7 @@ class Todos extends Component {
     }
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: RootState, props: Props) {
     return {
         todos: props.isCart
             ? cartSelector(state.todo.todos)
@@ -59,12 +72,16 @@ function mapStateToProps(state, props) {
                           state.category.currCategory
                       ),
                       props.dueBy
-                          ? { ...state.filters.filters, dueBy: [props.dueBy] }
+                          ? {
+                                ...state.filters.filters,
+                                dueBy: [props.dueBy],
+                            }
                           : state.filters.filters
                   ),
                   state.filters.sortBy
               ),
     };
 }
-
-export default connect(mapStateToProps)(Todos);
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(Todos);

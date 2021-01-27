@@ -1,8 +1,5 @@
-type Filters = {
-    completion?: "completed" | "uncompleted" | "all";
-    importance?: "important" | "all";
-    dueBy?: Array<"overdue" | "dueToday" | "upcoming" | "unscheduled">;
-};
+import { Filters } from "../allTypes";
+
 export const sortBy = (
     sortMethod: "dueBy" | "createdAt" | "name" = "dueBy"
 ) => ({

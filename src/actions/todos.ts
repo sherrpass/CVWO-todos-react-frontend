@@ -3,29 +3,11 @@ import setAlert from "./alert";
 import { Action } from "redux";
 import { RootState } from "../store/index.js";
 import { ThunkAction } from "redux-thunk";
-type TodoRequest = {
-    title: string;
-    description: string;
-    completed: boolean;
-    created_at: number;
-    important: boolean;
-    due_by: number | null;
-    category_ids: string;
-    cart: boolean;
-};
+import { TodoRequest, Category, Todo } from "../allTypes";
+
 type Response = {
-    todo: {
-        title: string;
-        description: string | null;
-        completed: boolean;
-        created_at: number;
-        important: boolean;
-        due_by: number | null;
-        cart: boolean;
-        user_id: number;
-        id: number;
-    };
-    categories: number[];
+    todo: Omit<Todo, "categories">;
+    categories: Category[];
 };
 //get Todos
 export const getTodos = (): ThunkAction<

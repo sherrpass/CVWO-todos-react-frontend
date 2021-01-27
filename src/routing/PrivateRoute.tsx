@@ -1,17 +1,23 @@
+//@ts-ignore
 import { Route, Redirect } from "react-router-dom";
 import React from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../store/index";
 import Loading from "../components/layout/Loading";
 
+type Props = PropsFromRedux & {
+    component: React.ComponentType;
+};
 const PrivateRoute = ({
     component: Component,
     auth: { isAuthenticated, loading },
     ...rest
-}) => {
+}: Props) => {
     return (
         <Route
             {...rest}
-            render={(props) => {
+            render={(props: Object) => {
                 if (loading) {
                     return <Loading />;
                 } else {
@@ -26,7 +32,9 @@ const PrivateRoute = ({
     );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
     return { auth: state.auth };
 };
-export default connect(mapStateToProps)(PrivateRoute);
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(PrivateRoute);

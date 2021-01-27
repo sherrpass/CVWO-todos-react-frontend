@@ -1,15 +1,21 @@
 import React from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
 import { getTodos } from "../../actions/todos";
 import { getCategories } from "../../actions/categories";
 import CategoriesSidebar from "./CategoriesSidebar";
 import BoardTopSection from "./BoardTopSection";
 import BoardMainSection from "./BoardMainSection";
 import Loading from "../layout/Loading";
-
-class Dashboard extends React.Component {
+type Props = PropsFromRedux;
+type State = {
+    showSideBar: boolean;
+    largeWidth: boolean;
+};
+class Dashboard extends React.Component<Props, State> {
     mm = window.matchMedia("(min-width: 768px)");
-    handler = (e) => {
+    handler = (e: MediaQueryListEvent) => {
         this.setState(() => ({
             showSideBar: e.matches,
             largeWidth: e.matches,
@@ -68,10 +74,12 @@ class Dashboard extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     loading: state.category.loading || state.todo.loading,
 });
-export default connect(mapStateToProps, {
+const connector = connect(mapStateToProps, {
     getTodos,
     getCategories,
-})(Dashboard);
+});
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(Dashboard);

@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+//@ts-ignore
 import { Provider } from "react-redux";
+//@ts-ignore
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import configureStore from "./store/index";
 import setAuthToken from "./utils/setAuthToken";

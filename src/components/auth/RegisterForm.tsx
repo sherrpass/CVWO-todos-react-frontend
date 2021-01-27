@@ -1,21 +1,36 @@
 import React, { useState } from "react";
+//@ts-ignore
 import validator from "validator";
+//@ts-ignore
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
 import { register } from "../../actions/auth";
-
-const RegisterForm = ({ register }) => {
-    const [formData, setFormData] = useState({
+type Props = PropsFromRedux;
+type FormErrors = {
+    email?: string;
+    password?: string;
+    passwordConfirmed?: string;
+};
+type State = {
+    email: string;
+    password: string;
+    passwordConfirmed: string;
+    errors: FormErrors;
+};
+const RegisterForm = ({ register }: Props) => {
+    const [formData, setFormData] = useState<State>({
         email: "",
         password: "",
         passwordConfirmed: "",
         errors: {},
     });
     const { email, password, passwordConfirmed, errors } = formData;
-    const onChange = (e) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormData({ ...formData, errors: {} });
         const emailValid = validateEmail();
@@ -157,4 +172,6 @@ const RegisterForm = ({ register }) => {
     );
 };
 const mapStateToProps = () => ({});
-export default connect(mapStateToProps, { register })(RegisterForm);
+const connector = connect(mapStateToProps, { register });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(RegisterForm);

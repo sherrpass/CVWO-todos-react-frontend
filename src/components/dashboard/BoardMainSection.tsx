@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
 import Todos from "./Todos";
-class BoardMainSection extends Component {
+import { RootState } from "../../store/index";
+type Props = PropsFromRedux;
+class BoardMainSection extends Component<Props> {
     render() {
         return (
             <div className="board__main-section">
@@ -23,10 +26,11 @@ class BoardMainSection extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     return {
         filters: state.filters,
     };
 }
-
-export default connect(mapStateToProps)(BoardMainSection);
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(BoardMainSection);

@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { PomoSetting } from "../../allTypes";
 
-const PomoSettings = ({ closeModal, onSubmit, settings }) => {
+type Props = {
+    closeModal: () => void;
+    onSubmit: (setting: PomoSetting) => void;
+    settings: PomoSetting;
+};
+const PomoSettings = ({ closeModal, onSubmit, settings }: Props) => {
     const [pomodoroTime, setPomodoroTime] = useState(settings.pomodoroTime);
     const [breakTime, setBreakTime] = useState(settings.breakTime);
     const [volume, setVolume] = useState(settings.volume);
-    const [pomodoroTimeError, setPomodoroTimeError] = useState(null);
-    const [breakTimeError, setBreakTimeError] = useState(null);
-    const befSubmit = (settings, submitFunc) => {
+    const [pomodoroTimeError, setPomodoroTimeError] = useState<string | null>(
+        null
+    );
+    const [breakTimeError, setBreakTimeError] = useState<string | null>(null);
+    const befSubmit = (
+        settings: PomoSetting,
+        submitFunc: (setting: PomoSetting) => void
+    ) => {
         setPomodoroTimeError(null);
         setBreakTimeError(null);
         //validate
@@ -122,7 +133,7 @@ const PomoSettings = ({ closeModal, onSubmit, settings }) => {
                                     step="5"
                                     value={volume}
                                     onChange={(e) => {
-                                        setVolume(e.target.value);
+                                        setVolume(parseInt(e.target.value));
                                     }}
                                 />
                                 <div className="vol">

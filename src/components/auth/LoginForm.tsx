@@ -1,23 +1,32 @@
 import React, { useState } from "react";
+//@ts-ignore
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
 import { login } from "../../actions/auth";
+//@ts-ignore
 import validator from "validator";
-
-const LoginForm = ({ login }) => {
-    const [formData, setFormData] = useState({
+type Props = PropsFromRedux;
+type FormErrors = { email?: string; password?: string };
+type State = {
+    email: string;
+    password: string;
+    errors: FormErrors;
+};
+const LoginForm = ({ login }: Props) => {
+    const [formData, setFormData] = useState<State>({
         email: "",
         password: "",
         errors: {},
     });
     const { email, password, errors } = formData;
-    const onChange = (e) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormData({ ...formData, errors: {} });
-        let errors = {};
+        let errors: { email?: string; password?: string } = {};
         if (validator.isEmpty(email)) {
             errors.email = "Email is required.";
         } else if (!validator.isEmail(email)) {
@@ -76,4 +85,6 @@ const LoginForm = ({ login }) => {
 };
 
 const mapStateToProps = () => ({});
-export default connect(mapStateToProps, { login })(LoginForm);
+const connector = connect(mapStateToProps, { login });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(LoginForm);

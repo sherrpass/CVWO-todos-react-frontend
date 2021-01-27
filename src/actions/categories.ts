@@ -4,10 +4,8 @@ import { getTodos } from "./todos";
 import { Action } from "redux";
 import { RootState } from "../store/index.js";
 import { ThunkAction } from "redux-thunk";
-type Category = {
-    name: string;
-    description: string | null;
-};
+import { CategoryRequest } from "../allTypes";
+
 export const getCategories = (): ThunkAction<
     void,
     RootState,
@@ -33,9 +31,12 @@ export const getCategories = (): ThunkAction<
 export const addCategory = ({
     name = "",
     description = "",
-}: Category): ThunkAction<void, RootState, unknown, Action<string>> => async (
-    dispatch
-) => {
+}: CategoryRequest): ThunkAction<
+    void,
+    RootState,
+    unknown,
+    Action<string>
+> => async (dispatch) => {
     try {
         const formData = {
             name,
@@ -65,7 +66,7 @@ export const addCategory = ({
 
 export const editCategory = (
     id: number,
-    { name, description }: Category
+    { name, description }: CategoryRequest
 ): ThunkAction<void, RootState, unknown, Action<string>> => async (
     dispatch,
     getState
@@ -125,7 +126,7 @@ export const deleteCategory = (
 };
 
 //set active Category
-export const setCurrCategory = (id = null) => ({
+export const setCurrCategory = (id: number | null = null) => ({
     type: "SET_CURR_CATEGORY",
     payload: id,
 });

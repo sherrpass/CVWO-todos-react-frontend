@@ -1,12 +1,24 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
+//@ts-ignore
 import Modal from "react-modal";
 import CategoryItem from "./CategoryItem";
 import CategoryForm from "./forms/CategoryForm";
 import { addCategory } from "../../actions/categories";
 import { setCurrCategory } from "../../actions/categories";
 import categoriesSelector from "../../selectors/categories";
-class CategoriesSidebar extends Component {
+import { CategoryRequest, Category } from "../../allTypes";
+
+type Props = PropsFromRedux & {
+    onClickCollaspe: () => void;
+    showSideBar: boolean;
+};
+type State = {
+    showCatModal: boolean;
+};
+class CategoriesSidebar extends Component<Props, State> {
     state = {
         showCatModal: false,
     };
@@ -23,7 +35,7 @@ class CategoriesSidebar extends Component {
         }));
     };
 
-    onSubmit = ({ name, description }) => {
+    onSubmit = ({ name, description }: CategoryRequest) => {
         this.closeCatModal();
         this.props.addCategory({ name, description });
     };
@@ -65,7 +77,7 @@ class CategoriesSidebar extends Component {
                             Everything
                         </div>
                     </div>
-                    {this.props.categories.map((category) => (
+                    {this.props.categories.map((category: Category) => (
                         <CategoryItem key={category.id} category={category} />
                     ))}
                 </div>
@@ -86,13 +98,12 @@ class CategoriesSidebar extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: RootState) {
     return {
         categories: categoriesSelector(state.category.categories),
         currCategory: state.category.currCategory,
     };
 }
-
-export default connect(mapStateToProps, { addCategory, setCurrCategory })(
-    CategoriesSidebar
-);
+const connector = connect(mapStateToProps, { addCategory, setCurrCategory });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(CategoriesSidebar);

@@ -1,25 +1,44 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+//@ts-ignore
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "../../store/index";
 import Todos from "../dashboard/Todos";
 import Loading from "../layout/Loading";
 import { getTodos, addTodo } from "../../actions/todos";
 import TodoForm from "../dashboard/forms/TodoForm";
+//@ts-ignore
 import Modal from "react-modal";
+//@ts-ignore
 import dingMP3 from "../../sounds/pomodoro_finished.mp3";
+//@ts-ignore
 import clickMP3 from "../../sounds/pomodoro_click.mp3";
 import PomoSettings from "./PomoSettings";
-class Pomodoro extends Component {
+import { Todo, TodoRequest, PomoSetting } from "../../allTypes";
+type Props = PropsFromRedux & {
+    todo: Todo;
+};
+type State = {
+    isRunning: boolean;
+    timeLeft: number; //in seconds
+    isBreak: boolean;
+    settings: PomoSetting;
+    modals: {
+        showTodoModal: boolean;
+        showPomoModal: boolean;
+    };
+};
+class Pomodoro extends Component<Props, State> {
+    pomodoroCircle: SVGCircleElement | null = null;
     Ding = new Audio(dingMP3);
     Click = new Audio(clickMP3);
     radius = 15;
     stroke = 2;
     normalizedRadius = this.radius - this.stroke * 2;
     circumference = this.normalizedRadius * 2 * Math.PI;
-    state = {
+    state: State = {
         isRunning: false,
         timeLeft: 1500, //in seconds
         isBreak: false,
-        currTask: null,
         settings: {
             pomodoroTime: 1500,
             breakTime: 300,
@@ -39,7 +58,11 @@ class Pomodoro extends Component {
             this.setState(
                 (prevState) => ({
                     ...prevState,
-                    settings: { pomodoroTime, breakTime, volume },
+                    settings: {
+                        pomodoroTime,
+                        breakTime,
+                        volume: parseInt(volume),
+                    },
                 }),
                 () => {
                     //update timeLeft
@@ -48,7 +71,7 @@ class Pomodoro extends Component {
             );
         }
     }
-    onSettingsChange = ({ pomodoroTime, breakTime, volume }) => {
+    onSettingsChange = ({ pomodoroTime, breakTime, volume }: PomoSetting) => {
         //update state
         this.setState(
             (prevState) => ({
@@ -70,26 +93,26 @@ class Pomodoro extends Component {
     closeTodoModal = () => {
         this.setState((prevState) => ({
             ...prevState,
-            modals: { showTodoModal: false },
+            modals: { ...prevState.modals, showTodoModal: false },
         }));
     };
     openTodoModal = () => {
         this.setState((prevState) => ({
             ...prevState,
-            modals: { showTodoModal: true },
+            modals: { ...prevState.modals, showTodoModal: true },
         }));
     };
     closePomoModal = () => {
         this.setState((prevState) => ({
             ...prevState,
-            modals: { showPomoModal: false },
+            modals: { ...prevState.modals, showPomoModal: false },
         }));
     };
     openPomoModal = () => {
         this.setState(
             (prevState) => ({
                 ...prevState,
-                modals: { showPomoModal: true },
+                modals: { ...prevState.modals, showPomoModal: true },
             }),
             () => {
                 this.onRedoClick();
@@ -125,7 +148,7 @@ class Pomodoro extends Component {
             }
         }, 1000);
     };
-    timeConverter = (timeInSec) => {
+    timeConverter = (timeInSec: number) => {
         let hour = 0;
         if (timeInSec >= 3600) {
             hour = Math.floor(timeInSec / 3600);
@@ -187,9 +210,6 @@ class Pomodoro extends Component {
                 : prevState.settings.pomodoroTime,
         }));
     };
-    onCurrTaskClick = (e) => {
-        this.setState(() => ({ currTask: e.target.id }));
-    };
 
     render() {
         return this.props.loading ? (
@@ -230,10 +250,10 @@ class Pomodoro extends Component {
                                                     : this.state.settings
                                                           .pomodoroTime)) *
                                                 this.circumference}rem`,
-                                        r: `${this.normalizedRadius}rem`,
-                                        cx: `${this.radius}rem`,
-                                        cy: `${this.radius}rem`,
                                     }}
+                                    r={`${this.normalizedRadius}rem`}
+                                    cx={`${this.radius}rem`}
+                                    cy={`${this.radius}rem`}
                                     ref={(e) => {
                                         this.pomodoroCircle = e;
                                     }}
@@ -303,7 +323,7 @@ class Pomodoro extends Component {
                     <TodoForm
                         isEdit={false}
                         closeModal={this.closeTodoModal}
-                        onSubmit={(todo) => {
+                        onSubmit={(todo: TodoRequest) => {
                             this.closeTodoModal();
                             this.props.addTodo(todo);
                         }}
@@ -321,7 +341,7 @@ class Pomodoro extends Component {
                     ariaHideApp={false}
                 >
                     <PomoSettings
-                        onSubmit={(settings) => {
+                        onSubmit={(settings: PomoSetting) => {
                             this.onSettingsChange(settings);
                         }}
                         settings={{
@@ -337,7 +357,9 @@ class Pomodoro extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
     loading: state.todo.loading,
 });
-export default connect(mapStateToProps, { getTodos, addTodo })(Pomodoro);
+const connector = connect(mapStateToProps, { getTodos, addTodo });
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(Pomodoro);

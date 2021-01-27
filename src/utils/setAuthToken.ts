@@ -2,7 +2,7 @@
 //To manage token within localStorage and the default x-auth-token header within axios
 import axios from "axios";
 
-const setAuthToken = (token) => {
+const setAuthToken = (token: string | null) => {
     if (token) {
         //if token changes value or changes from null to a value
         localStorage.setItem("token", token);
