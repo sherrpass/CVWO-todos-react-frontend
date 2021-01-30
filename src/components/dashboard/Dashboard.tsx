@@ -1,5 +1,4 @@
 import React from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
 import { getTodos } from "../../actions/todos";
@@ -8,6 +7,7 @@ import CategoriesSidebar from "./CategoriesSidebar";
 import BoardTopSection from "./BoardTopSection";
 import BoardMainSection from "./BoardMainSection";
 import Loading from "../layout/Loading";
+
 type Props = PropsFromRedux;
 type State = {
     showSideBar: boolean;

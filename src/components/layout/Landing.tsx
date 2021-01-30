@@ -1,7 +1,5 @@
 import React from "react";
-//@ts-ignore
 import { Redirect, Link } from "react-router-dom";
-//@ts-ignore
 import { connect } from "react-redux";
 import { RootState } from "../../store/index";
 

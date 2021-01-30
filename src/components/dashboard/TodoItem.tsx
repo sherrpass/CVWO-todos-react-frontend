@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
 import moment from "moment";
@@ -10,7 +9,6 @@ import {
     toggleImportanceTodo,
     toggleCartTodo,
 } from "../../actions/todos";
-//@ts-ignore
 import Modal from "react-modal";
 import TodoForm from "./forms/TodoForm";
 import { Todo, TodoRequest } from "../../allTypes";

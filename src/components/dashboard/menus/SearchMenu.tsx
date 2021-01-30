@@ -1,4 +1,4 @@
-//@ts-ignore
+import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../../store/index";
 import { editFilters } from "../../../actions/filters";

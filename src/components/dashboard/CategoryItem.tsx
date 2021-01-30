@@ -1,3 +1,4 @@
+import React from "react";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
 import { setCurrCategory } from "../../actions/categories";

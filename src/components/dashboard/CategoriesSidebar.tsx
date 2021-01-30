@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../../store/index";
-//@ts-ignore
 import Modal from "react-modal";
 import CategoryItem from "./CategoryItem";
 import CategoryForm from "./forms/CategoryForm";

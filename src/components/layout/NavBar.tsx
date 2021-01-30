@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-//@ts-ignore
 import { NavLink } from "react-router-dom";
-//@ts-ignore
 import { connect, ConnectedProps } from "react-redux";
 import { logout } from "../../actions/auth";
 import webIcon from "../../images/webIcon.png";
