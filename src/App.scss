@@ -30,6 +30,7 @@ $categories-sidebar-width: 23rem;
 $category-top-section-height: 7.5rem;
 $board-top-section-height: 14.3rem;
 $categories-sidebar-closed-width: 1.5rem;
+$categories-sidebar-change: -21.5rem;
 //datepicker
 .react-datepicker {
     font-size: 1.3rem !important;
@@ -226,12 +227,22 @@ a:hover {
 }
 
 .todo-modal {
-    width: 60%;
+    width: 50%;
+    min-width: 36rem;
+    max-height: 95vh;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #e1e1e1;
+        border-radius: 4px;
+    }
 }
 
-.todo-modal {
-    width: 50%;
-    min-width: 360px;
+.pomo-modal {
+    width: 40%;
+    min-width: 38rem;
 }
 
 .category-option {
@@ -444,9 +455,7 @@ a:hover {
     border-right: 0.5px solid rgba($color-grey-dark-2, 0.4);
     transition: all 0.2s ease-out;
     &.closed {
-        left: calc(
-            -1 * #{$categories-sidebar-width} + #{$categories-sidebar-closed-width}
-        );
+        left: $categories-sidebar-change;
     }
     &__top-section {
         height: $category-top-section-height;

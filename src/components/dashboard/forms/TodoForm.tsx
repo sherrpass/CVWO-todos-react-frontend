@@ -243,6 +243,7 @@ class TodoForm extends Component<Props, State> {
                                 isOpen={this.state.modalIsOpen}
                                 onRequestClose={this.onModalReqClose}
                                 className="my-modal add-edit-modal"
+                                ariaHideApp={false}
                             >
                                 <CategoryForm
                                     onSubmit={(cat) => {
