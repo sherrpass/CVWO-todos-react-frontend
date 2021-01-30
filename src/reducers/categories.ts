@@ -38,6 +38,9 @@ type Actions =
               msg: string;
               status: string;
           };
+      }
+    | {
+          type: "DELETE_ALL_CATEGORIES";
       };
 const categoriesReducer = (state: State = defaultState, action: Actions) => {
     switch (action.type) {
@@ -81,6 +84,12 @@ const categoriesReducer = (state: State = defaultState, action: Actions) => {
             return {
                 ...state,
                 currCategory: action.payload,
+            };
+        case "DELETE_ALL_CATEGORIES":
+            return {
+                ...state,
+                categories: [],
+                loading: true,
             };
         default:
             return state;

@@ -66,10 +66,6 @@ class TodoForm extends Component<Props, State> {
         error: null,
     };
 
-    // componentDidMount = () => {
-    //     this.props.getCategories();
-    // };
-
     onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const title = e.target.value;
         this.setState((prevState) => ({
@@ -105,9 +101,10 @@ class TodoForm extends Component<Props, State> {
     };
 
     onOldCategoryClick = (
-        e: React.MouseEvent<HTMLOptionElement, MouseEvent>
+        e: React.MouseEvent<HTMLSelectElement, MouseEvent>
     ) => {
-        const target = e.target as HTMLOptionElement;
+        console.log("clicked here.");
+        const target = e.target as HTMLSelectElement;
         if (this.state.todo.category_ids.includes(parseInt(target.value))) {
             //if the category chosen was already in the categories, remove it
             this.setState((prevState) => ({
@@ -261,14 +258,12 @@ class TodoForm extends Component<Props, State> {
                                 className="form-select-lg form-control"
                                 multiple
                                 aria-label="multiple select example"
+                                onClick={this.onOldCategoryClick}
                             >
                                 {this.props.categories &&
                                     this.props.categories.map(
                                         (category: Category) => (
                                             <option
-                                                onClick={
-                                                    this.onOldCategoryClick
-                                                }
                                                 key={category.id}
                                                 value={category.id}
                                                 className={

@@ -43,6 +43,9 @@ type Actions =
       }
     | {
           type: "CLEAR_ALL_COMPLETED_TODOS";
+      }
+    | {
+          type: "DELETE_ALL_TODOS";
       };
 const todosReducer = (state: State = defaultState, action: Actions) => {
     switch (action.type) {
@@ -110,6 +113,12 @@ const todosReducer = (state: State = defaultState, action: Actions) => {
                 ...state,
                 error: action.payload,
                 loading: false,
+            };
+        case "DELETE_ALL_TODOS":
+            return {
+                ...state,
+                todos: [],
+                loading: true,
             };
         default:
             return state;

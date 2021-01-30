@@ -91,5 +91,7 @@ export const logout = (): ThunkAction<
 > => (dispatch) => {
     dispatch(setCurrCategory());
     dispatch({ type: "LOGOUT" });
+    dispatch({ type: "DELETE_ALL_TODOS" });
+    dispatch({ type: "DELETE_ALL_CATEGORIES" });
     dispatch(setAlert("Logged out", "success"));
 };
