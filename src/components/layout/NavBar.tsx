@@ -7,14 +7,30 @@ import { RootState } from "../../store/index";
 type Props = PropsFromRedux;
 
 const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
-    const [largeWidth, setLargeWidth] = useState(
+    const [screenSize, setScreenSize] = useState(
         window.matchMedia("(min-width: 768px)").matches
+            ? 3
+            : window.matchMedia("(min-width: 410px)").matches
+            ? 2
+            : 1
     );
     useEffect(() => {
-        const handler = (e: MediaQueryListEvent) => {
-            setLargeWidth(e.matches);
+        const handler2 = (e: MediaQueryListEvent) => {
+            if (e.matches) {
+                setScreenSize(3);
+            } else {
+                setScreenSize(2);
+            }
         };
-        window.matchMedia("(min-width: 768px)").addListener(handler);
+        const handler1 = (e: MediaQueryListEvent) => {
+            if (e.matches) {
+                setScreenSize(2);
+            } else {
+                setScreenSize(1);
+            }
+        };
+        window.matchMedia("(min-width: 768px)").addListener(handler2);
+        window.matchMedia("(min-width: 410px)").addListener(handler1);
     }, []);
     const guestNavBar = (
         <>
@@ -29,7 +45,7 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
                             to="/login"
                             className={
                                 "navigation__link" +
-                                (largeWidth ? " large" : " small")
+                                (screenSize === 3 ? " large" : " small")
                             }
                         >
                             Login
@@ -38,7 +54,7 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
                             to="/register"
                             className={
                                 "navigation__link" +
-                                (largeWidth ? " large" : " small")
+                                (screenSize === 3 ? " large" : " small")
                             }
                         >
                             Sign Up
@@ -57,20 +73,22 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
                         Todoit
                     </NavLink>
                     <div className="navigation__list">
-                        <NavLink
-                            to="/dashboard"
-                            className={
-                                "navigation__link" +
-                                (largeWidth ? " large" : " small")
-                            }
-                        >
-                            Dashboard
-                        </NavLink>
+                        {screenSize !== 1 && (
+                            <NavLink
+                                to="/dashboard"
+                                className={
+                                    "navigation__link" +
+                                    (screenSize === 3 ? " large" : " small")
+                                }
+                            >
+                                Dashboard
+                            </NavLink>
+                        )}
                         <NavLink
                             to="/pomodoro"
                             className={
                                 "navigation__link" +
-                                (largeWidth ? " large" : " small")
+                                (screenSize === 3 ? " large" : " small")
                             }
                         >
                             {" "}
@@ -82,10 +100,10 @@ const NavBar = ({ logout, auth: { loading, isAuthenticated } }: Props) => {
                             to="/"
                             className={
                                 "navigation__link" +
-                                (largeWidth ? " large" : " small")
+                                (screenSize === 3 ? " large" : " small")
                             }
                         >
-                            {largeWidth && <span>Logout</span>}{" "}
+                            {screenSize === 3 && <span>Logout</span>}{" "}
                             <i className="fas fa-sign-out-alt"></i>
                         </NavLink>
                     </div>

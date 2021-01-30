@@ -101,7 +101,9 @@ class TodoItem extends Component<Props, State> {
                             {this.props.todo.due_by ? (
                                 <span className="description">
                                     {moment(this.props.todo.due_by).format(
-                                        "DD MMM YY"
+                                        this.state.largeWidth
+                                            ? "DD MMM YY"
+                                            : "DD MMM"
                                     )}
                                 </span>
                             ) : (

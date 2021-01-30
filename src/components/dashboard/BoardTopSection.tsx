@@ -29,23 +29,9 @@ type State = {
         showDelCatModal: boolean;
         showTodoModal: boolean;
     };
-    largeWidth: boolean;
+    screenSize: 1 | 2 | 3;
 };
 class BoardTopSection extends Component<Props, State> {
-    componentDidMount() {
-        this.mm.addListener(this.handler);
-    }
-    componentWillUnmount() {
-        this.mm.removeListener(this.handler);
-    }
-    catMenuButton: HTMLButtonElement | null = null;
-    catMenu: HTMLDivElement | null = null;
-    searchMenuButton: HTMLButtonElement | null = null;
-    searchMenu: HTMLDivElement | null = null;
-    filterMenuButton: HTMLButtonElement | null = null;
-    filterMenu: HTMLDivElement | null = null;
-    sortMenuButton: HTMLButtonElement | null = null;
-    sortMenu: HTMLDivElement | null = null;
     state: State = {
         menus: {
             showCatMenu: false,
@@ -58,11 +44,45 @@ class BoardTopSection extends Component<Props, State> {
             showDelCatModal: false,
             showTodoModal: false,
         },
-        largeWidth: window.matchMedia("(min-width: 1060px)").matches,
+        screenSize: window.matchMedia("(min-width: 1060px)").matches
+            ? 3
+            : window.matchMedia("(min-width: 410px)").matches
+            ? 2
+            : 1,
     };
-    mm = window.matchMedia("(min-width: 1060px)");
-    handler = (e: MediaQueryListEvent) =>
-        this.setState(() => ({ largeWidth: e.matches }));
+    catMenuButton: HTMLButtonElement | null = null;
+    catMenu: HTMLDivElement | null = null;
+    searchMenuButton: HTMLButtonElement | null = null;
+    searchMenu: HTMLDivElement | null = null;
+    filterMenuButton: HTMLButtonElement | null = null;
+    filterMenu: HTMLDivElement | null = null;
+    sortMenuButton: HTMLButtonElement | null = null;
+    sortMenu: HTMLDivElement | null = null;
+
+    componentDidMount() {
+        this.mm2.addListener(this.handler2);
+        this.mm1.addListener(this.handler1);
+    }
+    componentWillUnmount() {
+        this.mm2.removeListener(this.handler2);
+        this.mm1.removeListener(this.handler1);
+    }
+    mm2 = window.matchMedia("(min-width: 1060px)");
+    mm1 = window.matchMedia("(min-width: 410px)");
+    handler2 = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+            this.setState(() => ({ screenSize: 3 }));
+        } else {
+            this.setState(() => ({ screenSize: 2 }));
+        }
+    };
+    handler1 = (e: MediaQueryListEvent) => {
+        if (e.matches) {
+            this.setState(() => ({ screenSize: 2 }));
+        } else {
+            this.setState(() => ({ screenSize: 1 }));
+        }
+    };
     openCatMenu = () => {
         this.setState(
             (prevState) => ({
@@ -239,7 +259,7 @@ class BoardTopSection extends Component<Props, State> {
                     <div
                         className={
                             "board__top-section--header" +
-                            (this.state.largeWidth ? " large" : " small")
+                            (this.state.screenSize === 3 ? " large" : " small")
                         }
                     >
                         <div className="board__top-section--header-title">
@@ -293,7 +313,7 @@ class BoardTopSection extends Component<Props, State> {
                     <div
                         className={
                             "board__top-section--description" +
-                            (this.state.largeWidth ? " large" : " small")
+                            (this.state.screenSize === 3 ? " large" : " small")
                         }
                     >
                         <span className="description">
@@ -311,7 +331,9 @@ class BoardTopSection extends Component<Props, State> {
                         <div
                             className={
                                 "board__top-section--filter-wrapper" +
-                                (this.state.largeWidth ? " large" : " small")
+                                (this.state.screenSize === 3
+                                    ? " large"
+                                    : " small")
                             }
                         >
                             <div className="filter-buttons-wrapper">
@@ -333,10 +355,12 @@ class BoardTopSection extends Component<Props, State> {
                                     }}
                                 >
                                     <i className="fas fa-search"></i>
-                                    <span className="margin-left-sm">
-                                        {" "}
-                                        Search
-                                    </span>
+                                    {this.state.screenSize !== 1 ? (
+                                        <span className="margin-left-sm">
+                                            {" "}
+                                            Search
+                                        </span>
+                                    ) : null}
                                 </button>
                                 <button
                                     className="btn-secondary filter-btn"
@@ -350,10 +374,12 @@ class BoardTopSection extends Component<Props, State> {
                                     }}
                                 >
                                     <i className="fas fa-filter"></i>
-                                    <span className="margin-left-sm">
-                                        {" "}
-                                        Filter
-                                    </span>
+                                    {this.state.screenSize !== 1 ? (
+                                        <span className="margin-left-sm">
+                                            {" "}
+                                            Filter
+                                        </span>
+                                    ) : null}
                                 </button>
 
                                 <button
@@ -368,10 +394,12 @@ class BoardTopSection extends Component<Props, State> {
                                     }}
                                 >
                                     <i className="fas fa-sort"></i>
-                                    <span className="margin-left-sm">
-                                        {" "}
-                                        Sort
-                                    </span>
+                                    {this.state.screenSize !== 1 ? (
+                                        <span className="margin-left-sm">
+                                            {" "}
+                                            Sort
+                                        </span>
+                                    ) : null}
                                 </button>
 
                                 {/*Menus*/}
@@ -379,7 +407,7 @@ class BoardTopSection extends Component<Props, State> {
                                     <div
                                         className={
                                             "collaspible-menu search-menu" +
-                                            (this.state.largeWidth
+                                            (this.state.screenSize === 3
                                                 ? " large"
                                                 : " small")
                                         }
@@ -394,7 +422,7 @@ class BoardTopSection extends Component<Props, State> {
                                     <div
                                         className={
                                             "collaspible-menu filter-menu" +
-                                            (this.state.largeWidth
+                                            (this.state.screenSize === 3
                                                 ? " large"
                                                 : " small")
                                         }
@@ -409,7 +437,7 @@ class BoardTopSection extends Component<Props, State> {
                                     <div
                                         className={
                                             "collaspible-menu sort-menu" +
-                                            (this.state.largeWidth
+                                            (this.state.screenSize === 3
                                                 ? " large"
                                                 : " small")
                                         }
